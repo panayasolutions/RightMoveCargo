@@ -25,4 +25,5 @@ router.register(r'booking', BookingViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('auth/', include('custauth.urls')),
 ]

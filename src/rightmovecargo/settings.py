@@ -25,13 +25,16 @@ SECRET_KEY = 'django-insecure-x6fk)fti#_m#&&wvgy0v)$_f2q&nt1r&xu+kcvy^1kewdrxpn5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+   '*'
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        'rest_framework.authentication.BasicAuthentication',
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        # 'rest_framework.authentication.BasicAuthentication',
+        # "rest_framework.authentication.TokenAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        "custauth.auth.Authentication"
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -51,7 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles', 
     'rest_framework',
-    'rightmovecargo.custauth',
+    'custauth',
     'rightmovecargo.rmcapi',
 
 ]

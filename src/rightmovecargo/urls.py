@@ -20,7 +20,6 @@ from rest_framework import routers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('rightmovecargo.custauth.urls')),
     path('api/', include('rightmovecargo.rmcapi.urls')),
     # path('api-auth/', include('cust.urls', namespace='rest_framework')),
     
