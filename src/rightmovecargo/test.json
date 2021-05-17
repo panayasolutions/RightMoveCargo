@@ -1,0 +1,18 @@
+{
+    "url": "http://127.0.0.1:8000/api/usertype/USER_20210517100151_TYPE/",
+    "user_type_code": "USER_20210517100151_TYPE",
+    "type_name": "Client",
+    "type_code": "CLNT"
+},
+{
+    "url": "http://127.0.0.1:8000/api/usertype/USER_20210517100227_TYPE/",
+    "user_type_code": "USER_20210517100227_TYPE",
+    "type_name": "Employee",
+    "type_code": "ZEMP"
+},
+{
+    "url": "http://127.0.0.1:8000/api/usertype/USER_20210517100307_TYPE/",
+    "user_type_code": "USER_20210517100307_TYPE",
+    "type_name": "Admin",
+    "type_code": "ZADM"
+}

@@ -30,7 +30,6 @@ class AuthViewSet(BaseViewSet):
             elif not authtoken:
                 msg = _('Invalid basic header. Credentials string should not contain spaces.')
             elif authtype.lower() == b'basic':
-                print('asdfasdf')
                 user,localAuth,msg = self.basic_authentication(authtoken,request)
             elif authtype.lower() == b'bearer':
                 user,localAuth,msg = self.bearer_authentication(authtoken,request)
@@ -97,7 +96,7 @@ class AuthViewSet(BaseViewSet):
         with optional request for context.
         """
         msg = None
-        sysuser = User.objects.get(username=username);
+        sysuser = User.objects.get(userid=username);
         if sysuser is None:
             return (None,None,'User not exists, Please signoff first.')
         if not sysuser.is_active:
@@ -132,30 +131,29 @@ class AuthViewSet(BaseViewSet):
             return (None,None,msg)
         try:
             # delete all record from LocalSession
-            authUsers = LocalSession.objects.get(user_code=user.user_code);
+            authUsers = LocalSession.objects.get(username=user.username);
             authUsers.delete();   
         except ObjectDoesNotExist:
             #return (None,None,'No existing session found.')
             print('sdf');
         finally:
+            print(user.username+""+user.password)
             localAuth = LocalSession()
-            localAuth.token = username #default_token_generator.make_token(user);
-            localAuth.user_code = user.username
-            localAuth.authtype='TOKEN'
+            localAuth.token = user.username+""+user.password #default_token_generator.make_token(user);
+            localAuth.username = user.username
             localAuth.connid = self.create_id('CONN')
-            # localAuth.created_by = user
-            # localAuth.modified_by = user
-            localAuth.save(); 
+            localAuth.created = timezone.now();
+            localAuth.expirey = timezone.now();
+            localAuth.save()
             user.editdatetime = timezone.now();
             user.editby = '';
-            # user.fail_attempt = 0;
             user.save();
             localAuth.token = "Bearer "+localAuth.token;
         return (user,localAuth,msg)
 
     def bearer_authentication(self,authtoken,request):
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'),authtype='TOKEN');
-        sysuser = localses.user_code;
+        sysuser = localses.username;
         localses.username=sysuser.get_username();
         localses.token = "Bearer "+localses.token;
         print(request.data);

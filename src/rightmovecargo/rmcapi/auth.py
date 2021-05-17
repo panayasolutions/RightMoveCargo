@@ -38,7 +38,7 @@ class Authentication(authentication.BaseAuthentication):
         Authenticate the userid and password against username and password
         with optional request for context.
         """
-        sysuser = User.objects.get(username=username);
+        sysuser = User.objects.get(userid=username);
         if sysuser is None:
             raise exceptions.AuthenticationFailed(_('User not exists, Please check with admin first.'))
         if not sysuser.is_active:
@@ -58,7 +58,7 @@ class Authentication(authentication.BaseAuthentication):
         return (user, None)
 
     def user_credentials_validation(self,username,password):
-        sysuser = User.objects.get(username=username,password=password);
+        sysuser = User.objects.get(userid=username,password=password);
         return sysuser;
 
     def basic_authentication(self,authtoken,request):
@@ -82,18 +82,18 @@ class Authentication(authentication.BaseAuthentication):
     def bearer_authentication(self,authtoken,request):
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'))
         request.session = localses;
-        sysuser = localses.user_code
+        sysuser = User.objects.get(userid=localses.userid)
         if sysuser is None:
-            raise exceptions.AuthenticationFailed(_('User not exists, Please signoff first.'))
+            raise exceptions.AuthenticationFailed(_('Unauthrozation request,Please login again'))
         if not sysuser.is_active:
             raise exceptions.AuthenticationFailed(_('User is not verfied.'))
-        if sysuser.is_lock:
-            raise exceptions.AuthenticationFailed(_('User is locked,please check with admin'))
+        # if sysuser.is_lock:
+        #     raise exceptions.AuthenticationFailed(_('User is locked,please check with admin'))
         return (sysuser,None)
 
     def session_authentication(self,authtoken,request):
         localses = LocalSession.objects.get(authtoken=authtoken.decode('utf-8'),authtype='SESSION');
-        sysuser = localses.user_code;
+        sysuser = localses.userid;
         if sysuser is None:
             raise exceptions.AuthenticationFailed(_('User not exists, Please signoff first.'))
         if not sysuser.is_active:

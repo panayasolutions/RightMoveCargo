@@ -20,11 +20,11 @@ from rest_framework import routers
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
 
 
-router = routers.DefaultRouter()
-router.register(r'', AuthViewSet)
+# router = routers.DefaultRouter()
+# router.register(r'', AuthViewSet)
 
 
 urlpatterns = [
-    path('auth/', include(router.urls)),
-    # path('auth/', include('custauth.urls')),
+    # path('api/', include(router.urls)),
+    path('api/', include('rightmovecargo.rmcapi.urls')),
 ]

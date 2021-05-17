@@ -19,7 +19,6 @@ class BaseViewSet(viewsets.ModelViewSet):
         return self.onError("","DELETE not allowed",status.HTTP_405_METHOD_NOT_ALLOWED) 
 
     def retrieve(self, request, *args, **kwargs):
-        
         return self.onError("","GET not allowed",status.HTTP_405_METHOD_NOT_ALLOWED) 
 
     def update(self, request, *args, **kwargs):
@@ -32,6 +31,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         return self.onError("","PATCH not allowed",status.HTTP_405_METHOD_NOT_ALLOWED) 
 
     def list(self, request, *args, **kwargs):
+        # print('asdfasdf111111');
         return super(viewsets.ModelViewSet,self).list(self, request, *args, **kwargs)
         # return self.onError("","GET LIST not allowed",status.HTTP_405_METHOD_NOT_ALLOWED) 
     
@@ -68,7 +68,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         return self.user;
 
     def user_credentials_validation(self,username,password):
-        sysuser = User.objects.get(username=username,password=password);
+        sysuser = User.objects.get(userid=username,password=password);
         return sysuser;
 
     def create_id(self,prefix,suffix=None):

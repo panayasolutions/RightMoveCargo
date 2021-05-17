@@ -50,8 +50,8 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
     ),
     'UNAUTHENTICATED_USER': None,
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    # 'PAGE_SIZE': 10
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
 }
 
 # Application definition
@@ -116,26 +116,26 @@ DATABASES = {
     #     'HOST':'162.214.81.14',
     #     'PORT':'3306'
     # },
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "RMCTest",
-        'USER':'root',
-        'PASSWORD':'Pass@1234',
-        'HOST':'127.0.0.1',
-        'PORT':'3306'
-    },
     # 'default': {
-    #     'ENGINE': 'sql_server.pyodbc',
+    #     'ENGINE': 'django.db.backends.mysql',
     #     'NAME': "RMCTest",
-    #     'USER':'xa',
-    #     'PASSWORD':'Xp_256$',
-    #     'HOST':'103.65.20.180,33893',
-    #     'PORT':'',
-    #     'OPTIONS': {
-    #         'driver': 'ODBC Driver 17 for SQL Server',
-    #         'extra_params': "server=103.65.20.180,33893"
-    #     }
-    # }
+    #     'USER':'root',
+    #     'PASSWORD':'Pass@1234',
+    #     'HOST':'127.0.0.1',
+    #     'PORT':'3306'
+    # },
+    'default': {
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': "RMCTest",
+        'USER':'xa',
+        'PASSWORD':'Xp_256$',
+        'HOST':'103.65.20.180,33893',
+        'PORT':'',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'extra_params': "server=103.65.20.180,33893"
+        }
+    }
 }
 
 DATABASE_CONNECTION_POOLING = False

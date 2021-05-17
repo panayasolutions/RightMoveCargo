@@ -320,43 +320,43 @@ class Hisofd(models.Model):
         db_table = 'hisOFD'
 
 
-class Mtbranch(models.Model):
-    branchcode = models.CharField(db_column='BranchCode', primary_key=True, max_length=10)  # Field name made lowercase.
-    branchname = models.CharField(db_column='BranchName', max_length=100)  # Field name made lowercase.
-    displayname = models.CharField(db_column='DisplayName', max_length=100)  # Field name made lowercase.
-    branchtype = models.CharField(db_column='BranchType', max_length=50)  # Field name made lowercase.
-    branchincharge = models.CharField(db_column='BranchInCharge', max_length=100)  # Field name made lowercase.
-    address1 = models.CharField(db_column='Address1', max_length=100)  # Field name made lowercase.
-    address2 = models.CharField(db_column='Address2', max_length=100)  # Field name made lowercase.
-    address3 = models.CharField(db_column='Address3', max_length=100)  # Field name made lowercase.
-    pin = models.CharField(db_column='Pin', max_length=6)  # Field name made lowercase.
-    phone = models.CharField(db_column='Phone', max_length=100)  # Field name made lowercase.
-    mobile = models.CharField(db_column='Mobile', max_length=100)  # Field name made lowercase.
-    emailid = models.CharField(db_column='EmailId', max_length=100)  # Field name made lowercase.
-    idproof = models.CharField(db_column='IdProof', max_length=100)  # Field name made lowercase.
-    addproof = models.CharField(db_column='AddProof', max_length=100)  # Field name made lowercase.
-    panno = models.CharField(db_column='PanNo', max_length=100)  # Field name made lowercase.
-    active = models.CharField(db_column='Active', max_length=3)  # Field name made lowercase.
-    activedate = models.DateTimeField(db_column='ActiveDate')  # Field name made lowercase.
-    servicearea = models.CharField(db_column='ServiceArea', max_length=10)  # Field name made lowercase.
-    inpermission = models.CharField(db_column='InPermission', max_length=10)  # Field name made lowercase.
-    outpermission = models.CharField(db_column='OutPermission', max_length=10)  # Field name made lowercase.
-    rategroup = models.CharField(db_column='RateGroup', max_length=10)  # Field name made lowercase.
-    applytax = models.CharField(db_column='ApplyTax', max_length=3)  # Field name made lowercase.
-    ratetype = models.CharField(db_column='RateType', max_length=10)  # Field name made lowercase.
-    gstin = models.CharField(db_column='GSTIn', max_length=50)  # Field name made lowercase.
-    creditlimit = models.BigIntegerField(db_column='CreditLimit')  # Field name made lowercase.
-    enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
-    enterdatetime = models.DateTimeField(db_column='EnterDateTime')  # Field name made lowercase.
-    editby = models.CharField(db_column='EditBy', max_length=10)  # Field name made lowercase.
-    editdatetime = models.DateTimeField(db_column='EditDateTime')  # Field name made lowercase.
-    hubcode = models.CharField(db_column='HubCode', max_length=10)  # Field name made lowercase.
-    couriertype = models.CharField(db_column='CourierType', max_length=10)  # Field name made lowercase.
-    statename = models.CharField(db_column='StateName', max_length=100)  # Field name made lowercase.
+# class Mtbranch(models.Model):
+    # branchcode = models.CharField(db_column='BranchCode', primary_key=True, max_length=10)  # Field name made lowercase.
+    # branchname = models.CharField(db_column='BranchName', max_length=100)  # Field name made lowercase.
+    # displayname = models.CharField(db_column='DisplayName', max_length=100)  # Field name made lowercase.
+    # branchtype = models.CharField(db_column='BranchType', max_length=50)  # Field name made lowercase.
+    # branchincharge = models.CharField(db_column='BranchInCharge', max_length=100)  # Field name made lowercase.
+    # address1 = models.CharField(db_column='Address1', max_length=100)  # Field name made lowercase.
+    # address2 = models.CharField(db_column='Address2', max_length=100)  # Field name made lowercase.
+    # address3 = models.CharField(db_column='Address3', max_length=100)  # Field name made lowercase.
+    # pin = models.CharField(db_column='Pin', max_length=6)  # Field name made lowercase.
+    # phone = models.CharField(db_column='Phone', max_length=100)  # Field name made lowercase.
+    # mobile = models.CharField(db_column='Mobile', max_length=100)  # Field name made lowercase.
+    # emailid = models.CharField(db_column='EmailId', max_length=100)  # Field name made lowercase.
+    # idproof = models.CharField(db_column='IdProof', max_length=100)  # Field name made lowercase.
+    # addproof = models.CharField(db_column='AddProof', max_length=100)  # Field name made lowercase.
+    # panno = models.CharField(db_column='PanNo', max_length=100)  # Field name made lowercase.
+    # active = models.CharField(db_column='Active', max_length=3)  # Field name made lowercase.
+    # activedate = models.DateTimeField(db_column='ActiveDate')  # Field name made lowercase.
+    # servicearea = models.CharField(db_column='ServiceArea', max_length=10)  # Field name made lowercase.
+    # inpermission = models.CharField(db_column='InPermission', max_length=10)  # Field name made lowercase.
+    # outpermission = models.CharField(db_column='OutPermission', max_length=10)  # Field name made lowercase.
+    # rategroup = models.CharField(db_column='RateGroup', max_length=10)  # Field name made lowercase.
+    # applytax = models.CharField(db_column='ApplyTax', max_length=3)  # Field name made lowercase.
+    # ratetype = models.CharField(db_column='RateType', max_length=10)  # Field name made lowercase.
+    # gstin = models.CharField(db_column='GSTIn', max_length=50)  # Field name made lowercase.
+    # creditlimit = models.BigIntegerField(db_column='CreditLimit')  # Field name made lowercase.
+    # enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
+    # enterdatetime = models.DateTimeField(db_column='EnterDateTime')  # Field name made lowercase.
+    # editby = models.CharField(db_column='EditBy', max_length=10)  # Field name made lowercase.
+    # editdatetime = models.DateTimeField(db_column='EditDateTime')  # Field name made lowercase.
+    # hubcode = models.CharField(db_column='HubCode', max_length=10)  # Field name made lowercase.
+    # couriertype = models.CharField(db_column='CourierType', max_length=10)  # Field name made lowercase.
+    # statename = models.CharField(db_column='StateName', max_length=100)  # Field name made lowercase.
 
-    class Meta:
-        managed = True
-        db_table = 'mtBranch'
+    # class Meta:
+    #     managed = True
+    #     db_table = 'mtBranch'
 
 
 class Mtcitymapping(models.Model):
@@ -371,8 +371,8 @@ class Mtcitymapping(models.Model):
         unique_together = (('destination', 'company'),)
 
 
-class Mtcompany(models.Model):
-    companycode = models.CharField(db_column='CompanyCode', max_length=10)  # Field name made lowercase.
+class Company(models.Model):
+    company_code = models.CharField(db_column='CompanyCode',primary_key=True, max_length=10)  # Field name made lowercase. AMIT KUMAR
     companyname = models.CharField(db_column='CompanyName', max_length=100)  # Field name made lowercase.
     address1 = models.CharField(db_column='Address1', max_length=100)  # Field name made lowercase.
     address2 = models.CharField(db_column='Address2', max_length=100)  # Field name made lowercase.
@@ -432,7 +432,7 @@ class Mtconsignee(models.Model):
         db_table = 'mtConsignee'
 
 
-class Mtcourier(models.Model):
+class Courier(models.Model):
     branchcode = models.CharField(db_column='BranchCode', primary_key=True, max_length=10)  # Field name made lowercase.
     branchname = models.CharField(db_column='BranchName', max_length=100)  # Field name made lowercase.
     branchincharge = models.CharField(db_column='BranchInCharge', max_length=100)  # Field name made lowercase.
@@ -1133,22 +1133,10 @@ class Tbofd(models.Model):
 
 # ======================= Custome Table =================================
 
-class LocalSession(models.Model):
-    connid = models.CharField(max_length=50,primary_key=True,db_column='connid')
-    token = models.CharField(max_length=150,db_column='authtoken')
-    expirey = models.DateTimeField(blank=True, null=True,db_column='authexp')
-    created = models.DateTimeField(blank=True, null=True,db_column='authcreated')
-    user_code = models.CharField(max_length=50, default=None,db_column='user_code')
-    user_branch = models.CharField(max_length=50, null=True,db_column='user_branch')
-
-    class Meta:
-        managed = True
-        db_table = 'local_session'
-
 class UserType(models.Model):
     user_type_code = models.CharField(max_length=50,primary_key=True,db_column='user_type_code')
     type_name = models.CharField(unique=True, max_length=100)
-    type_code= models.CharField(unique=True, null=True,max_length=10)
+    type_code= models.CharField(unique=True,null=True,max_length=10)
 
     class Meta:
         managed = True
@@ -1172,32 +1160,32 @@ class ShipmentMode(models.Model):
         managed = True
         db_table = 'mtShipmentMode'   
 
-class UserBranch(models.Model):
-    user_branch_code = models.CharField(max_length=50,primary_key=True)
-    userId = models.CharField( max_length=50,null=False,default=None, db_column='userid')
-    user_type = models.CharField(max_length=50,null=False,default=None, db_column='user_type')
-    company = models.CharField(max_length=50,default=None,db_column='company')
+class UserCompany(models.Model):
+    user_company_code = models.CharField(max_length=50,primary_key=True)
+    userId = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
+    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None,db_column='user_type_code')
+    company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code')
 
     class Meta:
         unique_together = [['userId', 'user_type','company']]
         managed = True
-        db_table = 'mpUserBranch'
+        db_table = 'mpUserCompany'
 
 class CompanyCourierMode(models.Model):
     company_courier_mode_code = models.CharField(max_length=50,primary_key=True)
     userId = models.CharField(max_length=50,null=False,default=None, db_column='userid')
-    company = models.CharField(max_length=50,default=None,db_column='company')
-    courier_type = models.CharField(max_length=50, db_column='BranchCode')
-    shipment_mode = models.CharField(max_length=50,null=False,default=None)
-
+    company_code = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None, db_column='company_code')
+    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None, db_column='user_type_code')
+    shipment_code = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment_code')
+    
     class Meta:
         managed = True
         db_table = 'mpCompanyShipmentMode'
 
 
 class CompanyUserMenu(models.Model):
-    branch_user_menu_code = models.CharField(max_length=50,primary_key=True)
-    company = models.CharField(max_length=50,default=None,db_column='company')
+    company_user_menu_code = models.CharField(max_length=50,primary_key=True)
+    company_code = models.CharField(max_length=50,default=None,db_column='company')
     userId = models.CharField(max_length=50,null=False,default=None, db_column='userid')
     menu  = models.CharField(max_length=50, db_column='app_menu_code')
     user_type = models.CharField(max_length=50,null=False,default=None, db_column='user_type')
@@ -1205,3 +1193,16 @@ class CompanyUserMenu(models.Model):
     class Meta:
         managed = True
         db_table = 'mpCompanyUserMenu'
+
+
+class LocalSession(models.Model):
+    connid = models.CharField(max_length=50,primary_key=True,db_column='connid')
+    token = models.CharField(max_length=150,db_column='authtoken')
+    expirey = models.DateTimeField(blank=True, null=True,db_column='authexp')
+    created = models.DateTimeField(blank=True, null=True,db_column='authcreated')
+    username = models.CharField(max_length=50, null=True,default=None,db_column='username')
+    user_compnay = models.ForeignKey(UserCompany,models.DO_NOTHING,null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'local_session'

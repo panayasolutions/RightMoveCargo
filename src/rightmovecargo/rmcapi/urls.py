@@ -17,12 +17,36 @@ from django.urls import path,include
 from rest_framework import routers
 
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
+from rightmovecargo.rmcapi.viewsets.companyviewset import CompanyViewSet
+from rightmovecargo.rmcapi.viewsets.usertypeviewset import UserTypeViewSet
+from rightmovecargo.rmcapi.viewsets.userviewset import UserViewSet
 
 router = routers.DefaultRouter()
-router.register(r'', AuthViewSet)
+router.register(r'auth', AuthViewSet)
+router.register(r'user', UserViewSet)
+router.register(r'usertype', UserTypeViewSet)
+router.register(r'company', CompanyViewSet)
 
 
 urlpatterns = [
     path('', include(router.urls)),
     # path('auth/', include('custauth.urls')),
 ]
+
+
+# import secrets
+# from Crypto.Cipher import AES
+# from Crypto.Util.Padding import pad, unpad
+# import os
+# from base64 import b64decode, b64encode
+
+
+# def updatepwd(pwd, tokenstr):
+
+#     print(tokenstr)
+#     keyval = constants.KEYVAL
+#     iv = os.urandom(constants.BLOCKSIZE)
+#     print(iv)
+#     aes = AES.new(keyval,AES.MODE_CBC, iv)
+#     enpwd = aes.encrypt(pad(str(pwd).encode(), constants.BLOCKSIZE))
+#     print(enpwd)
