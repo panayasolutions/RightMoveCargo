@@ -29,43 +29,52 @@ ALLOWED_HOSTS = [
    '*'
 ]
 
+AUTHENTICATION_BACKENDS = [
+
+]
+SESSION_SERIALIZER = []
+
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         # 'rest_framework.authentication.BasicAuthentication',
         # "rest_framework.authentication.TokenAuthentication",
         # "rest_framework.authentication.SessionAuthentication",
-        "custauth.auth.Authentication"
+        "rightmovecargo.rmcapi.auth.Authentication"
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        # "rest_framework.permissions.IsAuthenticated",
         # "rest_framework.permissions.DjangoModelPermissions",
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+     'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'UNAUTHENTICATED_USER': None,
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10
 }
 
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles', 
+    # 'django.contrib.admin',
+    # 'django.contrib.auth',
+    # 'django.contrib.contenttypes',
+    # 'django.contrib.sessions',
+    # 'django.contrib.messages',
+    # 'django.contrib.staticfiles', 
     'rest_framework',
-    'custauth',
     'rightmovecargo.rmcapi',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    # 'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # 'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -80,7 +89,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                # 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -94,46 +103,59 @@ WSGI_APPLICATION = 'rightmovecargo.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'sqlite3': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
+    # 'sqlite3': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # },
 
-    'localmysql':{
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "panayaso_rmc",
-        'USER':'panayaso',
-        'PASSWORD':'Panaya@@1234',
-        'HOST':'162.214.81.14',
-        'PORT':'3306'
-    },
+    # 'panaya_mysql':{
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': "panayaso_rmc",
+    #     'USER':'panayaso',
+    #     'PASSWORD':'Panaya@@1234',
+    #     'HOST':'162.214.81.14',
+    #     'PORT':'3306'
+    # },
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "rmcp",
+        'NAME': "RMCTest",
         'USER':'root',
         'PASSWORD':'Pass@1234',
         'HOST':'127.0.0.1',
         'PORT':'3306'
-    }
+    },
+    # 'default': {
+    #     'ENGINE': 'sql_server.pyodbc',
+    #     'NAME': "RMCTest",
+    #     'USER':'xa',
+    #     'PASSWORD':'Xp_256$',
+    #     'HOST':'103.65.20.180,33893',
+    #     'PORT':'',
+    #     'OPTIONS': {
+    #         'driver': 'ODBC Driver 17 for SQL Server',
+    #         'extra_params': "server=103.65.20.180,33893"
+    #     }
+    # }
 }
 
+DATABASE_CONNECTION_POOLING = False
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 
@@ -156,9 +178,30 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL="custauth.User"
+# AUTH_USER_MODEL="custauth.User"
+
+# AUTH_USER_MODEL = 'rmcapi.Mtuserrevenue'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+# 'NAME': "RevenueTest",
+#     #     'USER':'xa',
+#     #     'PASSWORD':'Xp_256$',
+#     #     'HOST':'103.65.20.180,33893',
+#     #     'PORT':'1433',
+
+# import pyodbc
+# server = '103.65.20.180,33893'
+# database = 'RevenueTest'
+# username = 'xa'
+# password = 'Xp_256$'
+# driver='{ODBC Driver 13 for SQL Server}'
+
+# pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+password)
