@@ -29,9 +29,7 @@ class UserCompanyViewSet(BaseViewSet):
         # LocalSession.objects.all().delete();
         type_code = request.GET.get('user_type', None);
         user = self.get_user(request);
-        if user==None:
-            return self.onError(request.data,"Invalid session",status.HTTP_400_BAD_REQUEST);
-
+        
         if type_code == None:
             queryset = self.get_queryset().filter(user=user)
         else:

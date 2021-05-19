@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import base64
 import binascii
 from django.utils import timezone
-import datetime
+# import datetime
 from rest_framework import status
 from rest_framework.response import Response
 from rightmovecargo.rmcapi.models import Company, LocalSession, User, UserCompany, UserType
@@ -140,15 +140,16 @@ class AuthViewSet(BaseViewSet):
             print('sdf');
         finally:
             print(user.username+""+user.password)
-            current_dt = datetime.datetime.now();
+            current_dt = timezone.now();
             localAuth = LocalSession()
             localAuth.token = user.userid+""+user.username+""+user.password #default_token_generator.make_token(user);
-            localAuth.token = "Bearer "+localAuth.token;
+            
             localAuth.userid = user.userid
             localAuth.connid = self.create_id('CONN')
             localAuth.created = current_dt;
-            localAuth.expirey = current_dt+ datetime.timedelta(minutes=15) ;
+            localAuth.expirey = current_dt #+ datetime.timedelta(minutes=15) ;
             localAuth.save()
+            localAuth.token = "Bearer "+localAuth.token;
             user.editdatetime = current_dt;
             user.editby = '';
             user.save();
@@ -156,11 +157,12 @@ class AuthViewSet(BaseViewSet):
         return (user,localAuth,msg)
 
     def bearer_authentication(self,authtoken,request):
-        localses = LocalSession.objects.get(token=authtoken.decode('utf-8'));
-        # sysuser = localses.user;
-        # localses.userid=sysuser.get_username();
-        # localses.token = "Bearer "+localses.token;
         print(request.data);
+        print(authtoken.decode('utf-8'))
+        localses = LocalSession.objects.get(token=authtoken.decode('utf-8'));
+        sysuser = localses.user;
+        localses.userid=sysuser.get_username();
+        localses.token = "Bearer "+localses.token;
         if request.data != {}:
             try:
                 company = Company.objects.get(company_code = request.data['company_code']);

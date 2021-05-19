@@ -27,7 +27,7 @@ class Authentication(authentication.BaseAuthentication):
             elif authtype.lower() == b'bearer':
                 user,permissions = self.bearer_authentication(authtoken,request)
         except LocalSession.DoesNotExist:
-            print('Session not found')
+            print('Session not found1')
         except (User.DoesNotExist, ValueError) as e:
             print('User not found')
 
@@ -80,9 +80,13 @@ class Authentication(authentication.BaseAuthentication):
 
     def bearer_authentication(self,authtoken,request):
         # LocalSession.objects.all().delete();
+        print(authtoken.decode('utf-8'));
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'))
         request.session = localses;
         sysuser = User.objects.get(userid=localses.userid)
+        print(localses.userid)
+        print(sysuser);
+        print(authtoken.decode('utf-8'));
         if sysuser is None:
             raise exceptions.AuthenticationFailed(_('Unauthrozation request,Please login again'))
         if not sysuser.is_active:
