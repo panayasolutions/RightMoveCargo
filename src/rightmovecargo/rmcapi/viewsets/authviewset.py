@@ -153,7 +153,15 @@ class AuthViewSet(BaseViewSet):
             user.editdatetime = current_dt;
             user.editby = '';
             user.save();
-            
+            # user=user
+            # print(user)
+            # user_company = UserCompany.objects.filter(user=user).first();
+            # qu_user_company = self.get_queryset().filter(user_company__user=user);
+            # print(qu_user_company.query)
+            # serializer = self.get_serializer(qu_user_company, many=True)
+            # serializer.is_valid();
+            # print(user_company)
+            # localAuth.user_company = serializer.validated_data;
         return (user,localAuth,msg)
 
     def bearer_authentication(self,authtoken,request):
@@ -166,8 +174,8 @@ class AuthViewSet(BaseViewSet):
                 user_company = UserCompany.objects.get(user=request.user,company=company,user_type=user_type);
                 # sysuser.modified_by = sysuser
                 # localses.update()
-                # localses.user_company = user_company;
                 LocalSession.objects.filter(connid = localses.connid).update(user_company = user_company)
+                localses.user_company = user_company;
                 # LocalSession.objects.update()
                 # serializer = self.get_serializer(localses);
             except (User.DoesNotExist,Company.DoesNotExist,UserCompany.DoesNotExist,KeyError) as e:
