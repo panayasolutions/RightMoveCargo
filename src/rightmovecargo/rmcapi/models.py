@@ -407,7 +407,7 @@ class Company(models.Model):
         db_table = 'mtCompany'
 
 
-class Mtconsignee(models.Model):
+class Consignee(models.Model):
     conscode = models.CharField(db_column='ConsCode', primary_key=True, max_length=10)  # Field name made lowercase.
     consname = models.CharField(db_column='ConsName', max_length=100)  # Field name made lowercase.
     address1 = models.CharField(db_column='Address1', max_length=100)  # Field name made lowercase.
@@ -1134,9 +1134,9 @@ class Tbofd(models.Model):
 # ======================= Custome Table =================================
 
 class UserType(models.Model):
-    user_type_code = models.CharField(max_length=50,primary_key=True,db_column='user_type_code')
-    type_name = models.CharField(unique=True, max_length=100)
-    type_code= models.CharField(unique=True,null=True,max_length=10)
+    # user_type_code = models.CharField(max_length=50,primary_key=True,db_column='user_type_code')
+    type_name = models.CharField(unique=True,max_length=100)
+    type_code= models.CharField(unique=True,primary_key=True,max_length=10)
 
     class Meta:
         managed = True
@@ -1162,20 +1162,32 @@ class ShipmentMode(models.Model):
 
 class UserCompany(models.Model):
     user_company_code = models.CharField(max_length=50,primary_key=True)
-    userId = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
-    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None,db_column='user_type_code')
+    user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
+    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None,db_column='type_code')
     company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code')
 
     class Meta:
-        unique_together = [['userId', 'user_type','company']]
+        unique_together = [['user', 'user_type','company']]
         managed = True
         db_table = 'mpUserCompany'
+
+
+class UserConsignee(models.Model):
+    user_consignee_code = models.CharField(max_length=50,primary_key=True)
+    user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
+    company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code')
+    consignee = models.ForeignKey(Consignee,models.DO_NOTHING,null=True,default=None,db_column='consignee_code')
+
+    class Meta:
+        unique_together = [['user','company','consignee']]
+        managed = True
+        db_table = 'mpUserConsignee'
 
 class CompanyCourierMode(models.Model):
     company_courier_mode_code = models.CharField(max_length=50,primary_key=True)
     userId = models.CharField(max_length=50,null=False,default=None, db_column='userid')
     company_code = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None, db_column='company_code')
-    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None, db_column='user_type_code')
+    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None, db_column='type_code')
     shipment_code = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment_code')
     
     class Meta:
@@ -1200,8 +1212,8 @@ class LocalSession(models.Model):
     token = models.CharField(max_length=150,db_column='authtoken')
     expirey = models.DateTimeField(blank=True, null=True,db_column='authexp')
     created = models.DateTimeField(blank=True, null=True,db_column='authcreated')
-    username = models.CharField(max_length=50, null=True,default=None,db_column='username')
-    user_compnay = models.ForeignKey(UserCompany,models.DO_NOTHING,null=True)
+    userid = models.CharField(max_length=50, null=True,default=None,db_column='userid')
+    user_company = models.ForeignKey(UserCompany,models.DO_NOTHING,null=True,db_column='company')
 
     class Meta:
         managed = True

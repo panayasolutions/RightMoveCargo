@@ -15,15 +15,22 @@ Including another URLconf
 """
 from django.urls import path,include
 from rest_framework import routers
+from rightmovecargo.rmcapi.serializers import UserConsigneeSerializer
 
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
 from rightmovecargo.rmcapi.viewsets.companyviewset import CompanyViewSet
+from rightmovecargo.rmcapi.viewsets.consigneeviewset import ConsigneeViewSet
+from rightmovecargo.rmcapi.viewsets.usercompanyviewset import UserCompanyViewSet
+from rightmovecargo.rmcapi.viewsets.userconsigneeviewset import UserConsigneeViewSet
 from rightmovecargo.rmcapi.viewsets.usertypeviewset import UserTypeViewSet
 from rightmovecargo.rmcapi.viewsets.userviewset import UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r'auth', AuthViewSet)
 router.register(r'user', UserViewSet)
+router.register(r'consignee', ConsigneeViewSet)
+router.register(r'usercompnay', UserCompanyViewSet)
+router.register(r'userconsignee', UserConsigneeViewSet)
 router.register(r'usertype', UserTypeViewSet)
 router.register(r'company', CompanyViewSet)
 

@@ -5,7 +5,7 @@ from rest_framework import status
 from rightmovecargo.rmcapi.models import Company, User, UserCompany, UserType
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
 from rightmovecargo.rmcapi.serializers import UserSerializer
-
+from django.db import connection
 class UserViewSet(BaseViewSet):
     
     """
@@ -22,6 +22,10 @@ class UserViewSet(BaseViewSet):
     # permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            with connection.cursor() as cursor:
+                cursor.callproc('test_procedure', request.data)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.validated_data['modified_by'] = request.user;

@@ -16,3 +16,30 @@
     "type_name": "Admin",
     "type_code": "ZADM"
 }
+
+
+{
+    "url": "http://127.0.0.1:8000/api/company/1/",
+    "companycode": "RMC",
+    "companyname": "RIGHTMOVE LOGISTICS"
+},
+{
+    "url": "http://127.0.0.1:8000/api/company/2/",
+    "companycode": "UNI",
+    "companyname": "UNIVERSAL SUPPLIES"
+},
+{
+    "url": "http://127.0.0.1:8000/api/company/3/",
+    "companycode": "TCPL",
+    "companyname": "SHARMA COMMUNICATION"
+},
+{
+    "url": "http://127.0.0.1:8000/api/company/4/",
+    "companycode": "DEL",
+    "companyname": "RIGHTMOVE LOGISTICS (DELHIVERY)"
+},
+{
+    "url": "http://127.0.0.1:8000/api/company/5/",
+    "companycode": "GITA",
+    "companyname": "GITANSH ENTERPRISES"
+}

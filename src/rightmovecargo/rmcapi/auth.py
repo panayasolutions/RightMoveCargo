@@ -72,7 +72,6 @@ class Authentication(authentication.BaseAuthentication):
             return (None,None,'Invalid basic header. Credentials not correctly base64 encoded.')
         username, password = auth_parts[0], auth_parts[2];
         user,msg = self.authenticate_credentials(username,password,request);
-        
         if user is None:
             return (None,msg)
         return (user,msg)
@@ -80,6 +79,7 @@ class Authentication(authentication.BaseAuthentication):
 
 
     def bearer_authentication(self,authtoken,request):
+        # LocalSession.objects.all().delete();
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'))
         request.session = localses;
         sysuser = User.objects.get(userid=localses.userid)

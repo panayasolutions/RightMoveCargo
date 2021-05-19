@@ -52,16 +52,18 @@ class BaseViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(response_data)
         return Response(custom_response, status=status.HTTP_500_INTERNAL_SERVER_ERROR, headers=headers);
 
-    def get_branch(self,request):
+    def get_company(self,request):
         
         if self.branch == None:
             # user_branch = UserBranch.objects.get(request.session.user_branch)
             # print(request.session.user_branch)
             # branch = Branch.objects.get(request.session.user_branch.branch)
             # print(request.session.user_branch.branch)
-            return request.session.user_branch.branch
+            return request.session.user_company.company
+
     def get_user_type(request):
-        pass;
+        return request.session.user_company.user_type
+
     def get_user(self,request):
         if self.user == None:
             return request.user

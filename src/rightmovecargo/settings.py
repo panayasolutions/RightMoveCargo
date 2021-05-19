@@ -199,9 +199,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # import pyodbc
 # server = '103.65.20.180,33893'
-# database = 'RevenueTest'
+# database = 'RMSTest'
 # username = 'xa'
 # password = 'Xp_256$'
-# driver='{ODBC Driver 13 for SQL Server}'
+# driver='{SQL Server}'
 
 # pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1443;DATABASE='+database+';UID='+username+';PWD='+password)
+
+#      'default': {
+#         'ENGINE': 'sql_server.pyodbc',
+#         'NAME': "RevenueTest",
+#         'USER':'xa',
+#         'PASSWORD':'Xp_256$',
+#         'HOST':'103.65.20.180',
+#         'PORT':'33893',
+#         'OPTIONS': {
+#             'driver': 'SQL Server Native Client 11.0',
+#         },
+		
+
+# import pyodbc
+# db = pyodbc.connect('driver={%s};server=%s;database=%s;uid=%s;pwd=%s' % ( 'ODBC Driver 17 for SQL Server', '103.65.20.180,33893', 'RevenueTest', 'xa', 'Xp_256$' ) )
+# cursor = db.cursor()
+# cursor.execute('SELECT * FROM dummy')
+# for row in cursor:
+#     print(row)
