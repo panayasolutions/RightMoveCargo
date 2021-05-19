@@ -82,7 +82,7 @@ class UserSerializer(BaseSerializer):
         depth = 1
 
 class AuthSerializer(BaseSerializer):
-    user_company = UserCompanySerializer(many=True, read_only=True)
+    user_company = UserCompanySerializer(many=False, read_only=True)
     class Meta:
         model = LocalSession
         fields = ['userid','token','expirey','created','user_company']

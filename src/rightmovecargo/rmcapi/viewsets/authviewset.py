@@ -157,11 +157,7 @@ class AuthViewSet(BaseViewSet):
         return (user,localAuth,msg)
 
     def bearer_authentication(self,authtoken,request):
-        print(request.data);
-        print(authtoken.decode('utf-8'))
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'));
-        sysuser = localses.user;
-        localses.userid=sysuser.get_username();
         localses.token = "Bearer "+localses.token;
         if request.data != {}:
             try:
@@ -170,7 +166,7 @@ class AuthViewSet(BaseViewSet):
                 user_company = UserCompany.objects.get(user=request.user,company=company,user_type=user_type);
                 # sysuser.modified_by = sysuser
                 # localses.update()
-                localses.user_company = user_company;
+                # localses.user_company = user_company;
                 LocalSession.objects.filter(connid = localses.connid).update(user_company = user_company)
                 # LocalSession.objects.update()
                 # serializer = self.get_serializer(localses);
