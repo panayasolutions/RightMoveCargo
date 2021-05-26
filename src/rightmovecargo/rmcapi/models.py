@@ -1034,7 +1034,7 @@ class Tbbookingchild(models.Model):
         unique_together = (('masterawbno', 'childawb'),)
 
 
-class Tbbookingweb(models.Model):
+class BookingWeb(models.Model):
     entryid = models.BigAutoField(db_column='EntryId',primary_key=True)  # Field name made lowercase.
     awbno = models.CharField(db_column='AwbNo',  max_length=50)  # Field name made lowercase. amit primary to unique
     refno = models.CharField(db_column='RefNo', max_length=50)  # Field name made lowercase.

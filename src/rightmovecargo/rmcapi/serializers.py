@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rightmovecargo.rmcapi.models import Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, User, UserCompany, UserConsignee, UserType
+from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, User, UserCompany, UserConsignee, UserType
 
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
@@ -119,3 +119,13 @@ class AuthSerializer(BaseSerializer):
         model = LocalSession
         fields = ['userid','token','expirey','created','user_company']
         depth = 1
+
+
+class BookingSerializer(BaseSerializer):
+    
+    
+    class Meta:
+        model = BookingWeb
+        # fields = ('company_courier_mode_code','company_code','user_type','company_name','user_type_name','user_name')
+        fields = '__all__'#('userId','company','user_type','shipment_code')
+        # read_only_fields = ['user_company_code','company_name','user_type_name','username']

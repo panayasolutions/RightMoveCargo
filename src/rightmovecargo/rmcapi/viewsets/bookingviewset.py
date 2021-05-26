@@ -2,37 +2,56 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from django.db import IntegrityError
 from rest_framework import status
-from rightmovecargo.rmcapi.models import Company, User, UserCompany, UserType
+from rightmovecargo.rmcapi.models import BookingWeb, Company, User, UserCompany, UserType
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
-from rightmovecargo.rmcapi.serializers import UserSerializer
+from rightmovecargo.rmcapi.serializers import BookingSerializer, UserSerializer
 from django.db import connection
-class UserViewSet(BaseViewSet):
+import json
+from rest_framework.decorators import api_view
+class BookingViewSet(BaseViewSet):
     
-    """
-    create user,
-    update user
-    login
-    logout
-    fetch current user info
-    
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+   
+    queryset = BookingWeb.objects.all()
+    serializer_class = BookingSerializer
     # permission_classes = [permissions.IsAuthenticated]
 
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     print(request.data)
+    #     if serializer.is_valid():
+    #         with connection.cursor() as cursor:
+    #             print(request.data)
+    #             cursor.execute("{call sp_createBookingWeb( '"+request.data['awbno']+"' ,'"+request.data['refno']+"' ,'"+request.data['companycode']+"' ,'"+request.data['clientcode']+"' ,'"+request.data['couriercode']+"' ,'"+request.data['clientname']+"' ,'"+request.data['topay']+"',"+request.data['cod']+",'"+request.data['riskcoveredby']+"' ,'"+request.data['recname']+"' ,'"+request.data['recaddr1']+"' ,'"+request.data['recaddr2']+"' ,'"+request.data['recphone']+"' ,'"+request.data['recmail']+"' ,'"+request.data['recpin']+"' ,'"+request.data['recdestination']+"' ,'"+request.data['recstate']+"' ,'"+request.data['oda']+"' ,'"+request.data['ewaybillno']+"',"+request.data['invoicevalue']+",'"+request.data['invoicenumber']+"' ,'"+request.data['productdesc']+"' ,'"+request.data['mode']+"' ,'"+request.data['doctype']+"' ,"+request.data['pcs']+","+request.data['actweight']+",'"+request.data['referenceid']+"' ,'"+request.data['dimensions']+"' ,"+request.data['qty']+","+request.data['length']+" ,"+request.data['height']+" ,"+request.data['width']+" ,'"+request.data['submitteduser']+"','"+request.data['cliphone']+"' ,'"+request.data['climail']+"' ,'"+request.data['saveaddress']+"')}")
+    #             # cursor.execute("{call sp_insert_test('"+request.data['userid']+"', 'abc')}")
+    #             # cursor.execute("{call sp_createBookingWeb( '"+request.data['awbno']+"' ,'"+request.data['refno']+"' ,'"+request.data['companycode']+"' ,'"+request.data['clientcode']+"' ,'"+request.data['couriercode']+"' ,'"+request.data['clientname']+"' ,'"+request.data['topay']+"' ,'"+request.data['cod']+"' ,'"+request.data['riskcoveredby']+"' ,'"+request.data['recname']+"' ,'"+request.data['recaddr1']+"' ,'"+request.data['recaddr2']+"' ,'"+request.data['recphone']+"' ,'"+request.data['recmail']+"' ,'"+request.data['recpin']+"' ,'"+request.data['recdestination']+"' ,'"+request.data['recstate']+"' ,'"+request.data['oda']+"' ,'"+request.data['ewaybillno']+"' ,'"+request.data['invoicevalue']+"' ,'"+request.data['invoicenumber']+"' ,'"+request.data['productdesc']+"' ,'"+request.data['mode']+"' ,'"+request.data['doctype']+"' ,'"+request.data['pcs']+"' ,'"+request.data['actweight']+"' ,'"+request.data['referenceid']+"' ,'"+request.data['dimensions']+"' ,'"+request.data['qty']+"' ,'"+request.data['length']+"' ,'"+request.data['height']+"' ,'"+request.data['width']+"' ,'"+request.data['submitteduser']+"' ,'"+request.data['cliphone']+"' ,'"+request.data['climail']+"' ,'"+request.data['saveaddress']+"' ) } ")
+    #     # serializer = self.get_serializer(data=request.data)
+    #     # if serializer.is_valid():
+    #     #     serializer.validated_data['modified_by'] = request.user;
+    #     #     serializer.validated_data['created_by'] = request.user;
+    #     #     user = User.objects.create_user(**serializer.validated_data);
+    #     #     return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
+    #     return  self.onError([request.data],serializer._errors,status.HTTP_400_BAD_REQUEST)
+        
+
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
+            
             with connection.cursor() as cursor:
-                cursor.callproc('test_procedure', request.data)
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.validated_data['modified_by'] = request.user;
-            serializer.validated_data['created_by'] = request.user;
-            user = User.objects.create_user(**serializer.validated_data);
+                print(request.data)
+                cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
+                # cursor.execute("exec sp_insert_test(1234, 'abc')")
+                # cursor.execute('exec sp_insert_test', [request.data['userid'], 'b'])
+                # cursor.execute('sp_insert_test1')
             return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
-        return  self.onError([request.data],serializer._errors,status.HTTP_400_BAD_REQUEST)
+        
+
+    # @api_view(['POST'])   
+    # def child_booking(self, request, *args, **kwargs):
+            
+    #         with connection.cursor() as cursor:
+    #             # cursor.execute("exec sp_insert_test(1234, 'abc')")
+    #             # cursor.execute('exec sp_insert_test', [request.data['userid'], 'b'])
+    #          cursor.execute('sp_insert_test1')
+    #         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED); 
         
     def update(self, request, *args, **kwargs):
         print('asdfadf');
