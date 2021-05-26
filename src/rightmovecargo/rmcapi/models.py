@@ -1,6 +1,7 @@
 from enum import unique
 from re import T
-from django.db import models;
+from django.db import models
+from django.db.models.fields import related;
 from django.utils.translation import gettext_lazy as _
 
 #=========================Import file========================================
@@ -402,6 +403,11 @@ class Company(models.Model):
     term7 = models.CharField(db_column='Term7', max_length=100)  # Field name made lowercase.
     term8 = models.CharField(db_column='Term8', max_length=100)  # Field name made lowercase.
 
+    # amit kumar 
+    company_courier = models.ManyToManyField('Courier', 
+    through_fields=('company','courier'),
+    through='CompanyCourierMode',related_name='companies')
+
     class Meta:
         managed = True
         db_table = 'mtCompany'
@@ -426,6 +432,24 @@ class Consignee(models.Model):
     editdatetime = models.DateTimeField(db_column='EditDateTime')  # Field name made lowercase.
     statename = models.CharField(db_column='StateName', max_length=100)  # Field name made lowercase.
     branchincharge = models.CharField(db_column='BranchInCharge', max_length=100)  # Field name made lowercase.
+
+    # amit kumar 
+    clients = models.ManyToManyField('User', 
+    through_fields=('consignee','user'),
+    through='UserConsignee',related_name='clients')
+
+
+
+# lass UserConsignee(models.Model):
+#     user_consignee_code = models.CharField(max_length=50,primary_key=True)
+#     user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
+#     company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code')
+#     consignee = models.ForeignKey(Consignee,models.DO_NOTHING,null=True,default=None,db_column='consignee_code')
+
+#     class Meta:
+#         unique_together = [['user','company','consignee']]
+#         managed = True
+#         db_table = 'mpUserConsignee'
 
     class Meta:
         managed = True
@@ -455,16 +479,34 @@ class Courier(models.Model):
     editdatetime = models.DateTimeField(db_column='EditDateTime')  # Field name made lowercase.
     statename = models.CharField(db_column='StateName', max_length=100)  # Field name made lowercase.
     website = models.CharField(db_column='WebSite', max_length=100)  # Field name made lowercase.
-    company = models.CharField(db_column='Company', max_length=10)  # Field name made lowercase.
+    company1 = models.CharField(db_column='Company', max_length=10)  # Field name made lowercase.
+    
+    # amit kumar 
+    courier_shipment = any
+    
+    # models.ManyToManyField('ShipmentMode',
+    # through_fields=('company_courier','shipment_mode'),
+    # through='CourierShipmentMode',related_name="+") 
+
+    def get_related_to(self,):
+        print('adsfasd');
+        return self.related_to.filter(
+        company_courier__company=self)
+
+    # Courier.objects.all().values_list
+    # courier_shipment_code = models.CharField(max_length=50,primary_key=True)
+    # company_courier = models.ForeignKey(CompanyCourierMode,models.DO_NOTHING,null=True,default=None, db_column='company_courier')
+    # shipment_mode = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment')
+    
 
     class Meta:
         managed = True
         db_table = 'mtCourier'
 
 
-class Mtcustomer(models.Model):
-    branchcode = models.CharField(db_column='BranchCode', primary_key=True, max_length=10)  # Field name made lowercase.
-    branchname = models.CharField(db_column='BranchName', max_length=100)  # Field name made lowercase.
+class Client(models.Model):           
+    userid = models.CharField(db_column='BranchCode', primary_key=True, max_length=10)  # Field name made lowercase.
+    username = models.CharField(db_column='BranchName', max_length=100)  # Field name made lowercase.
     branchincharge = models.CharField(db_column='BranchInCharge', max_length=100)  # Field name made lowercase.
     address1 = models.CharField(db_column='Address1', max_length=100)  # Field name made lowercase.
     address2 = models.CharField(db_column='Address2', max_length=100)  # Field name made lowercase.
@@ -690,6 +732,12 @@ class User(models.Model):
     resettimestamp = models.DateTimeField(db_column='ResetTimeStamp', blank=True, null=True)  # Field name made lowercase.
     iv = models.CharField(db_column='IV', max_length=255, blank=True, null=True)  # Field name made lowercase.
     invalidcount = models.IntegerField(db_column='InvalidCount', blank=True, null=True)  # Field name made lowercase.
+
+
+    # amit kumar 
+    companies = models.ManyToManyField('Company', 
+    through_fields=('user','company'),
+    through='UserCompany',related_name='user')
 
     class Meta:
         managed = True
@@ -1162,15 +1210,42 @@ class ShipmentMode(models.Model):
 
 class UserCompany(models.Model):
     user_company_code = models.CharField(max_length=50,primary_key=True)
-    user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
-    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None,db_column='type_code')
-    company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code')
+    user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid',related_name='user')
+    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None,db_column='type_code',related_name='user_type')
+    company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code',related_name='company')
 
     class Meta:
         unique_together = [['user', 'user_type','company']]
         managed = True
         db_table = 'mpUserCompany'
 
+class CompanyCourierMode(models.Model):
+    company_courier_mode_code = models.CharField(max_length=50,primary_key=True)
+    company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None, db_column='company_code')
+    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None, db_column='type_code')
+    courier = models.ForeignKey(Courier,models.DO_NOTHING,null=False,default=None, db_column='courier_code')
+    # shipment = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=True,default=None, db_column='shipment_code')
+    
+    class Meta:
+        managed = True
+        unique_together = [['company','user_type','courier']]
+        db_table = 'mpCompanyCourierMode'
+
+
+class CourierShipmentMode(models.Model):
+    courier_shipment_code = models.CharField(max_length=50,primary_key=True)
+    company_courier = models.ForeignKey(CompanyCourierMode,models.DO_NOTHING,null=True,default=None, db_column='company_courier')
+    shipment_mode = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment_mode')
+    
+    def get_related_to(self,):
+        print('adsfasd');
+        return self.related_to.filter(
+        company_courier__company=self)
+
+    class Meta:
+        managed = True
+        # unique_together = [['company_courier', 'shipment_mode']]
+        db_table = 'mpCourierShipmentMode'
 
 class UserConsignee(models.Model):
     user_consignee_code = models.CharField(max_length=50,primary_key=True)
@@ -1182,19 +1257,7 @@ class UserConsignee(models.Model):
         unique_together = [['user','company','consignee']]
         managed = True
         db_table = 'mpUserConsignee'
-
-class CompanyCourierMode(models.Model):
-    company_courier_mode_code = models.CharField(max_length=50,primary_key=True)
-    userId = models.CharField(max_length=50,null=False,default=None, db_column='userid')
-    company_code = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None, db_column='company_code')
-    user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None, db_column='type_code')
-    shipment_code = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment_code')
-    
-    class Meta:
-        managed = True
-        db_table = 'mpCompanyShipmentMode'
-
-
+        
 class CompanyUserMenu(models.Model):
     company_user_menu_code = models.CharField(max_length=50,primary_key=True)
     company_code = models.CharField(max_length=50,default=None,db_column='company')
@@ -1218,3 +1281,4 @@ class LocalSession(models.Model):
     class Meta:
         managed = True
         db_table = 'local_session'
+        

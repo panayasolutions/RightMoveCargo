@@ -24,6 +24,7 @@ CREATE TABLE `mtCourierMode` (
   PRIMARY KEY (`courier_mode_code`)
 );
 
+//Courier and Mode Mapping
 CREATE TABLE `mpCourierModeType` (
   `courier_mode_type_code` INT NOT NULL,
   `courier_type_code` INT NOT NULL,
@@ -223,3 +224,48 @@ cursor = db.cursor()
 cursor.execute('SELECT * FROM dummy')
 for row in cursor:
     print(row)
+
+
+    iNSERT INTo [RMCTest].[dbo].[mpCompanyCourierMode] ([company_courier_mode_Code],[company_Code],[courier_code],[type_Code])
+SELECT 3,'RMC','DTDC','ZEMP' UNION ALL
+SELECT 4,'RMC','DTDC','ZCLN' UNION ALL
+SELECT 5,'TCPL','DTDC','ZEMP' UNION ALL
+SELECT 6,'TCPL','DTDC','ZCLN' UNION ALL
+SELECT 1,'RMC','TCPL','ZCLN' UNION ALL
+SELECT 2,'RMC','TCPL','ZEMP' UNION ALL
+SELECT 7,'TCPL','TCPL','ZEMP' UNION ALL
+SELECT 8,'TCPL','TCPL','ZCLN'
+
+
+
+SELECT TOP 1000 [courier_shipment_code]
+      ,[company_courier]
+      ,[shipment]
+  FROM [RMCTest].[dbo].[mpCourierShipmentMode]
+
+INSERT INTo [RMCTest].[dbo].[mpCourierShipmentMode] ([courier_shipment_code],[company_courier],[shipment])
+SELECT 1,1,'CA' UNION ALL
+SELECT 2,1,'CO' UNION ALL
+SELECT 3,2,'CA' UNION ALL
+SELECT 4,2,'CO' UNION ALL
+SELECT 5,2,'EX' UNION ALL
+SELECT 6,3,'CA' UNION ALL
+SELECT 7,3,'CO' UNION ALL
+SELECT 8,3,'EX' UNION ALL
+SELECT 9,4,'CA' UNION ALL
+SELECT 10,4,'CO' UNION ALL
+SELECT 11,4,'CX' UNION ALL
+
+
+SELECT 12,5,'CA' UNION ALL
+SELECT 13,5,'CO' UNION ALL
+SELECT 14,5,'EX' UNION ALL
+SELECT 15,6,'CA' UNION ALL
+SELECT 16,6,'CO' UNION ALL
+SELECT 17,6,'EX' UNION ALL
+SELECT 18,7,'CA' UNION ALL
+SELECT 19,7,'CO' UNION ALL
+SELECT 20,7,'EX' UNION ALL
+SELECT 21,8,'CA' UNION ALL
+SELECT 22,8,'CO' UNION ALL
+SELECT 23,8,'EX' UNION ALL

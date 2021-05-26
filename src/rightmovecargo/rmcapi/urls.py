@@ -18,8 +18,13 @@ from rest_framework import routers
 from rightmovecargo.rmcapi.serializers import UserConsigneeSerializer
 
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
+from rightmovecargo.rmcapi.viewsets.clientsviewset import ClientViewSet
+from rightmovecargo.rmcapi.viewsets.companycourierviewset import CompanyCourierViewSet
 from rightmovecargo.rmcapi.viewsets.companyviewset import CompanyViewSet
 from rightmovecargo.rmcapi.viewsets.consigneeviewset import ConsigneeViewSet
+from rightmovecargo.rmcapi.viewsets.couriershipmentmodeviewset import CourierShipmentModeViewSet
+from rightmovecargo.rmcapi.viewsets.courierviewset import CourierViewSet
+from rightmovecargo.rmcapi.viewsets.shipmentmodeviewset import ShipmentModeViewSet
 from rightmovecargo.rmcapi.viewsets.usercompanyviewset import UserCompanyViewSet
 from rightmovecargo.rmcapi.viewsets.userconsigneeviewset import UserConsigneeViewSet
 from rightmovecargo.rmcapi.viewsets.usertypeviewset import UserTypeViewSet
@@ -29,10 +34,16 @@ router = routers.DefaultRouter()
 router.register(r'auth', AuthViewSet)
 router.register(r'user', UserViewSet)
 router.register(r'consignee', ConsigneeViewSet)
-router.register(r'usercompany', UserCompanyViewSet)
-router.register(r'userconsignee', UserConsigneeViewSet)
+router.register(r'client', ClientViewSet)
+# router.register(r'usercompany', UserCompanyViewSet)
+# router.register(r'userconsignee', UserConsigneeViewSet)
+# router.register(r'companycourier', CompanyCourierViewSet)
+# router.register(r'couriershipment', CourierShipmentModeViewSet)
+
 router.register(r'usertype', UserTypeViewSet)
 router.register(r'company', CompanyViewSet)
+router.register(r'courier', CourierViewSet)
+router.register(r'shipment', ShipmentModeViewSet)
 
 
 urlpatterns = [

@@ -83,10 +83,8 @@ class Authentication(authentication.BaseAuthentication):
         print(authtoken.decode('utf-8'));
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'))
         request.session = localses;
+        print(request.session.user_company)
         sysuser = User.objects.get(userid=localses.userid)
-        print(localses.userid)
-        print(sysuser);
-        print(authtoken.decode('utf-8'));
         if sysuser is None:
             raise exceptions.AuthenticationFailed(_('Unauthrozation request,Please login again'))
         if not sysuser.is_active:

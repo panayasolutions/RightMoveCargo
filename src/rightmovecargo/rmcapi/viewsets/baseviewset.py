@@ -61,7 +61,7 @@ class BaseViewSet(viewsets.ModelViewSet):
             # print(request.session.user_branch.branch)
             return request.session.user_company.company
 
-    def get_user_type(request):
+    def get_user_type(self,request):
         return request.session.user_company.user_type
 
     def get_user(self,request):

@@ -1,3 +1,4 @@
+import re
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
@@ -11,31 +12,18 @@ class ConsigneeViewSet(BaseViewSet):
     """
     queryset = Consignee.objects.all()
     serializer_class = ConsigneeSerializer;
-    # permission_classes = [permissions.IsAuthenticated]
-    
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     if serializer.is_valid(raise_exception=False):
-    #         serializer.validated_data['user_type_code'] = self.create_id('USER','TYPE');
-    #         # serializer.validated_data['modified_by'] = request.user;
-    #         # serializer.validated_data['created_by'] = request.user;
-    #         self.perform_create(serializer)
-    #         return  self.onSuccess([serializer.data],"Record created successfully",status.HTTP_201_CREATED);
-    #     return  self.onError([request.data],serializer._errors,status.HTTP_400_BAD_REQUEST)
 
-# Branch by User 
-# User By Branch (filter type=user_type)
     def list(self, request, *args, **kwargs):
-        # LocalSession.objects.all().delete();
-        type_code = request.GET.get('user_type', None);
-        user = self.get_user(request);
-        if user==None:
-            return self.onError(request.data,"Invalid session",status.HTTP_400_BAD_REQUEST);
-
-        if type_code == None:
-            queryset = self.get_queryset().filter(user=user)
+        queryset = None;
+        client = request.GET.get('client', None);
+        if client!=None:
+            queryset = self.get_queryset().filter(
+                userconsignee__company=self.get_company(request),
+                userconsignee__user = client
+            )
         else:
-            queryset = self.get_queryset().filter(company=self.get_company(request),user_type__type_code=type_code)
-
+            queryset = self.get_queryset().filter(
+                userconsignee__company=self.get_company(request)
+            )
         serializer = self.get_serializer(queryset, many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);

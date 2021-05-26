@@ -25,15 +25,15 @@ class UserCompanyViewSet(BaseViewSet):
 
 # Branch by User 
 # User By Branch (filter type=user_type)
-    def list(self, request, *args, **kwargs):
-        # LocalSession.objects.all().delete();
-        type_code = request.GET.get('user_type', None);
-        user = self.get_user(request);
+    # def list(self, request, *args, **kwargs):
+    #     # LocalSession.objects.all().delete();
+    #     type_code = request.GET.get('user_type', None);
+    #     user = self.get_user(request);
         
-        if type_code == None:
-            queryset = self.get_queryset().filter(user=user)
-        else:
-            queryset = self.get_queryset().filter(company=self.get_company(request),user_type__type_code=type_code)
+    #     if type_code == None:
+    #         queryset = self.get_queryset().filter(user=user)
+    #     else:
+    #         queryset = self.get_queryset().filter(company=self.get_company(request),user_type__type_code=type_code)
 
-        serializer = self.get_serializer(queryset, many=True)
-        return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return self.onSuccess(serializer.data," ",status.HTTP_200_OK);

@@ -66,30 +66,36 @@ class AuthViewSet(BaseViewSet):
            return self.onError("",msg,status.HTTP_403_FORBIDDEN) 
         return  self.onSuccess('',msg,status.HTTP_200_OK)
         
+    # def list(self, request, *args, **kwargs):
+        # try:
+        #     msg = None;
+        #     user= None;
+        #     localAuth=None
+        #     authtype,authtoken = authentication.get_authorization_header(request).split();
+        #     if not authtype or (authtype.lower() != b'bearer'):
+        #         msg = _('Invalid basic header. No credentials provided.')
+        #     if not authtoken:
+        #         msg = _('Invalid basic header. Credentials string should not contain spaces.')
+        #     elif authtype.lower() == b'bearer':
+        #         localAuth = LocalSession.objects.get(token=authtoken.decode('utf-8'),authtype='TOKEN');
+        #         localAuth.username=localAuth.userid.get_username();
+        #         localAuth.token = "Bearer "+localAuth.token;
+        #     else:
+        #         msg = _('No session found')
+        # except LocalSession.DoesNotExist:
+        #     msg = _('Session not found')
+        # except (User.DoesNotExist ,ValueError) as e:
+        #     msg = _('Aunthorized request')
+        # if msg != None:
+        #     return self.onError("",msg,status.HTTP_403_FORBIDDEN) 
+        # serializer = self.get_serializer(localAuth)
+        # return self.onSuccess(serializer.data,msg,status.HTTP_200_OK)
     def list(self, request, *args, **kwargs):
-        try:
-            msg = None;
-            user= None;
-            localAuth=None
-            authtype,authtoken = authentication.get_authorization_header(request).split();
-            if not authtype or (authtype.lower() != b'bearer'):
-                msg = _('Invalid basic header. No credentials provided.')
-            if not authtoken:
-                msg = _('Invalid basic header. Credentials string should not contain spaces.')
-            elif authtype.lower() == b'bearer':
-                localAuth = LocalSession.objects.get(token=authtoken.decode('utf-8'),authtype='TOKEN');
-                localAuth.username=localAuth.userid.get_username();
-                localAuth.token = "Bearer "+localAuth.token;
-            else:
-                msg = _('No session found')
-        except LocalSession.DoesNotExist:
-            msg = _('Session not found')
-        except (User.DoesNotExist ,ValueError) as e:
-            msg = _('Aunthorized request')
-        if msg != None:
-            return self.onError("",msg,status.HTTP_403_FORBIDDEN) 
-        serializer = self.get_serializer(localAuth)
-        return self.onSuccess(serializer.data,msg,status.HTTP_200_OK)
+        user = self.get_user(request);
+        if user==None:
+            return self.onError(request.data,"Invalid session",status.HTTP_400_BAD_REQUEST);
+        serializer = self.get_serializer(request.session)
+        return self.onSuccess([serializer.data]," ",status.HTTP_200_OK);
 
     def authenticate_credentials(self, username, password, request=None):
         """
@@ -142,7 +148,7 @@ class AuthViewSet(BaseViewSet):
             print(user.username+""+user.password)
             current_dt = timezone.now();
             localAuth = LocalSession()
-            localAuth.token = user.userid+""+user.username+""+user.password #default_token_generator.make_token(user);
+            localAuth.token = user.userid+""+user.password #default_token_generator.make_token(user);
             
             localAuth.userid = user.userid
             localAuth.connid = self.create_id('CONN')

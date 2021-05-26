@@ -23,5 +23,16 @@ class CompanyViewSet(BaseViewSet):
     #         return  self.onSuccess([serializer.data],"Record created successfully",status.HTTP_201_CREATED);
     #     return  self.onError([request.data],serializer._errors,status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, *args, **kwargs):
+
+        qCompnay = self.filter_queryset(self.get_queryset().filter(
+            company_courier__user_type= self.get_user_type(request)
+            
+        ));
+        # print(que ryset.query)
+        # print(qCompnay.query);
+        serializer = self.get_serializer(qCompnay, many=True)
+        return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
+
     
 
