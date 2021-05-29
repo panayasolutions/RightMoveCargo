@@ -34,13 +34,28 @@ class BookingViewSet(BaseViewSet):
         
 
     def create(self, request, *args, **kwargs):
-            
+           
             with connection.cursor() as cursor:
-                print(request.data)
-                cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
+                # print(request.data)
+                # cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
                 # cursor.execute("exec sp_insert_test(1234, 'abc')")
                 # cursor.execute('exec sp_insert_test', [request.data['userid'], 'b'])
                 # cursor.execute('sp_insert_test1')
+                # cursor.execute('exec sp_insert_test1');
+                cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
+                
+                # sStatus = cursor.fetchone()[0];
+                # if  sStatus!= '201':
+                    # print(cursor.fetchone())
+                    # return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
+                # cursor.fetchone().sort();
+                request.data['awbNo']=cursor.fetchone()[0];
+               
+                # print(cursor.fetchone()[1])
+                # print(cursor)
+                # for row in cursor:
+                    # print(row)
+                
             return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
         
 
