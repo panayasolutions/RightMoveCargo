@@ -63,16 +63,15 @@ class ClientViewSet(BaseViewSet):
     def list(self, request, *args, **kwargs):
         queryset = None
         ctype = request.GET.get('ctype', None);
-        # if ctype != None:
-            
-        # else:
-        #     queryset = self.get_queryset()#.filter(company=utype)
-        queryset = self.get_queryset().filter(company=self.get_company(request).company_code)
+        if self.get_user_type(request).type_code != 'ZCLN':
+            queryset = self.get_queryset().filter(company=self.get_company(request).company_code)
+        else:
+            queryset = self.get_queryset().filter(
+                company=self.get_company(request).company_code,
+                userid = self.get_user(request).userid)
+
+
         serializer = self.get_serializer(queryset,many=True) 
-        # user = self.get_user(request);
-        # if user==None:
-        #     return self.onError(request.data,"Invalid session",status.HTTP_400_BAD_REQUEST);
-        
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
 
     def retrieve(self, request, *args, **kwargs):
