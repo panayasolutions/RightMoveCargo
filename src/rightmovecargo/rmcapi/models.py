@@ -739,6 +739,8 @@ class User(models.Model):
     through_fields=('user','company'),
     through='UserCompany',related_name='user')
 
+    is_authenticated = False
+
     class Meta:
         managed = True
         db_table = 'mtUserRevenue'
@@ -1019,32 +1021,47 @@ class Tbbooking(models.Model):
 
 
 class Tbbookingchild(models.Model):
-    masterawbno = models.CharField(db_column='MasterAwbNo', primary_key=True, max_length=50)  # Field name made lowercase.
-    childawb = models.CharField(db_column='ChildAwb', max_length=50)  # Field name made lowercase.
-    actweight = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    length = models.DecimalField(db_column='Length', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    height = models.DecimalField(db_column='Height', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
-    width = models.DecimalField(db_column='Width', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    masterawbno = models.CharField(db_column='masterawbno',  max_length=50)  # Field name made lowercase.
+    subAwbNo = models.CharField(db_column='ChildAwb', primary_key=True, max_length=50)  # Field name made lowercase.
+    dimWG = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    dimL = models.DecimalField(db_column='Length', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    dimH = models.DecimalField(db_column='Height', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    dimW = models.DecimalField(db_column='Width', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     submitteduser = models.CharField(db_column='SubmittedUser', max_length=50)  # Field name made lowercase.
     entrydate = models.DateTimeField(db_column='EntryDate')  # Field name made lowercase.
-
+    # masterawbno   = models.ForeignKey('BookingWeb', on_delete=models.CASCADE)
     class Meta:
         managed = True
         db_table = 'tbBookingChild'
-        unique_together = (('masterawbno', 'childawb'),)
+        unique_together = (('masterawbno', 'subAwbNo'),)
 
 
-class BookingWeb(models.Model):
-    entryid = models.BigAutoField(db_column='EntryId',primary_key=True)  # Field name made lowercase.
-    awbno = models.CharField(db_column='AwbNo',  max_length=50)  # Field name made lowercase. amit primary to unique
-    refno = models.CharField(db_column='RefNo', max_length=50)  # Field name made lowercase.
-    companycode = models.CharField(db_column='CompanyCode', max_length=10)  # Field name made lowercase.
-    clientcode = models.CharField(db_column='ClientCode', max_length=10)  # Field name made lowercase.
-    couriercode = models.CharField(db_column='CourierCode', max_length=10)  # Field name made lowercase.
+class BookingWeb(models.Model):    
+    awbNo = models.CharField(db_column='AwbNo',  max_length=50)  # Field name made lowercase. amit primary to unique
+    companyCode = models.CharField(db_column='CompanyCode', max_length=10)  # Field name made lowercase.
+    client = models.CharField(db_column='ClientCode', max_length=10)  # Field name made lowercase.
+    courier = models.CharField(db_column='CourierCode', max_length=10)  # Field name made lowercase.
+    toFreight = models.CharField(db_column='Topay', max_length=10)  # Field name made lowercase.
+    codAmt = models.DecimalField(db_column='COD', max_digits=19, decimal_places=4)  # Field name made lowercase.
+    insuranceType = models.CharField(db_column='RiskCoveredBy', max_length=10)  # Field name made lowercase.
+    EWayNo = models.CharField(db_column='EwayBillNo', max_length=50)  # Field name made lowercase.
+    invoiceValue = models.DecimalField(db_column='InvoiceValue', max_digits=19, decimal_places=4)  # Field name made lowercase.
+    invoiceNumber = models.CharField(db_column='InvoiceNumber', max_length=50)  # Field name made lowercase.
+    prodDesc = models.CharField(db_column='ProductDesc', max_length=50)  # Field name made lowercase.
+    prodMod = models.CharField(db_column='Mode', max_length=10)  # Field name made lowercase.
+    prodIty = models.CharField(db_column='DocType', max_length=10)  # Field name made lowercase.
+    prodPiece = models.IntegerField(db_column='PCS')  # Field name made lowercase.
+    prodWeight = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2)  # Field name made lowercase.
+    refid = models.CharField(db_column='ReferenceId', max_length=50)  # Field name made lowercase.
+    prodDim = models.CharField(db_column='Dimensions', max_length=15)  # Field name made lowercase.
+    user = models.CharField(db_column='SubmittedUser', max_length=50)  # Field name made lowercase.
+    consignee = models.CharField(db_column='ReceiverCode', max_length=20)  # Field name made lowercase.
+
+    qty = models.IntegerField(db_column='Qty')  # Field name made lowercase.
+    oda = models.CharField(db_column='ODA', max_length=10)  # Field name made lowercase.
     clientname = models.CharField(db_column='ClientName', max_length=100)  # Field name made lowercase.
-    topay = models.CharField(db_column='Topay', max_length=10)  # Field name made lowercase.
-    cod = models.DecimalField(db_column='COD', max_digits=19, decimal_places=4)  # Field name made lowercase.
-    riskcoveredby = models.CharField(db_column='RiskCoveredBy', max_length=10)  # Field name made lowercase.
+    entryid = models.BigAutoField(db_column='EntryId',primary_key=True)  # Field name made lowercase.
+    refno = models.CharField(db_column='RefNo', max_length=50)  # Field name made lowercase.
     recname = models.CharField(db_column='RecName', max_length=100)  # Field name made lowercase.
     recaddr1 = models.CharField(db_column='RecAddr1', max_length=100)  # Field name made lowercase.
     recaddr2 = models.CharField(db_column='RecAddr2', max_length=100)  # Field name made lowercase.
@@ -1053,22 +1070,9 @@ class BookingWeb(models.Model):
     recpin = models.CharField(db_column='RecPin', max_length=6)  # Field name made lowercase.
     recdestination = models.CharField(db_column='RecDestination', max_length=50)  # Field name made lowercase.
     recstate = models.CharField(db_column='RecState', max_length=2)  # Field name made lowercase.
-    oda = models.CharField(db_column='ODA', max_length=10)  # Field name made lowercase.
-    ewaybillno = models.CharField(db_column='EwayBillNo', max_length=50)  # Field name made lowercase.
-    invoicevalue = models.DecimalField(db_column='InvoiceValue', max_digits=19, decimal_places=4)  # Field name made lowercase.
-    invoicenumber = models.CharField(db_column='InvoiceNumber', max_length=50)  # Field name made lowercase.
-    productdesc = models.CharField(db_column='ProductDesc', max_length=50)  # Field name made lowercase.
-    mode = models.CharField(db_column='Mode', max_length=10)  # Field name made lowercase.
-    doctype = models.CharField(db_column='DocType', max_length=10)  # Field name made lowercase.
-    pcs = models.IntegerField(db_column='PCS')  # Field name made lowercase.
-    actweight = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2)  # Field name made lowercase.
-    referenceid = models.CharField(db_column='ReferenceId', max_length=50)  # Field name made lowercase.
-    dimensions = models.CharField(db_column='Dimensions', max_length=15)  # Field name made lowercase.
-    qty = models.IntegerField(db_column='Qty')  # Field name made lowercase.
     length = models.DecimalField(db_column='Length', max_digits=5, decimal_places=2)  # Field name made lowercase.
     height = models.DecimalField(db_column='Height', max_digits=5, decimal_places=2)  # Field name made lowercase.
     width = models.DecimalField(db_column='Width', max_digits=5, decimal_places=2)  # Field name made lowercase.
-    submitteduser = models.CharField(db_column='SubmittedUser', max_length=50)  # Field name made lowercase.
     recdfrom = models.CharField(db_column='RecdFrom', max_length=10)  # Field name made lowercase.
     byhub = models.CharField(db_column='ByHub', max_length=10)  # Field name made lowercase.
     entrytype = models.CharField(db_column='EntryType', max_length=10)  # Field name made lowercase.
@@ -1081,6 +1085,8 @@ class BookingWeb(models.Model):
     climail = models.CharField(db_column='CliMail', max_length=100)  # Field name made lowercase.
     cliadd = models.CharField(db_column='CliAdd', max_length=100)  # Field name made lowercase.
     clipin = models.CharField(db_column='CliPin', max_length=6)  # Field name made lowercase.
+
+    dim = ''
 
     class Meta:
         managed = True
