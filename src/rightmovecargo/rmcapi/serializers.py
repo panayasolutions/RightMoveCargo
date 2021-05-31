@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, User, UserCompany, UserConsignee, UserType
+from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, Tbbookingchild, User, UserCompany, UserConsignee, UserType
 
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
@@ -120,12 +120,35 @@ class AuthSerializer(BaseSerializer):
         fields = ['userid','token','expirey','created','user_company']
         depth = 1
 
+class ChildSerializer(BaseSerializer):
+    class Meta:
+        model = Tbbookingchild
+        fields = ['subAwbNo','dimWG','dimL','dimH','dimW']
+        depth = 1
 
 class BookingSerializer(BaseSerializer):
-    
-    
+    courier = CourierSerializer(many=False, read_only=True)
+    shipment = ShipmentModeSerializer(many=False, read_only=True)
+    consignee = ConsigneeSerializer(many=False, read_only=True)
+    client = ClientSerializer(many=False, read_only=True)
+    dim = ChildSerializer(many=True, read_only=True)
     class Meta:
         model = BookingWeb
-        # fields = ('company_courier_mode_code','company_code','user_type','company_name','user_type_name','user_name')
-        fields = '__all__'#('userId','company','user_type','shipment_code')
+        fields = ('courier','shipment','awbNo','client','companyCode','toFreight','codAmt','insuranceType','EWayNo','invoiceValue'
+        ,'invoiceNumber','prodDesc','prodMod','prodIty','prodPiece','prodWeight','user','refid','prodDim'
+       ,'entrydate','consignee','dim')
+#  
+        # ,'shipment' 'awbType',
+        # fields = '__all__'#('userId','company','user_type','shipment_code')
         # read_only_fields = ['user_company_code','company_name','user_type_name','username']
+
+
+
+    # {"courier":"DTDC","shipment":"CO","awbNo":"","awbType":"M","client":"RMC_CLNT",
+    # "companyCode":"RMC","toFreight":"PREPAID","codAmt":"","insuranceType":"OWNER",
+    # "EWayNo":"","invoiceValue":"","invoiceNumber":"","prodDesc":"","prodMod":"SURFACE",
+    # "prodIty":"DOX","prodPiece":"2","prodWeight":"","user":"RMC_CLNT",
+    # "refid":"","prodDim":"INCH",
+
+    # "consignee":{"conscode":"10001","consname":"COSIGNEE 1", "address1":"ADDRES1", "address2":"ADDRESS2", "address3":"A3", "pin":"110012", "phone":"2300012111", "mobile":"9000000001", "emailid":"MAIL@YAHOO.COM", "state":"null", "save":"true", "oda":"No"},
+    # "dim":
