@@ -67,7 +67,6 @@ class BookingViewSet(BaseViewSet):
                 booking.consignee = Consignee.objects.get(conscode=booking.consignee)
                 booking.courier = Courier.objects.get(branchcode=booking.courier)
                 booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
-                # booking.shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 booking.dim = Tbbookingchild.objects.filter(masterawbno=booking.awbNo)
             except Consignee.DoesNotExist :
                 booking.consignee = None

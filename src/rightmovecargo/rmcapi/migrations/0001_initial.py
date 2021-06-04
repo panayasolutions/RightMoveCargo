@@ -462,7 +462,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Mtcustomer',
+            name='Client',
             fields=[
                 ('branchcode', models.CharField(db_column='BranchCode', max_length=10, primary_key=True, serialize=False)),
                 ('branchname', models.CharField(db_column='BranchName', max_length=100)),
@@ -936,8 +936,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tbbookingchild',
             fields=[
-                ('masterawbno', models.CharField(db_column='MasterAwbNo', max_length=50, primary_key=True, serialize=False)),
-                ('childawb', models.CharField(db_column='ChildAwb', max_length=50)),
+                ('masterawbno', models.CharField(db_column='masterawbno_id', max_length=50, serialize=False)),
+                ('childawb', models.CharField(db_column='ChildAwb',primary_key=True, max_length=50)),
                 ('actweight', models.DecimalField(blank=True, db_column='ActWeight', decimal_places=2, max_digits=5, null=True)),
                 ('length', models.DecimalField(blank=True, db_column='Length', decimal_places=2, max_digits=5, null=True)),
                 ('height', models.DecimalField(blank=True, db_column='Height', decimal_places=2, max_digits=5, null=True)),
@@ -951,7 +951,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Tbbookingweb',
+            name='BookingWeb',
             fields=[
                 ('entryid', models.BigAutoField(db_column='EntryId', primary_key=True, serialize=False)),
                 ('awbno', models.CharField(db_column='AwbNo', max_length=50)),
@@ -999,6 +999,8 @@ class Migration(migrations.Migration):
                 ('climail', models.CharField(db_column='CliMail', max_length=100)),
                 ('cliadd', models.CharField(db_column='CliAdd', max_length=100)),
                 ('clipin', models.CharField(db_column='CliPin', max_length=6)),
+                ('consignee', models.CharField(db_column='ReceiverCode', max_length=20)),
+                
             ],
             options={
                 'db_table': 'tbBookingWeb',

@@ -32,8 +32,8 @@ class CourierViewSet(BaseViewSet):
             )
         for courier in qCouriers:
             for company_courier in courier.companycouriermode_set.filter(user_type=user_type,company=company):
-                print(company_courier.company_courier_mode_code+"==="+company_courier.company.company_code+" ===== "+courier.branchcode+"====="+company_courier.user_type.type_code)
-                # courier.courier_shipment = CourierShipmentMode.objects.filter(company_courier=meme)
+                #print(company_courier.company_courier_mode_code+"==="+company_courier.company.company_code+" ===== "+courier.branchcode+"====="+company_courier.user_type.type_code)
+                #courier.courier_shipment = CourierShipmentMode.objects.filter(company_courier=meme)
                 courier.courier_shipment = ShipmentMode.objects.filter(
                     couriershipmentmode__company_courier = company_courier
                 )
