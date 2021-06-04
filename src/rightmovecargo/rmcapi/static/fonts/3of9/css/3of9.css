@@ -1,0 +1,6 @@
+@font-face {
+  font-family: '3_of_9_barcoderegular';
+  src: url('../fonts/3of9_new-webfont.woff2') format('woff2'), url('../fonts/3of9_new-webfont.woff') format('woff'), url('../fonts/3OF9_NEW.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
