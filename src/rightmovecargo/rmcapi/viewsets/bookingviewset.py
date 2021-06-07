@@ -1,13 +1,15 @@
+from datetime import datetime
 from rest_framework import viewsets
 from rest_framework import permissions
 from django.db import IntegrityError
 from rest_framework import status
-from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, Consignee, Courier, CourierShipmentMode, ShipmentMode, Tbbookingchild, User, UserCompany, UserType
+from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, Consignee, Courier, CourierShipmentMode, ShipmentMode, ChildBooking, User, UserCompany, UserType
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
 from rightmovecargo.rmcapi.serializers import BookingSerializer, UserSerializer
 from django.db import connection
 import json
 from rest_framework.decorators import api_view
+from rightmovecargo.rmcapi.labelutil.label import createLabel
 class BookingViewSet(BaseViewSet):
     
    
@@ -16,11 +18,18 @@ class BookingViewSet(BaseViewSet):
     # permission_classes = [permissions.IsAuthenticated]      
 
     def create(self, request, *args, **kwargs):
-            with connection.cursor() as cursor:
-                cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
-                request.data['awbNo']=cursor.fetchone()[0];
-                
-            return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
+        with connection.cursor() as cursor:
+            cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
+            request.data['awbNo']=cursor.fetchone()[0];  
+            print(request.data['awbNo']);
+            if request.data['awbNo'] is None or request.data['awbNo'] == '':
+                return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
+            # serializer = self.get_serializer(data=request.data)
+            #print(serializer.is_valid(raise_exception=True))
+            # if serializer.is_valid():
+            booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
+            createLabel(booking);
+        return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
 
    
     def list(self, request, *args, **kwargs):
@@ -40,12 +49,12 @@ class BookingViewSet(BaseViewSet):
                 booking.courier = Courier.objects.get(branchcode=booking.courier)
                 booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 # booking.shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
-                booking.dim = Tbbookingchild.objects.filter(masterawbno=booking.awbNo)
+                booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo)
             except Consignee.DoesNotExist :
                 booking.consignee = None
             except ShipmentMode.DoesNotExist :
                 booking.shipment = None
-            except Tbbookingchild.DoesNotExist :
+            except ChildBooking.DoesNotExist :
                 booking.dim = None
         serializer = self.get_serializer(queryset , many=True) # self.get_serializer(request.user)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
@@ -67,12 +76,12 @@ class BookingViewSet(BaseViewSet):
                 booking.consignee = Consignee.objects.get(conscode=booking.consignee)
                 booking.courier = Courier.objects.get(branchcode=booking.courier)
                 booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
-                booking.dim = Tbbookingchild.objects.filter(masterawbno=booking.awbNo)
+                booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo)
             except Consignee.DoesNotExist :
                 booking.consignee = None
             except ShipmentMode.DoesNotExist :
                 booking.shipment = None
-            except Tbbookingchild.DoesNotExist :
+            except ChildBooking.DoesNotExist :
                 booking.dim = None
         serializer = self.get_serializer(queryset , many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);

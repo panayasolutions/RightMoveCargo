@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.urls import path,include
 from rest_framework import routers
+from django.conf import settings
+from django.conf.urls.static import static
 from rightmovecargo.rmcapi.serializers import UserConsigneeSerializer
 
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
@@ -49,10 +51,10 @@ router.register(r'booking', BookingViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls)),
-    # path('auth/', include('custauth.urls')),
+    path('', include(router.urls))
 ]
-
+urlpatterns = urlpatterns+static(settings.LABEL_URL, document_root=settings.RMC_DOCUMENT_ROOT+settings.LABEL_URL)
+urlpatterns = urlpatterns+static(settings.IMAGE_URL, document_root=settings.RMC_STATIC_ROOT+settings.IMAGE_URL)
 
 # import secrets
 # from Crypto.Cipher import AES

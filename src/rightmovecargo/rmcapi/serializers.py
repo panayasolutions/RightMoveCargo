@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, Tbbookingchild, User, UserCompany, UserConsignee, UserType
+from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
 
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
@@ -122,7 +122,7 @@ class AuthSerializer(BaseSerializer):
 
 class ChildSerializer(BaseSerializer):
     class Meta:
-        model = Tbbookingchild
+        model = ChildBooking
         fields = ['subAwbNo','dimWG','dimL','dimH','dimW']
         depth = 1
 
@@ -135,8 +135,8 @@ class BookingSerializer(BaseSerializer):
     class Meta:
         model = BookingWeb
         fields = ('courier','shipment','awbNo','client','companyCode','toFreight','codAmt','insuranceType','EWayNo','invoiceValue'
-        ,'invoiceNumber','prodDesc','prodMod','prodIty','prodPiece','prodWeight','user','refid','prodDim'
-       ,'entrydate','consignee','dim')
+        ,'invoiceNumber','prodDesc','prodMod','prodIty','prodPiece','prodWeight','user','refid','prodDim','entrydate','consignee','dim')
+        # read_only_fields = ['entrydate']
 #  
         # ,'shipment' 'awbType',
         # fields = '__all__'#('userId','company','user_type','shipment_code')

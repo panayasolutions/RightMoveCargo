@@ -16,6 +16,8 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path,include
 from rest_framework import routers
+from django.conf import settings
+from django.conf.urls.static import static
 
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
 
@@ -26,5 +28,5 @@ from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
 
 urlpatterns = [
     # path('api/', include(router.urls)),
-    path('api/', include('rightmovecargo.rmcapi.urls')),
+    path('rmc/', include('rightmovecargo.rmcapi.urls')),
 ]

@@ -934,7 +934,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Tbbookingchild',
+            name='ChildBooking',
             fields=[
                 ('masterawbno', models.CharField(db_column='masterawbno_id', max_length=50, serialize=False)),
                 ('childawb', models.CharField(db_column='ChildAwb',primary_key=True, max_length=50)),
@@ -1179,7 +1179,7 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(related_name='user', through='rmcapi.UserCompany', to='rmcapi.Company'),
         ),
         migrations.AlterUniqueTogether(
-            name='tbbookingchild',
+            name='ChildBooking',
             unique_together={('masterawbno', 'childawb')},
         ),
         migrations.AlterUniqueTogether(

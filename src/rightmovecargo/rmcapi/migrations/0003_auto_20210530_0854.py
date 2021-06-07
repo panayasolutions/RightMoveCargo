@@ -111,27 +111,27 @@ class Migration(migrations.Migration):
             new_name='username',
         ),
         migrations.RenameField(
-            model_name='tbbookingchild',
+            model_name='ChildBooking',
             old_name='height',
             new_name='dimH',
         ),
         migrations.RenameField(
-            model_name='tbbookingchild',
+            model_name='ChildBooking',
             old_name='length',
             new_name='dimL',
         ),
         migrations.RenameField(
-            model_name='tbbookingchild',
+            model_name='ChildBooking',
             old_name='width',
             new_name='dimW',
         ),
         migrations.RenameField(
-            model_name='tbbookingchild',
+            model_name='ChildBooking',
             old_name='actweight',
             new_name='dimWG',
         ),
         migrations.RenameField(
-            model_name='tbbookingchild',
+            model_name='ChildBooking',
             old_name='childawb',
             new_name='subAwbNo',
         ),
@@ -141,7 +141,7 @@ class Migration(migrations.Migration):
             field=models.ManyToManyField(related_name='clients', through='rmcapi.UserConsignee', to='rmcapi.User'),
         ),
         migrations.AlterUniqueTogether(
-            name='tbbookingchild',
+            name='ChildBooking',
             unique_together={('masterawbno', 'subAwbNo')},
         ),
     ]

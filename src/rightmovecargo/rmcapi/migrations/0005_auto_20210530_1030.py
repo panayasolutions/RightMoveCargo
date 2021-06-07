@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='tbbookingchild',
+            model_name='ChildBooking',
             name='masterawbno',
             field=models.CharField(db_column='masterawbno', max_length=50),
         ),

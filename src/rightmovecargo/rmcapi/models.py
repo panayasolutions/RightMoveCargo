@@ -1020,7 +1020,7 @@ class Tbbooking(models.Model):
         db_table = 'tbBooking'
 
 
-class Tbbookingchild(models.Model):
+class ChildBooking(models.Model):
     masterawbno = models.CharField(db_column='masterawbno',  max_length=50)  # Field name made lowercase.
     subAwbNo = models.CharField(db_column='ChildAwb', primary_key=True, max_length=50)  # Field name made lowercase.
     dimWG = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
