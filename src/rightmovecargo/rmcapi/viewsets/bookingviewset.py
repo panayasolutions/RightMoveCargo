@@ -23,7 +23,7 @@ class BookingViewSet(BaseViewSet):
             request.data['awbNo']=cursor.fetchone()[0];  
             print(request.data['awbNo']);
             if request.data['awbNo'] is None or request.data['awbNo'] == '':
-                return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
+                return self.onError(request.data,"Something went wrong",status.HTTP_400_BAD_REQUEST);
             # serializer = self.get_serializer(data=request.data)
             #print(serializer.is_valid(raise_exception=True))
             # if serializer.is_valid():
