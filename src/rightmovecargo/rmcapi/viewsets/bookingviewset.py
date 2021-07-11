@@ -9,7 +9,7 @@ from rightmovecargo.rmcapi.serializers import BookingSerializer, UserSerializer
 from django.db import connection
 import json
 from rest_framework.decorators import api_view
-from rightmovecargo.rmcapi.labelutil.label import createLabel
+from rightmovecargo.rmcapi.docutil.docketutil import createDocket
 class BookingViewSet(BaseViewSet):
     
    
@@ -28,20 +28,33 @@ class BookingViewSet(BaseViewSet):
             #print(serializer.is_valid(raise_exception=True))
             # if serializer.is_valid():
             booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
-            createLabel(booking);
+            createDocket(booking);
         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
 
-   
+    def update(self, request, *args, **kwargs):
+        with connection.cursor() as cursor:
+            cursor.execute("{call sp_update_booking('"+json.dumps(request.data)+"')}")
+            request.data['awbNo']=cursor.fetchone()[0];  
+            print(request.data['awbNo']);
+            if request.data['awbNo'] is None or request.data['awbNo'] == '':
+                return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
+            # serializer = self.get_serializer(data=request.data)
+            #print(serializer.is_valid(raise_exception=True))
+            # if serializer.is_valid():
+            booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
+            createDocket(booking);
+        return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
+
     def list(self, request, *args, **kwargs):
         queryset = None
         user = self.get_user(request);
         user_type = self.get_user_type(request).type_code;
         company_code = self.get_company(request).company_code;
         if user_type !='ZEMP':
-            queryset = self.get_queryset().filter(user=user.userid)
+            queryset = self.filter_queryset(self.get_queryset()).filter(user=user.userid).order_by('awbNo')
         else:
-            queryset = self.get_queryset().filter(companyCode=company_code)
-
+            queryset = self.filter_queryset(self.get_queryset()).filter(companyCode=company_code).order_by('awbNo')
+       # page = self.paginate_queryset(queryset)
         for booking in queryset:
             booking.client = Client.objects.get(userid=booking.user)
             try:
@@ -56,8 +69,25 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
                 booking.dim = None
+        # if page is not None:
+        #     serializer = self.get_pagination_serializer(page)
+        # else:
+        #     serializer = self.get_serializer(queryset, many=True)
+
         serializer = self.get_serializer(queryset , many=True) # self.get_serializer(request.user)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
+
+        # queryset = self.queryset
+        # parameters = self.get_request_params(self.request)
+        # if 'ordering' in parameters:
+        #     queryset = queryset.order_by(parameters['ordering'])
+        #     del parameters['ordering']
+        # queryset = queryset.filter(**parameters).distinct()
+        # page = self.paginate_queryset(queryset)
+        # if page is not None:
+        #     serializer = self.get_serializer(page, many=True)
+        #     return self.get_paginated_response(serializer.data)
+        # serializer = self.get_serializer(queryset, many=True)
 
     def retrieve(self, request, *args, **kwargs):
         awbNo = kwargs.get('pk');
