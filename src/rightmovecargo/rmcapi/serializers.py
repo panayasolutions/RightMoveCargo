@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
+from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, LocalSession, PinCode, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
 
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
@@ -24,6 +24,11 @@ class UserTypeSerializer(BaseSerializer):
     class Meta:
         model = UserType
         fields = ['type_name', 'type_code']
+
+class PinCodeSerializer(BaseSerializer):
+    class Meta:
+        model = PinCode
+        fields = ['destinationcode', 'destinationname','statecode','oda']
 
 class ShipmentModeSerializer(BaseSerializer):
     class Meta:
@@ -123,7 +128,7 @@ class AuthSerializer(BaseSerializer):
 class ChildSerializer(BaseSerializer):
     class Meta:
         model = ChildBooking
-        fields = ['subAwbNo','dimWG','dimL','dimH','dimW']
+        fields = ['subAwbNo','actWG','volWG','dimL','dimH','dimW']
         depth = 1
 
 class BookingSerializer(BaseSerializer):

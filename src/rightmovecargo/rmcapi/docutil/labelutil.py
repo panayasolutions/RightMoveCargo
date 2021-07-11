@@ -22,8 +22,7 @@ rmc_path=Path(__file__).parent.parent;
 rmc_path = str(rmc_path);
 image_path=rmc_path+"/static/images/";
 font_path = rmc_path+"/static/fonts/3of9/fonts/"
-doctect_path=rmc_path+"/documents/labels/";
-invoice_path=rmc_path+"/static/invoices/";
+label_path=rmc_path+"/documents/labels/";
 
 pdfmetrics.registerFont(TTFont('code128', font_path+"code128.TTF"))
 
@@ -32,7 +31,7 @@ def createLabel(booking):
     printop = 'N'
     pages = list()
 
-    lblpath = doctect_path+booking.awbNo+'.pdf'
+    lblpath = label_path+booking.awbNo+'.pdf'
     
     if os.path.isfile(lblpath):
         # os.remove(lblpath)

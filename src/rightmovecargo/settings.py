@@ -179,6 +179,8 @@ USE_TZ = True
 RMC_DOCUMENT_ROOT = os.path.join(BASE_DIR, 'rmcapi/documents')
 RMC_STATIC_ROOT = os.path.join(BASE_DIR, 'rmcapi/static')
 LABEL_URL = '/labels/'
+DOCKET_URL = '/dockets/'
+RECEIPT_URL = '/receipts/'
 IMAGE_URL = '/images/'
 
 

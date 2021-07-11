@@ -27,6 +27,7 @@ from rightmovecargo.rmcapi.viewsets.companyviewset import CompanyViewSet
 from rightmovecargo.rmcapi.viewsets.consigneeviewset import ConsigneeViewSet
 from rightmovecargo.rmcapi.viewsets.couriershipmentmodeviewset import CourierShipmentModeViewSet
 from rightmovecargo.rmcapi.viewsets.courierviewset import CourierViewSet
+from rightmovecargo.rmcapi.viewsets.pincodeviewset import PinCodeViewSet
 from rightmovecargo.rmcapi.viewsets.shipmentmodeviewset import ShipmentModeViewSet
 from rightmovecargo.rmcapi.viewsets.usercompanyviewset import UserCompanyViewSet
 from rightmovecargo.rmcapi.viewsets.userconsigneeviewset import UserConsigneeViewSet
@@ -48,12 +49,15 @@ router.register(r'company', CompanyViewSet)
 router.register(r'courier', CourierViewSet)
 router.register(r'shipment', ShipmentModeViewSet)
 router.register(r'booking', BookingViewSet)
+router.register(r'pincode', PinCodeViewSet)
 
 
 urlpatterns = [
     path('', include(router.urls))
 ]
 urlpatterns = urlpatterns+static(settings.LABEL_URL, document_root=settings.RMC_DOCUMENT_ROOT+settings.LABEL_URL)
+urlpatterns = urlpatterns+static(settings.DOCKET_URL, document_root=settings.RMC_DOCUMENT_ROOT+settings.DOCKET_URL)
+urlpatterns = urlpatterns+static(settings.RECEIPT_URL, document_root=settings.RMC_DOCUMENT_ROOT+settings.RECEIPT_URL)
 urlpatterns = urlpatterns+static(settings.IMAGE_URL, document_root=settings.RMC_STATIC_ROOT+settings.IMAGE_URL)
 
 # import secrets

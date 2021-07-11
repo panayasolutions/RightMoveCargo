@@ -539,7 +539,7 @@ class Client(models.Model):
         db_table = 'mtCustomer'
 
 
-class Mtdestination(models.Model):
+class PinCode(models.Model):
     destinationcode = models.CharField(db_column='DestinationCode', primary_key=True, max_length=10)  # Field name made lowercase.
     destinationname = models.CharField(db_column='DestinationName', max_length=50)  # Field name made lowercase.
     statecode = models.CharField(db_column='StateCode', max_length=5)  # Field name made lowercase.
@@ -1023,7 +1023,8 @@ class Tbbooking(models.Model):
 class ChildBooking(models.Model):
     masterawbno = models.CharField(db_column='masterawbno',  max_length=50)  # Field name made lowercase.
     subAwbNo = models.CharField(db_column='ChildAwb', primary_key=True, max_length=50)  # Field name made lowercase.
-    dimWG = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    actWG = models.DecimalField(db_column='ActWeight', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
+    volWG = models.DecimalField(db_column='VolWeight', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     dimL = models.DecimalField(db_column='Length', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     dimH = models.DecimalField(db_column='Height', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
     dimW = models.DecimalField(db_column='Width', max_digits=5, decimal_places=2, blank=True, null=True)  # Field name made lowercase.
