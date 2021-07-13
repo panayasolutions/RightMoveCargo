@@ -652,9 +652,15 @@ class Mtpin(models.Model):
     pincode = models.CharField(db_column='PinCode', primary_key=True, max_length=6)  # Field name made lowercase.
     branchcode = models.CharField(db_column='BranchCode', max_length=10)  # Field name made lowercase.
     destinationcode = models.CharField(db_column='DestinationCode', max_length=10)  # Field name made lowercase.
+    oda = models.CharField(db_column='ODA', max_length=10,null=True)  # Field name made lowercase.
+    topay = models.CharField(db_column='ToPay', max_length=10,null=True)  # Field name made lowercase.
+    compnay = models.CharField(db_column='Company', max_length=10,null=True)  # Field name made lowercase.
+    pickup = models.CharField(db_column='PickUp', max_length=10,null=True)  # Field name made lowercase.
     enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
     entrydatetime = models.DateTimeField(db_column='EntryDatetime')  # Field name made lowercase.
     active = models.CharField(db_column='Active', max_length=5)  # Field name made lowercase.
+
+    # ODA/TOPAYCODE/COMPNAY/PICKUP
 
     class Meta:
         managed = True
