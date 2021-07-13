@@ -10,6 +10,10 @@ from django.db import connection
 import json
 from rest_framework.decorators import api_view
 from rightmovecargo.rmcapi.docutil.docketutil import createDocket
+from rightmovecargo.rmcapi.docutil.labelutil import createLabel
+from rightmovecargo.rmcapi.docutil.receiptutil import createReceipt; #receipt
+# from rightmovecargo.rmcapi.docutil.invoiceutil import createInvoice;
+# createInvoice('');
 class BookingViewSet(BaseViewSet):
     
    
@@ -24,11 +28,15 @@ class BookingViewSet(BaseViewSet):
             print(request.data['awbNo']);
             if request.data['awbNo'] is None or request.data['awbNo'] == '':
                 return self.onError(request.data,"Something went wrong",status.HTTP_400_BAD_REQUEST);
-            # serializer = self.get_serializer(data=request.data)
-            #print(serializer.is_valid(raise_exception=True))
-            # if serializer.is_valid():
-            booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
-            createDocket(booking);
+            serializer = self.get_serializer(data=request.data)
+            # print(serializer.is_valid(raise_exception=True))
+            if serializer.is_valid():
+                booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
+                createLabel(booking);
+                createDocket(booking);
+                createReceipt(booking);
+        # booking =BookingWeb.objects.get(awbNo='500188521842');
+        # createReceipt(booking);
         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
 
     def update(self, request, *args, **kwargs):
