@@ -1,6 +1,7 @@
 from enum import unique
 from re import T
 from django.db import models
+from django.db.models.deletion import CASCADE
 from django.db.models.fields import related;
 from django.utils.translation import gettext_lazy as _
 
@@ -540,7 +541,24 @@ class Client(models.Model):
 
 
 class PinCode(models.Model):
-    destinationcode = models.CharField(db_column='DestinationCode', primary_key=True, max_length=10)  # Field name made lowercase.
+    pincode = models.CharField(db_column='PinCode', primary_key=True, max_length=6,default=None)  # Field name made lowercase.
+    branchcode = models.CharField(db_column='BranchCode', max_length=10,null=True)  # Field name made lowercase.
+    oda = models.CharField(db_column='ODA', max_length=10,null=True)  # Field name made lowercase.
+    topay = models.CharField(db_column='ToPay', max_length=10,null=True)  # Field name made lowercase.
+    compnay = models.CharField(db_column='Company', max_length=10,null=True)  # Field name made lowercase.
+    pickup = models.CharField(db_column='PickUp', max_length=10,null=True)  # Field name made lowercase.
+    enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
+    entrydatetime = models.DateTimeField(db_column='EntryDatetime',default=None)  # Field name made lowercase.
+    active = models.CharField(db_column='Active', max_length=5,null=True)  # Field name made lowercase.
+    destinationcode = models.CharField(db_column='DestinationCode', max_length=10 ,null=True)  # Field name made lowercase.
+    # ODA/TOPAYCODE/COMPNAY/PICKUP
+    class Meta:
+        managed = True
+        db_table = 'mtPin'
+
+class Destination(models.Model):
+    destinationid = models.CharField(db_column='DestinationId', primary_key=True, max_length=10,default=None)  # Field name made lowercase.
+    destinationcode = models.ForeignKey(PinCode,db_column='DestinationCode',on_delete=CASCADE, max_length=10,null=True)  # Field name made lowercase.
     destinationname = models.CharField(db_column='DestinationName', max_length=50)  # Field name made lowercase.
     statecode = models.CharField(db_column='StateCode', max_length=5)  # Field name made lowercase.
     enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
@@ -550,6 +568,7 @@ class PinCode(models.Model):
     class Meta:
         managed = True
         db_table = 'mtDestination'
+
 
 
 class Mtfuelchg(models.Model):
@@ -647,24 +666,6 @@ class Mtoriginzone(models.Model):
         managed = True
         db_table = 'mtOriginZone'
 
-
-class Mtpin(models.Model):
-    pincode = models.CharField(db_column='PinCode', primary_key=True, max_length=6)  # Field name made lowercase.
-    branchcode = models.CharField(db_column='BranchCode', max_length=10)  # Field name made lowercase.
-    destinationcode = models.CharField(db_column='DestinationCode', max_length=10)  # Field name made lowercase.
-    oda = models.CharField(db_column='ODA', max_length=10,null=True)  # Field name made lowercase.
-    topay = models.CharField(db_column='ToPay', max_length=10,null=True)  # Field name made lowercase.
-    compnay = models.CharField(db_column='Company', max_length=10,null=True)  # Field name made lowercase.
-    pickup = models.CharField(db_column='PickUp', max_length=10,null=True)  # Field name made lowercase.
-    enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
-    entrydatetime = models.DateTimeField(db_column='EntryDatetime')  # Field name made lowercase.
-    active = models.CharField(db_column='Active', max_length=5)  # Field name made lowercase.
-
-    # ODA/TOPAYCODE/COMPNAY/PICKUP
-
-    class Meta:
-        managed = True
-        db_table = 'mtPin'
 
 
 class Mtratezone(models.Model):

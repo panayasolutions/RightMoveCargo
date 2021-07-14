@@ -30,11 +30,11 @@ class BookingViewSet(BaseViewSet):
                 return self.onError(request.data,"Something went wrong",status.HTTP_400_BAD_REQUEST);
             serializer = self.get_serializer(data=request.data)
             # print(serializer.is_valid(raise_exception=True))
-            if serializer.is_valid():
-                booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
-                createLabel(booking);
-                createDocket(booking);
-                createReceipt(booking);
+        #if serializer.is_valid():
+            booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
+            createLabel(booking);
+            # createDocket(booking);
+            createReceipt(booking);
         # booking =BookingWeb.objects.get(awbNo='500188521842');
         # createReceipt(booking);
         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);

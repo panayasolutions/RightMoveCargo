@@ -2,15 +2,15 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rightmovecargo.rmcapi.models import LocalSession, User, PinCode,Destination
-from rightmovecargo.rmcapi.serializers import PinCodeSerializer
+from rightmovecargo.rmcapi.serializers import DestinationSerializer, PinCodeSerializer
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
 
-class PinCodeViewSet(BaseViewSet):
+class DestinationViewSet(BaseViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
-    queryset = PinCode.objects.all()
-    serializer_class = PinCodeSerializer;
+    queryset = Destination.objects.all()
+    serializer_class = DestinationSerializer;
     # permission_classes = [permissions.IsAuthenticated]
     
     # def create(self, request, *args, **kwargs):

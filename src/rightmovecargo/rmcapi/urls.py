@@ -27,6 +27,7 @@ from rightmovecargo.rmcapi.viewsets.companyviewset import CompanyViewSet
 from rightmovecargo.rmcapi.viewsets.consigneeviewset import ConsigneeViewSet
 from rightmovecargo.rmcapi.viewsets.couriershipmentmodeviewset import CourierShipmentModeViewSet
 from rightmovecargo.rmcapi.viewsets.courierviewset import CourierViewSet
+from rightmovecargo.rmcapi.viewsets.destinationviewset import DestinationViewSet
 from rightmovecargo.rmcapi.viewsets.pincodeviewset import PinCodeViewSet
 from rightmovecargo.rmcapi.viewsets.shipmentmodeviewset import ShipmentModeViewSet
 from rightmovecargo.rmcapi.viewsets.usercompanyviewset import UserCompanyViewSet
@@ -50,7 +51,7 @@ router.register(r'courier', CourierViewSet)
 router.register(r'shipment', ShipmentModeViewSet)
 router.register(r'booking', BookingViewSet)
 router.register(r'pincode', PinCodeViewSet)
-
+router.register(r'destination', DestinationViewSet)
 
 urlpatterns = [
     path('', include(router.urls))
