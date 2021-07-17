@@ -77,14 +77,13 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
                 booking.dim = None
-        # if page is not None:
-        #     serializer = self.get_pagination_serializer(page)
-        # else:
-        #     serializer = self.get_serializer(queryset, many=True)
-
-        serializer = self.get_serializer(queryset , many=True) # self.get_serializer(request.user)
-        return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
-
+        page = self.paginate_queryset(queryset);
+        if page is not None:
+            serializer = self.get_serializer(page, many=True) 
+        else:
+           serializer = self.get_serializer(queryset, many=True) 
+        return self.onSuccess(serializer.data," ",status.HTTP_200_OK)
+        
         # queryset = self.queryset
         # parameters = self.get_request_params(self.request)
         # if 'ordering' in parameters:

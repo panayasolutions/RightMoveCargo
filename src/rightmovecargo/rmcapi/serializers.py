@@ -26,16 +26,23 @@ class UserTypeSerializer(BaseSerializer):
         fields = ['type_name', 'type_code']
 
 
+
 class DestinationSerializer(BaseSerializer):
+    # destinationcode = DestinationSerializer(many=False, read_only=True)
     class Meta:
         model = Destination
-        fields = ['destinationcode','destinationname','statecode',]
+        # fields = '__all__'
+        fields = ['destinationcode','destinationname','statecode']
 
 class PinCodeSerializer(BaseSerializer):
-    destinationcode = DestinationSerializer(many=True, read_only=True)
+    destinationcode = serializers.ReadOnlyField(source='destinationcode.destinationcode')
+    destinationname = serializers.ReadOnlyField(source='destinationcode.destinationname')
+    statecode = serializers.ReadOnlyField(source='destinationcode.statecode')
+    courier = serializers.ReadOnlyField(source='courier.branchname')
     class Meta:
         model = PinCode
-        fields = ['pincode','branchcode','oda','topay','compnay','pickup','destinationcode']
+        # fields = '__all__'
+        fields = ['pincode','branchcode','oda','topay','courier','pickup','destinationcode','destinationname','statecode']
 
 class ShipmentModeSerializer(BaseSerializer):
     class Meta:

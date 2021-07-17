@@ -26,22 +26,20 @@ receipts_path=rmc_path+"/documents/receipts/";
 pdfmetrics.registerFont(TTFont('code128', font_path+"code128.TTF"))
 
 def createReceipt(booking):
-    print(booking);
     printop = 'N'
     pages = list()
-    
     lblpath = receipts_path+booking.awbNo+'.pdf'
     
-    # if os.path.isfile(lblpath):
-    #     return 'Y', lblpath
-
+    if os.path.isfile(lblpath):
+        return 'Y', lblpath
+    
     doc = SimpleDocTemplate(lblpath, pagesize=(4 * inch, 6 * inch),
                             showBounday=0.5,
                             leftMargin=0.05 * inch,
                             rightMargin=0.05 * inch,
                             topMargin=0.05 * inch,
                             bottomMargin=0.05 * inch)
-
+    print(lblpath)
     if booking.courier == constant.TRACKON:
         courierlogo = 'trackon1.jpg'
     elif booking.courier == constant.PROFESSIONAL:
@@ -50,12 +48,10 @@ def createReceipt(booking):
         courierlogo = 'dtdc.jpeg'
     else:
         courierlogo = 'trackon1.jpg'
-
         printop, story = create(booking,courierlogo)
         pages.extend(story)
         print(lblpath)
     printop, story = create(booking,courierlogo)
-    print(booking);
     pages.extend(story)
     doc.build(pages)
     return printop, lblpath

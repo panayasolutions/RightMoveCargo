@@ -499,9 +499,9 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='Mtdestination',
+            name='Destination',
             fields=[
-                ('destinationcode', models.CharField(db_column='DestinationCode', max_length=10, primary_key=True, serialize=False)),
+                ('destinationcode', models.CharField(db_column='DestinationCode', max_length=10, null=True)),
                 ('destinationname', models.CharField(db_column='DestinationName', max_length=50)),
                 ('statecode', models.CharField(db_column='StateCode', max_length=5)),
                 ('enterby', models.CharField(db_column='EnterBy', max_length=10)),
@@ -626,15 +626,23 @@ class Migration(migrations.Migration):
                 'managed': True,
             },
         ),
+        
+      
         migrations.CreateModel(
-            name='Mtpin',
+            name='PinCode',
             fields=[
-                ('pincode', models.CharField(db_column='PinCode', max_length=6, primary_key=True, serialize=False)),
-                ('branchcode', models.CharField(db_column='BranchCode', max_length=10)),
-                ('destinationcode', models.CharField(db_column='DestinationCode', max_length=10)),
+                ('pincode', models.CharField(db_column='PinCode', max_length=6,primary_key=True, serialize=False)),
+                ('branchcode', models.CharField(db_column='BranchCode', max_length=10,null=True)),
+                ('destinationcode', models.CharField(db_column='DestinationCode', max_length=10, null=True)),
+                # ('destinationcode', models.ForeignKey(db_column='destinationcode', default=None, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='rmcapi.Destination')),
+                ('courier', models.CharField(db_column='CourierCode', max_length=10,null=True)),
+                ('compnay', models.CharField(db_column='CompanyCode', max_length=10,null=True)),
+                ('oda', models.CharField(db_column='ODA', max_length=10,null=True)),
+                ('pickup', models.CharField(db_column='PickUp', max_length=10,null=True)),
+                ('topay', models.CharField(db_column='ToPayorCod', max_length=10,null=True)),
                 ('enterby', models.CharField(db_column='EnterBy', max_length=10)),
-                ('entrydatetime', models.DateTimeField(db_column='EntryDatetime')),
-                ('active', models.CharField(db_column='Active', max_length=5)),
+                ('entrydatetime', models.DateTimeField(db_column='EntryDatetime',default=None)),
+                ('active', models.CharField(db_column='Active', max_length=5,null=True)),
             ],
             options={
                 'db_table': 'mtPin',
@@ -939,6 +947,7 @@ class Migration(migrations.Migration):
                 ('masterawbno', models.CharField(db_column='masterawbno_id', max_length=50, serialize=False)),
                 ('childawb', models.CharField(db_column='ChildAwb',primary_key=True, max_length=50)),
                 ('actweight', models.DecimalField(blank=True, db_column='ActWeight', decimal_places=2, max_digits=5, null=True)),
+                ('volweight', models.DecimalField(blank=True, db_column='VolWeight', decimal_places=2, max_digits=5, null=True)),
                 ('length', models.DecimalField(blank=True, db_column='Length', decimal_places=2, max_digits=5, null=True)),
                 ('height', models.DecimalField(blank=True, db_column='Height', decimal_places=2, max_digits=5, null=True)),
                 ('width', models.DecimalField(blank=True, db_column='Width', decimal_places=2, max_digits=5, null=True)),
@@ -1190,6 +1199,10 @@ class Migration(migrations.Migration):
             name='mtcitymapping',
             unique_together={('destination', 'company')},
         ),
+        migrations.AlterUniqueTogether(
+            name='pincode',
+            unique_together={('pincode', 'courier')},
+        ),
         migrations.AddField(
             model_name='localsession',
             name='user_company',
@@ -1241,5 +1254,5 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='companycouriermode',
             unique_together={('company', 'user_type', 'courier')},
-        ),
+        )     
     ]

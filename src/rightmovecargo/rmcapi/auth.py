@@ -30,7 +30,6 @@ class Authentication(authentication.BaseAuthentication):
             print('Session not found1')
         except (User.DoesNotExist, ValueError) as e:
             print('User not found')
-
         return (user, permissions)
 
     def authenticate_credentials(self, username, password, request=None):
@@ -79,11 +78,12 @@ class Authentication(authentication.BaseAuthentication):
 
 
     def bearer_authentication(self,authtoken,request):
+        print("Auth.py ,bearer_authentication : "+authtoken.decode('utf-8'));
         # LocalSession.objects.all().delete();
-        print(authtoken.decode('utf-8'));
+        # print(authtoken.decode('utf-8'));
         localses = LocalSession.objects.get(token=authtoken.decode('utf-8'))
         request.session = localses;
-        print(request.session.user_company)
+        # print(request.session.user_company)
         sysuser = User.objects.get(userid=localses.userid)
         if sysuser is None:
             raise exceptions.AuthenticationFailed(_('Unauthrozation request,Please login again'))

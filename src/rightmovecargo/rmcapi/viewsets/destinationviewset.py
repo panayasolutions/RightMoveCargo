@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rightmovecargo.rmcapi.models import LocalSession, User, PinCode,Destination
-from rightmovecargo.rmcapi.serializers import DestinationSerializer, PinCodeSerializer
+from rightmovecargo.rmcapi.serializers import DestinationSerializer
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
 
 class DestinationViewSet(BaseViewSet):
@@ -31,8 +31,9 @@ class DestinationViewSet(BaseViewSet):
         courier = request.GET.get('courier', None);
         shipment = request.GET.get('shipment', None);
         if pincode == None:
-            queryset = self.get_queryset()
+            # queryset = self.get_queryset().filter(destinationcode__courier='TCPL',destinationcode__active='YES')
+            queryset = self.get_queryset().filter()
         else:
-            queryset = self.get_queryset().filter(destinationcode=pincode)
+            queryset = self.get_queryset().filter(pincode=pincode, destinationcode__active='YES')
         serializer = self.get_serializer(queryset, many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);

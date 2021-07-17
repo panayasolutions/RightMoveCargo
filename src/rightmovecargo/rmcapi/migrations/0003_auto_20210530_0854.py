@@ -128,8 +128,14 @@ class Migration(migrations.Migration):
         migrations.RenameField(
             model_name='ChildBooking',
             old_name='actweight',
-            new_name='dimWG',
+            new_name='actWG',
         ),
+        migrations.RenameField(
+            model_name='ChildBooking',
+            old_name='volweight',
+            new_name='volWG',
+        ),
+        
         migrations.RenameField(
             model_name='ChildBooking',
             old_name='childawb',

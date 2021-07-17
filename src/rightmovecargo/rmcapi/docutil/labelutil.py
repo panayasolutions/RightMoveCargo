@@ -57,12 +57,12 @@ def createLabel(booking):
     if booking.courier == constant.DELHIVERY:
         printop, story = delhiverylabel(booking,courierlogo)
         pages.extend(story)
-        print(lblpath)
     else:
         box_no = 1;
         child_queryset = ChildBooking.objects.filter(masterawbno=booking.awbNo);
         total_box = len(child_queryset);
         total_box = total_box + box_no;
+        print(str(total_box)+"  "+str(box_no));
         printop, story = otherLabel(booking,courierlogo,booking,box_no,total_box)
         pages.extend(story)
         for childBooking in child_queryset:
@@ -275,11 +275,11 @@ def otherLabel(booking, imagename, childBooking, boxno,total_box):
         t2xx = Table([[p7x, p5x]], style=[('GRID', (0, 0), (2, 0), 0.5, colors.black)])
         t2xx._argW[0] = 1.9 * inch
     else:
-        if int(total_box) > 1:
-            if booking.courier == constant.TRACKON:
-                t2xx = Table([[p7x, p5x]], style=[('GRID', (0, 0), (1, 0), 0.5, colors.black)])
-            else:
-                t2xx = Table([[p5x]], style=[('BOX', (0, 0), (0, 0), 0.5, colors.black)])
+        # if int(total_box) > 1:
+        if booking.courier == constant.TRACKON:
+            t2xx = Table([[p7x, p5x]], style=[('GRID', (0, 0), (1, 0), 0.5, colors.black)])
+        else:
+            t2xx = Table([[p5x]], style=[('BOX', (0, 0), (0, 0), 0.5, colors.black)])
 
     t3 = Table([[Spacer(1, 0.005*inch)], [p9], [Spacer(1, 0.005*inch)]], style=[('BOX', (0, 0), (0, 2), 0.5, colors.black)])
 
