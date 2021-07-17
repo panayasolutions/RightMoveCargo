@@ -41,7 +41,7 @@ class BookingViewSet(BaseViewSet):
 
     def update(self, request, *args, **kwargs):
         with connection.cursor() as cursor:
-            cursor.execute("{call sp_update_booking('"+json.dumps(request.data)+"')}")
+            cursor.execute("{call sp_Inscan_booking('"+json.dumps(request.data)+"')}")
             request.data['awbNo']=cursor.fetchone()[0];  
             print(request.data['awbNo']);
             if request.data['awbNo'] is None or request.data['awbNo'] == '':
