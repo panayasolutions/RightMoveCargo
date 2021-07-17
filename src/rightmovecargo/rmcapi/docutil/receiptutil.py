@@ -8,6 +8,7 @@ from reportlab.platypus.figures import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
 from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import landscape
 import logging
 
 import base64
@@ -37,7 +38,7 @@ def createReceipt(booking):
                             showBounday=0.5,
                             leftMargin=0.05 * inch,
                             rightMargin=0.05 * inch,
-                            topMargin=0.05 * inch,
+                            topMargin=0.3 * inch,
                             bottomMargin=0.05 * inch)
     print(lblpath)
     if booking.courier == constant.TRACKON:
@@ -52,6 +53,7 @@ def createReceipt(booking):
         pages.extend(story)
         print(lblpath)
     printop, story = create(booking,courierlogo)
+    
     pages.extend(story)
     doc.build(pages)
     return printop, lblpath

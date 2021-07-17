@@ -41,7 +41,7 @@ def createLabel(booking):
                             showBounday=0.5,
                             leftMargin=0.05 * inch,
                             rightMargin=0.05 * inch,
-                            topMargin=0.05 * inch,
+                            topMargin=0.3 * inch,
                             bottomMargin=0.05 * inch)
 
     if booking.courier == constant.TRACKON:
