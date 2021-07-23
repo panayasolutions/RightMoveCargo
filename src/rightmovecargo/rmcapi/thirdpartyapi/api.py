@@ -76,7 +76,12 @@ class API:
             geodata = response.json()
             pinCodes = self.get_delivery_pincode(self,courier,authfor,geodata);
         else:
-            pinCodes = 'trackon1.jpg'
+            courier = constant.DELHIVERY;
+            authfor = "RIGHTMOVEFRANCHISE";
+            url = self.get_url(self,courier,authfor,'pin',oparams);
+            response = requests.get(url)
+            geodata = response.json()
+            pinCodes = self.get_delivery_pincode(self,courier,authfor,geodata);
 
         return pinCodes;
 

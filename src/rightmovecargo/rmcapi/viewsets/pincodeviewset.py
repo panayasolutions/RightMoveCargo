@@ -54,8 +54,12 @@ class PinCodeViewSet(BaseViewSet):
             if pincode != None:
                 queryset =  self.get_queryset().filter(courier=courier,pincode=pincode)
                 # queryset = self.get_queryset().filter(pincode=pincode)
+        else:
+            if pincode != None:
+                queryset =  self.get_queryset().filter(pincode=pincode)
+                # queryset = self.get_queryset().filter(pincode=pincode)
 
-        page = self.paginate_queryset(queryset);
+        page = None #self.paginate_queryset(queryset);
         if page is not None:
             serializer = self.get_serializer(page, many=True)
         else:
