@@ -15,7 +15,7 @@ class PinCodeViewSet(BaseViewSet):
     """
     queryset = PinCode.objects.all()
     serializer_class = PinCodeSerializer;
-    api = API
+    api = API()
     # permission_classes = [permissions.IsAuthenticated]
     
     # def create(self, request, *args, **kwargs):
@@ -45,7 +45,7 @@ class PinCodeViewSet(BaseViewSet):
         query = query+' WHERE pc.Active=%s'
         params = [active];
         result = any;
-        pincodes = self.api.get_pin_code(self.api,courier,[pincode]);
+        pincodes = self.api.get_pin_code(courier,[pincode]);
         pincodeser = self.get_serializer(pincodes,many=True);
 
         queryset = self.get_queryset();
@@ -53,7 +53,7 @@ class PinCodeViewSet(BaseViewSet):
             queryset =  self.get_queryset().filter(courier=courier)
             if pincode != None:
                 queryset =  self.get_queryset().filter(courier=courier,pincode=pincode)
-                # queryset = self.get_queryset().filter(pincode=pincode)
+                #queryset = self.get_queryset().filter(pincode=pincode)
         else:
             if pincode != None:
                 queryset =  self.get_queryset().filter(pincode=pincode)

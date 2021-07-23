@@ -4,7 +4,7 @@
             "RIGHTMOVEFRANCHISE":
             {
                 "authtype":"TOKEN",
-                "client": "RIGHTMOVE FRANCHISE",
+                "cl": "RIGHTMOVEFRANCHISE",
                 "user": "RIGHTMOVEFRANCHISE",
                 "token": "246cddab4de2381e75b38c4bcc694ab06f428ffd",
                 "format":"json",
@@ -13,20 +13,20 @@
             },
             "DOCRIGHTMOVEFRANCHISE":{
                 "authtype":"TOKEN",
-                "client": "DOCRIGHTMOVE FRANCHISE",
+                "cl": "DOCRIGHTMOVE FRANCHISE",
                 "user": "DOCRIGHTMOVEFRANCHISE",
                 "token": "cbb3099f80dd98db77c7bafbc4b1b7487a51b78b",
                 "format":"json",
-                "baseurl": "https://cl.delhivery.com",
+                "baseurl": "https://track.delhivery.com",
                 "Pickup": "DOCRIGHTMOVE FRANCHISE"
             },
             "RIGHTMOVELOGISTICSLW":{
                 "authtype":"TOKEN",
-                "client": "RIGHTMOVE LOGISTICSLW",
+                "cl": "RIGHTMOVE LOGISTICSLW",
                 "user": "RIGHTMOVELOGISTICSLW",
                 "token": "426008e0ee82d28dc4728eb849f8896a150aa2a3",
                 "format":"json",
-                "baseurl": "https://cl.delhivery.com",
+                "baseurl": "https://track.delhivery.com",
                 "Pickup": "RIGHTMOVE LOGISTICSLW"
             }
            },
@@ -51,6 +51,16 @@
                     "uri":"/api/p/packing_slip",
                     "authindex":-1,
                     "params":["wbns"]
+                },
+                "eway_no":{
+                    "uri":"/waybill/api/fetch/json",
+                    "authindex":2,
+                    "params":["token","cl","format"]
+                },
+                "eway_nos":{
+                    "uri":"/waybill/api/bulk/json",
+                    "authindex":2,
+                    "params":["token","cl","format","count"]
                 }
             }
     },

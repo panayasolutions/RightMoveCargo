@@ -4,6 +4,7 @@ from rest_framework import permissions
 from django.db import IntegrityError
 from rest_framework import status
 from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, Consignee, Courier, CourierShipmentMode, ShipmentMode, ChildBooking, User, UserCompany, UserType
+from rightmovecargo.rmcapi.thirdpartyapi.api import API
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
 from rightmovecargo.rmcapi.serializers import BookingSerializer, UserSerializer
 from django.db import connection
@@ -12,6 +13,7 @@ from rest_framework.decorators import api_view
 from rightmovecargo.rmcapi.docutil.docketutil import createDocket
 from rightmovecargo.rmcapi.docutil.labelutil import createLabel
 from rightmovecargo.rmcapi.docutil.receiptutil import createReceipt; #receipt
+
 # from rightmovecargo.rmcapi.docutil.invoiceutil import createInvoice;
 # createInvoice('');
 class BookingViewSet(BaseViewSet):
@@ -19,11 +21,25 @@ class BookingViewSet(BaseViewSet):
    
     queryset = BookingWeb.objects.all()
     serializer_class = BookingSerializer
+    api = API();
     # permission_classes = [permissions.IsAuthenticated]      
 
     def create(self, request, *args, **kwargs):
+        if(request.data['awbType'] == 'A'):
+            courier = request.data['courier']
+            noPieces = request.data["prodPiece"]
+            prodMod = request.data["prodMod"]
+            prodIty = request.data["prodIty"]
+            prodWeight = request.data["prodWeight"]
+            pin = request.data["consignee"]['pin']
+            eway_nos = self.api.get_fetch_eway_code(courier,[noPieces],pin,prodIty,prodWeight,prodMod);
+            request.data['awbNo'] = eway_nos
+            print(eway_nos);
+
+
+        bookingJSON = json.dumps(request.data);
         with connection.cursor() as cursor:
-            cursor.execute("{call sp_insert_booking('"+json.dumps(request.data)+"')}")
+            cursor.execute("{call sp_insert_booking('"+bookingJSON+"')}")
             request.data['awbNo']=cursor.fetchone()[0];  
             print(request.data['awbNo']);
             if request.data['awbNo'] is None or request.data['awbNo'] == '':
