@@ -1,0 +1,76 @@
+{
+    "DELC": {
+           "auth":{
+            "RIGHTMOVEFRANCHISE":
+            {
+                "authtype":"TOKEN",
+                "client": "RIGHTMOVE FRANCHISE",
+                "user": "RIGHTMOVEFRANCHISE",
+                "token": "246cddab4de2381e75b38c4bcc694ab06f428ffd",
+                "format":"json",
+                "baseurl": "https://track.delhivery.com",
+                "Pickup": "RIGHTMOVE FRANCHISE"
+            },
+            "DOCRIGHTMOVEFRANCHISE":{
+                "authtype":"TOKEN",
+                "client": "DOCRIGHTMOVE FRANCHISE",
+                "user": "DOCRIGHTMOVEFRANCHISE",
+                "token": "cbb3099f80dd98db77c7bafbc4b1b7487a51b78b",
+                "format":"json",
+                "baseurl": "https://cl.delhivery.com",
+                "Pickup": "DOCRIGHTMOVE FRANCHISE"
+            },
+            "RIGHTMOVELOGISTICSLW":{
+                "authtype":"TOKEN",
+                "client": "RIGHTMOVE LOGISTICSLW",
+                "user": "RIGHTMOVELOGISTICSLW",
+                "token": "426008e0ee82d28dc4728eb849f8896a150aa2a3",
+                "format":"json",
+                "baseurl": "https://cl.delhivery.com",
+                "Pickup": "RIGHTMOVE LOGISTICSLW"
+            }
+           },
+            "uris":{
+                "pin":{
+                    "uri":"/c/api/pin-codes/json/",
+                    "authindex":0,
+                    "params":["token", "filter_codes", "st", "dt", "covid_zone"],
+                    "response":["pin","pre_paid","pickup","district","cod","is_oda","state_code","covid_zone"]
+                },
+                "track":{
+                    "uri":"/api/v1/packages/json/",
+                    "authindex":0,
+                    "params":["token","waybill"]
+                },
+                "order":{
+                    "uri":"/api/cmu/create.json",
+                    "authindex":0,
+                    "params":["token", "format"]
+                },
+                "label":{
+                    "uri":"/api/p/packing_slip",
+                    "authindex":-1,
+                    "params":["wbns"]
+                }
+            }
+    },
+
+    "TCPL": {
+        "auth":{
+            "TCPL":{
+                "authtype":"USERNAMEPASSWORD",
+                "userID": "D20833",
+                "Password": "dMST1hzre4433cz",
+                "AppKey": "3wdpo90mjrttdMST1hzcz",
+                "baseurl": "http://trackoncourier.com:5455"
+            }
+        },
+        "uris":{
+            "track":{
+                "uri": "/CrmApi/t1/AWBTracking",
+                "authindex":2,
+                "params": ["userID", "Password", "AppKey","AWBNo"]
+            }
+        }
+        }
+}

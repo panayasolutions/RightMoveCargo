@@ -68,7 +68,9 @@ class BookingViewSet(BaseViewSet):
             try:
                 booking.consignee = Consignee.objects.get(conscode=booking.consignee)
                 booking.courier = Courier.objects.get(branchcode=booking.courier)
-                booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
+                booking.shipment = ShipmentMode.objects.get(shipment_mode_code=booking.shipment);
+                booking.shipment.shipment_courier = None #Courier.objects.get(branchcode=booking.courier.branchcode);
+                # booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 # booking.shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo)
             except Consignee.DoesNotExist :

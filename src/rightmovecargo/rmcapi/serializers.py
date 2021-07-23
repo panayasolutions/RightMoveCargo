@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, Destination, LocalSession, PinCode, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
+from rightmovecargo.rmcapi.models import Attachment, BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, Destination, LocalSession, PinCode, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
 
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
@@ -43,12 +43,7 @@ class PinCodeSerializer(BaseSerializer):
         model = PinCode
         # fields = '__all__'
         fields = ['pincode','branchcode','oda','topay','courier','pickup','destinationcode','destinationname','statecode']
-
-class ShipmentModeSerializer(BaseSerializer):
-    class Meta:
-        model = ShipmentMode
-        fields = ['shipment_mode_code','shipment_mode_name']
-
+       
 
 class CompanyCourierSerializer(BaseSerializer):
     
@@ -95,12 +90,21 @@ class ClientSerializer(BaseSerializer):
         depth = 1
 
 class CourierSerializer(BaseSerializer):
-    courier_shipment = ShipmentModeSerializer(many=True, read_only=True)
+    # courier_shipment = ShipmentModeSerializer(many=True, read_only=True)
     # user_code = serializers.ReadOnlyField(source='companycouriermode__user_type_type_code')
     class Meta:
         model = Courier
-        fields = ['branchcode','branchname','courier_shipment']
+        fields = ['branchcode','branchname']
+        # fields = ['branchcode','branchname','courier_shipment']
         # read_only_fields = ['courier_code']
+        # depth = 1
+
+class ShipmentModeSerializer(BaseSerializer):
+    shipment_courier = CourierSerializer(many=True, read_only=True);
+    class Meta:
+        model = ShipmentMode
+        # fields = '__all__'
+        fields = ['shipment_mode_code','shipment_mode_name','shipment_courier']
         depth = 1
 
 class ConsigneeSerializer(BaseSerializer):            
@@ -151,10 +155,12 @@ class BookingSerializer(BaseSerializer):
     consignee = ConsigneeSerializer(many=False, read_only=True)
     client = ClientSerializer(many=False, read_only=True)
     dim = ChildSerializer(many=True, read_only=True)
+    
     class Meta:
         model = BookingWeb
         fields = ('courier','shipment','awbNo','client','companyCode','toFreight','codAmt','insuranceType','EWayNo','invoiceValue'
         ,'invoiceNumber','prodDesc','prodMod','prodIty','prodPiece','prodWeight','user','refid','prodDim','entrydate','consignee','dim')
+        depth = 1
         # read_only_fields = ['entrydate']
 #  
         # ,'shipment' 'awbType',
@@ -171,3 +177,8 @@ class BookingSerializer(BaseSerializer):
 
     # "consignee":{"conscode":"10001","consname":"COSIGNEE 1", "address1":"ADDRES1", "address2":"ADDRESS2", "address3":"A3", "pin":"110012", "phone":"2300012111", "mobile":"9000000001", "emailid":"MAIL@YAHOO.COM", "state":"null", "save":"true", "oda":"No"},
     # "dim":
+    
+class AttachmentSerializer(BaseSerializer):
+    class Meta:
+        model = Attachment
+        fields = ['awbno','declarationdata','dfilename','deextn','docketdata','docketfilename','dextn']

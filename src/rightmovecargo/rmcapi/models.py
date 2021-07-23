@@ -322,47 +322,7 @@ class Hisofd(models.Model):
         managed = True
         db_table = 'hisOFD'
 
-
-# class Mtbranch(models.Model):
-    # branchcode = models.CharField(db_column='BranchCode', primary_key=True, max_length=10)  # Field name made lowercase.
-    # branchname = models.CharField(db_column='BranchName', max_length=100)  # Field name made lowercase.
-    # displayname = models.CharField(db_column='DisplayName', max_length=100)  # Field name made lowercase.
-    # branchtype = models.CharField(db_column='BranchType', max_length=50)  # Field name made lowercase.
-    # branchincharge = models.CharField(db_column='BranchInCharge', max_length=100)  # Field name made lowercase.
-    # address1 = models.CharField(db_column='Address1', max_length=100)  # Field name made lowercase.
-    # address2 = models.CharField(db_column='Address2', max_length=100)  # Field name made lowercase.
-    # address3 = models.CharField(db_column='Address3', max_length=100)  # Field name made lowercase.
-    # pin = models.CharField(db_column='Pin', max_length=6)  # Field name made lowercase.
-    # phone = models.CharField(db_column='Phone', max_length=100)  # Field name made lowercase.
-    # mobile = models.CharField(db_column='Mobile', max_length=100)  # Field name made lowercase.
-    # emailid = models.CharField(db_column='EmailId', max_length=100)  # Field name made lowercase.
-    # idproof = models.CharField(db_column='IdProof', max_length=100)  # Field name made lowercase.
-    # addproof = models.CharField(db_column='AddProof', max_length=100)  # Field name made lowercase.
-    # panno = models.CharField(db_column='PanNo', max_length=100)  # Field name made lowercase.
-    # active = models.CharField(db_column='Active', max_length=3)  # Field name made lowercase.
-    # activedate = models.DateTimeField(db_column='ActiveDate')  # Field name made lowercase.
-    # servicearea = models.CharField(db_column='ServiceArea', max_length=10)  # Field name made lowercase.
-    # inpermission = models.CharField(db_column='InPermission', max_length=10)  # Field name made lowercase.
-    # outpermission = models.CharField(db_column='OutPermission', max_length=10)  # Field name made lowercase.
-    # rategroup = models.CharField(db_column='RateGroup', max_length=10)  # Field name made lowercase.
-    # applytax = models.CharField(db_column='ApplyTax', max_length=3)  # Field name made lowercase.
-    # ratetype = models.CharField(db_column='RateType', max_length=10)  # Field name made lowercase.
-    # gstin = models.CharField(db_column='GSTIn', max_length=50)  # Field name made lowercase.
-    # creditlimit = models.BigIntegerField(db_column='CreditLimit')  # Field name made lowercase.
-    # enterby = models.CharField(db_column='EnterBy', max_length=10)  # Field name made lowercase.
-    # enterdatetime = models.DateTimeField(db_column='EnterDateTime')  # Field name made lowercase.
-    # editby = models.CharField(db_column='EditBy', max_length=10)  # Field name made lowercase.
-    # editdatetime = models.DateTimeField(db_column='EditDateTime')  # Field name made lowercase.
-    # hubcode = models.CharField(db_column='HubCode', max_length=10)  # Field name made lowercase.
-    # couriertype = models.CharField(db_column='CourierType', max_length=10)  # Field name made lowercase.
-    # statename = models.CharField(db_column='StateName', max_length=100)  # Field name made lowercase.
-
-    # class Meta:
-    #     managed = True
-    #     db_table = 'mtBranch'
-
-
-class Mtcitymapping(models.Model):
+class CityMapping(models.Model):
     company = models.CharField(db_column='Company', max_length=10)  # Field name made lowercase.
     destination = models.CharField(db_column='Destination', primary_key=True, max_length=10)  # Field name made lowercase.
     zonedox = models.CharField(db_column='ZoneDox', max_length=5)  # Field name made lowercase.
@@ -491,7 +451,6 @@ class Courier(models.Model):
     # through='CourierShipmentMode',related_name="+") 
 
     def get_related_to(self,):
-        print('adsfasd');
         return self.related_to.filter(
         company_courier__company=self)
 
@@ -556,7 +515,7 @@ class Destination(models.Model):
 
 
 class PinCode(models.Model):
-    pincode = models.CharField(db_column='PinCode', max_length=6,)  # Field name made lowercase.
+    pincode = models.CharField(db_column='PinCode', default=None,max_length=6,)  # Field name made lowercase.
     courier = models.ForeignKey(Courier,on_delete=CASCADE,db_column='CourierCode', max_length=10,null=True)  # Field name made lowercase.
     branchcode = models.CharField(db_column='BranchCode', max_length=10,null=True)  # Field name made lowercase.
     oda = models.CharField(db_column='ODA', max_length=10,null=True)  # Field name made lowercase.
@@ -1055,6 +1014,7 @@ class BookingWeb(models.Model):
     companyCode = models.CharField(db_column='CompanyCode', max_length=10)  # Field name made lowercase.
     client = models.CharField(db_column='ClientCode', max_length=10)  # Field name made lowercase.
     courier = models.CharField(db_column='CourierCode', max_length=10)  # Field name made lowercase.
+    shipment = models.CharField(db_column='ShipmentMode',default=None, max_length=10)  # Field name made lowercase.
     toFreight = models.CharField(db_column='Topay', max_length=10)  # Field name made lowercase.
     codAmt = models.DecimalField(db_column='COD', max_digits=19, decimal_places=4)  # Field name made lowercase.
     insuranceType = models.CharField(db_column='RiskCoveredBy', max_length=10)  # Field name made lowercase.
@@ -1223,7 +1183,9 @@ class AppMenu(models.Model):
 class ShipmentMode(models.Model):
     shipment_mode_code = models.CharField(max_length=50,primary_key=True)
     shipment_mode_name = models.CharField(max_length=100, blank=True, null=True)
-
+    # amit kumar 
+    shipment_courier = any
+    
     class Meta:
         managed = True
         db_table = 'mtShipmentMode'   
@@ -1258,7 +1220,6 @@ class CourierShipmentMode(models.Model):
     shipment_mode = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment_mode')
     
     def get_related_to(self,):
-        print('adsfasd');
         return self.related_to.filter(
         company_courier__company=self)
 
@@ -1301,4 +1262,27 @@ class LocalSession(models.Model):
     class Meta:
         managed = True
         db_table = 'local_session'
+
+
+class Attachment(models.Model):
+    awbno = models.CharField(primary_key=True, max_length=50)
+    declarationdata = models.BinaryField(blank=True, null=True)
+    dfilename = models.CharField(max_length=80, blank=True, null=True)
+    deextn = models.CharField(max_length=10, blank=True, null=True)
+    docketdata = models.BinaryField(blank=True, null=True)
+    docketfilename = models.CharField(max_length=80, blank=True, null=True)
+    dextn = models.CharField(max_length=10, blank=True, null=True)
+    file3data = models.BinaryField(blank=True, null=True)
+    file3filename = models.CharField(max_length=80, blank=True, null=True)
+    f3extn = models.CharField(max_length=10, blank=True, null=True)
+    file4data = models.BinaryField(blank=True, null=True)
+    file4filename = models.CharField(max_length=80, blank=True, null=True)
+    f4extn = models.CharField(max_length=10, blank=True, null=True)
+    file5data = models.BinaryField(blank=True, null=True)
+    file5filename = models.CharField(max_length=80, blank=True, null=True)
+    f5extn = models.CharField(max_length=10, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbAttachments'
         

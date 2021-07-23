@@ -1,8 +1,10 @@
 
 from rest_framework import status
-from rightmovecargo.rmcapi.models import LocalSession, User, PinCode,Destination
+from rest_framework.response import Response
+from rightmovecargo.rmcapi.models import Courier, LocalSession, User, PinCode,Destination
 from rightmovecargo.rmcapi.serializers import PinCodeSerializer
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
+from rightmovecargo.rmcapi.thirdpartyapi.api import API;
 from django.db import connection
 from django.core import serializers
 
@@ -13,6 +15,7 @@ class PinCodeViewSet(BaseViewSet):
     """
     queryset = PinCode.objects.all()
     serializer_class = PinCodeSerializer;
+    api = API
     # permission_classes = [permissions.IsAuthenticated]
     
     # def create(self, request, *args, **kwargs):
@@ -35,29 +38,31 @@ class PinCodeViewSet(BaseViewSet):
         shipment = request.GET.get('shipment', None);
         page = request.GET.get('page', None);
         active = 'YES';
-    
+        
         query = 'SELECT pc.PinCode as PinCode,pc.BranchCode as branchcode ,pc.ODA as oda,pc.ToPayorCod as topaycod,pc.CourierCode as CourierCode,pc.CompanyCode as compnaycode,pc.PickUp as pickup'
         query = query+' ,dest.destinationcode,dest.destinationname,dest.statecode'
         query = query+' FROM mtPin as pc inner join mtDestination as dest on pc.pincode=dest.destinationcode'
         query = query+' WHERE pc.Active=%s'
         params = [active];
         result = any;
+        pincodes = self.api.get_pin_code(self.api,courier,[pincode]);
+        pincodeser = self.get_serializer(pincodes,many=True);
 
         queryset = self.get_queryset();
         if courier != None:
             queryset =  self.get_queryset().filter(courier=courier)
             if pincode != None:
                 queryset =  self.get_queryset().filter(courier=courier,pincode=pincode)
+                # queryset = self.get_queryset().filter(pincode=pincode)
 
         page = self.paginate_queryset(queryset);
         if page is not None:
-            serializer = self.get_serializer(page, many=True) 
-            # result = self.get_paginated_response(serializer.data).data;
-            #self.get_paginated_response(serializer.data)
-            # return self.onSuccess(serializer.data," ",status.HTTP_200_OK) 
+            serializer = self.get_serializer(page, many=True)
         else:
            serializer = self.get_serializer(queryset, many=True) 
-        return self.onSuccess(serializer.data," ",status.HTTP_200_OK)
+
+        pincodes = serializer.data+pincodeser.data        
+        return self.onSuccess(pincodes," ",status.HTTP_200_OK)
 
     def dictfetchall(self, cursor):
         """Returns all rows from a cursor as a dict"""

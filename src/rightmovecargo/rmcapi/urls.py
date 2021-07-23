@@ -17,7 +17,9 @@ from django.urls import path,include
 from rest_framework import routers
 from django.conf import settings
 from django.conf.urls.static import static
+from rightmovecargo.rmcapi.models import Attachment
 from rightmovecargo.rmcapi.serializers import UserConsigneeSerializer
+from rightmovecargo.rmcapi.viewsets.attachmentviewset import AttachmentViewSet
 
 from rightmovecargo.rmcapi.viewsets.authviewset import AuthViewSet
 from rightmovecargo.rmcapi.viewsets.bookingviewset import BookingViewSet
@@ -52,6 +54,7 @@ router.register(r'shipment', ShipmentModeViewSet)
 router.register(r'booking', BookingViewSet)
 router.register(r'pincode', PinCodeViewSet)
 router.register(r'destination', DestinationViewSet)
+router.register(r'attachment', AttachmentViewSet)
 
 urlpatterns = [
     path('', include(router.urls))

@@ -39,10 +39,10 @@ def createLabel(booking):
 
     doc = SimpleDocTemplate(lblpath, pagesize=(4 * inch, 6 * inch),
                             showBounday=0.5,
-                            leftMargin=0.05 * inch,
-                            rightMargin=0.05 * inch,
-                            topMargin=0.3 * inch,
-                            bottomMargin=0.05 * inch)
+                            leftPadding=0.05 * inch,
+                            rightPadding=0.05 * inch,
+                            topPadding=0.05 * inch,
+                            bottomPadding=0.05 * inch)
 
     if booking.courier == constant.TRACKON:
         courierlogo = 'trackon1.jpg'
