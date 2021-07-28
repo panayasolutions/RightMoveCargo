@@ -35,11 +35,15 @@ class BookingViewSet(BaseViewSet):
             eway_nos = self.api.get_fetch_eway_code(courier,[noPieces],pin,prodIty,prodWeight,prodMod);
             request.data['awbNo'] = eway_nos
             print(eway_nos);
+          
 
 
         bookingJSON = json.dumps(request.data);
         with connection.cursor() as cursor:
-            cursor.execute("{call sp_insert_booking('"+bookingJSON+"')}")
+         if courier=='DELC':
+            cursor.execute("{call sp_insert_booking_delhivery('"+bookingJSON+"')}")
+         else:
+            cursor.execute("{call sp_insert_booking('"+bookingJSON+"')}") 
             request.data['awbNo']=cursor.fetchone()[0];  
             print(request.data['awbNo']);
             if request.data['awbNo'] is None or request.data['awbNo'] == '':
