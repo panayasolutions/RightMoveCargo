@@ -36,10 +36,10 @@ def createReceipt(booking):
     
     doc = SimpleDocTemplate(lblpath, pagesize=(4 * inch, 6 * inch),
                             showBounday=0.5,
-                            leftPadding=0.05 * inch,
-                            rightPadding=0.05 * inch,
-                            topPadding=0.05 * inch,
-                            bottomPadding=0.05 * inch)
+                            leftMargin=0.05 * inch,
+                            rightMargin=0.05 * inch,
+                            topMargin=0.05 * inch,
+                            bottomMargin=0.05 * inch)
     print(lblpath)
     if booking.courier == constant.TRACKON:
         courierlogo = 'trackon1.jpg'
