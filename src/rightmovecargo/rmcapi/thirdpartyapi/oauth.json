@@ -45,7 +45,7 @@
                 "order":{
                     "uri":"/api/cmu/create.json",
                     "authindex":0,
-                    "params":["token", "format"]
+                    "params":["token", "format","data"]
                 },
                 "label":{
                     "uri":"/api/p/packing_slip",

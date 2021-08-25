@@ -31,7 +31,7 @@ class ShipmentModeViewSet(BaseViewSet):
         #     companycouriermode__company=company,
         #     companycouriermode__user_type=user_type
         #     )
-        qShipment = self.get_queryset();
+        qShipment = self.get_queryset().order_by("shipment_seq");
         for shipment in qShipment:
 
             shipment.shipment_courier = Courier.objects.filter(

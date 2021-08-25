@@ -34,7 +34,7 @@ def createLabel(booking):
     lblpath = label_path+booking.awbNo+'.pdf'
     
     if os.path.isfile(lblpath):
-        # os.remove(lblpath)
+        os.remove(lblpath)
         return 'Y', lblpath
 
     doc = SimpleDocTemplate(lblpath, pagesize=(4 * inch, 6 * inch),
@@ -50,10 +50,11 @@ def createLabel(booking):
         courierlogo = 'proff.png'
     elif booking.courier == constant.DTDC:
         courierlogo = 'dtdc.jpeg'
+    elif booking.courier == constant.DELHIVERY:
+        courierlogo = 'dtdc.jpeg'
     else:
         courierlogo = 'trackon1.jpg'
-
-    print(lblpath)
+    
     if booking.courier == constant.DELHIVERY:
         printop, story = delhiverylabel(booking,courierlogo)
         pages.extend(story)
@@ -84,7 +85,7 @@ def delhiverylabel(booking,log):
     ri.drawHeight = 1.7*inch * ri.drawHeight / ri.drawWidth
     ri.drawWidth = 1.7*inch
 
-    rd = Image(image_path+'delhivery.jpg')
+    rd = Image(image_path+log)
     rd.drawHeight = 1.7 * inch * rd.drawHeight / rd.drawWidth
     rd.drawWidth = 1.7 * inch
 
@@ -99,8 +100,9 @@ def delhiverylabel(booking,log):
     #     sortcode = booking['sort_code']
     # else:
     sortcode = ' '
-
-    createDate = datetime.strptime(booking.entrydate[:19],"%Y-%m-%dT%H:%M:%S").strftime("%Y-%M-%d %H:%M:%S")
+    print(booking.entrydate)
+    createDate = booking.entrydate #datetime.strptime(booking.entrydate,"%Y-%m-%dT%H:%M:%S") #.strftime("%Y-%M-%d %H:%M:%S")
+    # createDate = datetime.strftime("%Y-%M-%d %H:%M:%S")
     ps1 = ParagraphStyle('left', alignment=TA_LEFT)
     ps2 = ParagraphStyle('right', alignment=TA_RIGHT)
     ps3 = ParagraphStyle('center', alignment=TA_CENTER, fontName='Helvetica', fontSize=6)
@@ -109,7 +111,7 @@ def delhiverylabel(booking,log):
     ps5c = ParagraphStyle('normal', alignment=TA_CENTER, fontName='Helvetica', fontSize=8)
     psb = ParagraphStyle('barcode', alignment=TA_CENTER, fontName='code128', fontSize=42)
     psbo = ParagraphStyle('barcode', alignment=TA_CENTER, fontName='code128', fontSize=28)
-    p2 = Paragraph(str(booking['pin']), style=ps1)
+    p2 = Paragraph(str(booking.recpin), style=ps1)
     p3 = Paragraph('<b>'+sortcode+'</b>', style=ps2)
     
     p4 = Paragraph('Shipping Address:<br/><b>'+booking.recname+'<br/>'+booking.recaddr1+'<br/>'+booking.recdestination+'<br/>PIN: '+str(booking.recpin)+'</b>', style=ps1)
@@ -118,7 +120,7 @@ def delhiverylabel(booking,log):
     p12 = Paragraph("Price", style=ps3)
     p13 = Paragraph("Total", style=ps3) # repeated twice
     p14 = Paragraph(booking.prodDesc, style=ps1)
-    p15 = Paragraph(samt, style=ps3) #repeated four times
+    p15 = Paragraph(str(samt), style=ps3) #repeated four times
     p17 = Paragraph('\n'+booking.invoiceNumber, style=styleN)
     p18 = Paragraph('Return Address:'+client.username+'-'+client.address1+'-'+str(client.pin), style=ps4)
     p19 = Paragraph(ptstr, style=ps3)
