@@ -34,7 +34,7 @@ def createLabel(booking):
     lblpath = label_path+booking.awbNo+'.pdf'
     
     if os.path.isfile(lblpath):
-        os.remove(lblpath)
+        # os.remove(lblpath)
         return 'Y', lblpath
 
     doc = SimpleDocTemplate(lblpath, pagesize=(4 * inch, 6 * inch),
@@ -50,11 +50,10 @@ def createLabel(booking):
         courierlogo = 'proff.png'
     elif booking.courier == constant.DTDC:
         courierlogo = 'dtdc.jpeg'
-    elif booking.courier == constant.DELHIVERY:
-        courierlogo = 'dtdc.jpeg'
     else:
         courierlogo = 'trackon1.jpg'
-    
+
+    print(lblpath)
     if booking.courier == constant.DELHIVERY:
         printop, story = delhiverylabel(booking,courierlogo)
         pages.extend(story)
@@ -81,11 +80,11 @@ def delhiverylabel(booking,log):
     styleN = styles['Normal']
     story = []
 
-    ri = Image(image_path+'logo.png')
+    # Test Push
+    ri = Image(image_path+'logo.jpg')
     ri.drawHeight = 1.7*inch * ri.drawHeight / ri.drawWidth
     ri.drawWidth = 1.7*inch
-
-    rd = Image(image_path+log)
+    rd = Image(image_path+'delhivery.jpg')
     rd.drawHeight = 1.7 * inch * rd.drawHeight / rd.drawWidth
     rd.drawWidth = 1.7 * inch
 
@@ -100,9 +99,9 @@ def delhiverylabel(booking,log):
     #     sortcode = booking['sort_code']
     # else:
     sortcode = ' '
-    print(booking.entrydate)
-    createDate = booking.entrydate #datetime.strptime(booking.entrydate,"%Y-%m-%dT%H:%M:%S") #.strftime("%Y-%M-%d %H:%M:%S")
-    # createDate = datetime.strftime("%Y-%M-%d %H:%M:%S")
+
+    createDate = booking.entrydatetime.strftime("%Y-%M-%d %H:%M:%S")
+    #datetime.strptime(booking.entrydatetime[:19],"%Y-%m-%dT%H:%M:%S").strftime("%Y-%M-%d %H:%M:%S")
     ps1 = ParagraphStyle('left', alignment=TA_LEFT)
     ps2 = ParagraphStyle('right', alignment=TA_RIGHT)
     ps3 = ParagraphStyle('center', alignment=TA_CENTER, fontName='Helvetica', fontSize=6)
@@ -182,7 +181,7 @@ def delhiverylabel(booking,log):
 
 def otherLabel(booking, imagename, childBooking, boxno,total_box):
     client = Client.objects.get(userid=booking.client)
-    createDate = booking.entrydate.strftime("%Y-%M-%d %H:%M:%S")
+    createDate = booking.entrydatetime.strftime("%Y-%M-%d %H:%M:%S")
     is_parent =True;
     
     if boxno>1:
