@@ -1,5 +1,4 @@
 import json
-from os import WEXITED
 from pathlib import Path
 import requests
 
@@ -449,9 +448,9 @@ class API:
         if isMaster == False:
             shipment["weight"] = 0; #only for master max 20,000g rest 0
             shipment["waybill"] = childBooking.subAwbNo; #// first package will always be master package//
-            shipment["shipment_height"]=str(childBooking.height); # if there in booking then use other wise no need
-            shipment["shipment_width"]=str(childBooking.width); # if there in booking then use other wise no need
-            shipment["shipment_length"]=str(childBooking.length); # if there in booking then use other wise no need
+            shipment["shipment_height"]=str(childBooking.dimH); # if there in booking then use other wise no need
+            shipment["shipment_width"]=str(childBooking.dimW); # if there in booking then use other wise no need
+            shipment["shipment_length"]=str(childBooking.dimL); # if there in booking then use other wise no need
         
         # if MPS
             # if cod then cod amount 
