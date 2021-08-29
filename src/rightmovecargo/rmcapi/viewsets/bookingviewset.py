@@ -13,7 +13,6 @@ from rest_framework.decorators import api_view
 from rightmovecargo.rmcapi.docutil.docketutil import createDocket
 from rightmovecargo.rmcapi.docutil.labelutil import createLabel
 from rightmovecargo.rmcapi.docutil.receiptutil import createReceipt; #receipt
-from rightmovecargo.rmcapi.constants import constant
 
 # from rightmovecargo.rmcapi.docutil.invoiceutil import createInvoice;
 # createInvoice('');
@@ -26,8 +25,8 @@ class BookingViewSet(BaseViewSet):
     # permission_classes = [permissions.IsAuthenticated]      
 
     def create(self, request, *args, **kwargs):
-        courier = request.data['courier']
-        if(request.data['awbType'] == constant.AUTOMATIC):
+        if(request.data['awbType'] == 'A'):
+            courier = request.data['courier']
             noPieces = request.data["prodPiece"]
             prodMod = request.data["prodMod"]
             prodIty = request.data["prodIty"]
@@ -36,39 +35,52 @@ class BookingViewSet(BaseViewSet):
             eway_nos = self.api.get_fetch_eway_code(courier,[noPieces],pin,prodIty,prodWeight,prodMod);
             request.data['awbNo'] = eway_nos
             print(eway_nos);
-
+        
         bookingJSON = json.dumps(request.data);
         with connection.cursor() as cursor:
-            if courier==constant.DELHIVERY:
-                cursor.execute("{call sp_insert_booking_delhivery('"+bookingJSON+"')}")
-                request.data['awbNo']=cursor.fetchone()[0];
-            else:
-                cursor.execute("{call sp_insert_booking('"+bookingJSON+"')}") 
-                request.data['awbNo']=cursor.fetchone()[0];
-
+         if courier=='DELC':
+            cursor.execute("{call sp_insert_booking_delhivery('"+bookingJSON+"')}")
+         else:
+            cursor.execute("{call sp_insert_booking('"+bookingJSON+"')}") 
+            request.data['awbNo']=cursor.fetchone()[0];  
+            print(request.data['awbNo']);
         if request.data['awbNo'] is None or request.data['awbNo'] == '':
-            return self.onError(request.data,"Something went wrong AWB not find ",status.HTTP_400_BAD_REQUEST);
-        serializer = self.get_serializer(data=request.data)
-        #if serializer.is_valid():
+            return self.onError(request.data,"Something went wrong",status.HTTP_400_BAD_REQUEST);
+            serializer = self.get_serializer(data=request.data)
+        print(request.data)
         booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
         createLabel(booking);
         # createDocket(booking);
         createReceipt(booking);
+        # booking =BookingWeb.objects.get(awbNo='500188521842');
+        # createReceipt(booking);
         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
 
     def update(self, request, *args, **kwargs):
+        #print(json.dumps(request.data))
         with connection.cursor() as cursor:
             cursor.execute("{call sp_Inscan_booking('"+json.dumps(request.data)+"')}")
-            request.data['awbNo']=cursor.fetchone()[0];  
             print(request.data['awbNo']);
-            if request.data['awbNo'] is None or request.data['awbNo'] == '':
-                return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
-            # serializer = self.get_serializer(data=request.data)
-            #print(serializer.is_valid(raise_exception=True))
+        cursor.close();
+        
+        if request.data['awbNo'] is None or request.data['awbNo'] == '':
+            return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
+        
+        booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
+        apiResponse = self.api.create_booking(booking);
+
+        if apiResponse is not None and apiResponse != '':
+            return self.onError([request.data],apiResponse,status.HTTP_400_BAD_REQUEST);
+        
+
+        # serializer = self.get_serializer(data=request.data)
+        #print(serializer.is_valid(raise_exception=True))
             # if serializer.is_valid():
-            booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
-            createDocket(booking);
-        return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
+        # cursor.close();
+        
+        # self.api.test();
+        # createDocket(booking);
+        return  self.onSuccess([request.data],"Record updated successfully",status.HTTP_201_CREATED);
 
     def list(self, request, *args, **kwargs):
         queryset = None
@@ -131,7 +143,13 @@ class BookingViewSet(BaseViewSet):
             try:
                 booking.consignee = Consignee.objects.get(conscode=booking.consignee)
                 booking.courier = Courier.objects.get(branchcode=booking.courier)
-                booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
+                booking.shipment = ShipmentMode.objects.get(shipment_mode_code=booking.shipment)
+                booking.shipment.shipment_courier = Courier.objects.filter(
+                companycouriermode__couriershipmentmode__shipment_mode=booking.shipment,
+                companycouriermode__company=company_code,
+                companycouriermode__user_type=user_type,
+                companycouriermode__courier=booking.courier,
+                )
                 booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo)
             except Consignee.DoesNotExist :
                 booking.consignee = None
@@ -139,6 +157,6 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
                 booking.dim = None
+                
         serializer = self.get_serializer(queryset , many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
-        
