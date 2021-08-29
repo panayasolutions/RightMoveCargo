@@ -40,6 +40,7 @@ class BookingViewSet(BaseViewSet):
         with connection.cursor() as cursor:
          if courier=='DELC':
             cursor.execute("{call sp_insert_booking_delhivery('"+bookingJSON+"')}")
+            request.data['awbNo']=cursor.fetchone()[0]; 
          else:
             cursor.execute("{call sp_insert_booking('"+bookingJSON+"')}") 
             request.data['awbNo']=cursor.fetchone()[0];  
@@ -157,6 +158,6 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
                 booking.dim = None
-                
+
         serializer = self.get_serializer(queryset , many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
