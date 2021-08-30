@@ -12,6 +12,7 @@ import json
 from rest_framework.decorators import api_view
 from rightmovecargo.rmcapi.docutil.docketutil import createDocket
 from rightmovecargo.rmcapi.docutil.labelutil import createLabel
+from rightmovecargo.rmcapi.docutil.labelutil import test;
 from rightmovecargo.rmcapi.docutil.receiptutil import createReceipt; #receipt
 
 # from rightmovecargo.rmcapi.docutil.invoiceutil import createInvoice;
@@ -37,6 +38,7 @@ class BookingViewSet(BaseViewSet):
             print(eway_nos);
         
         bookingJSON = json.dumps(request.data);
+        # print(bookingJSON);
         with connection.cursor() as cursor:
          if courier=='DELC':
             cursor.execute("{call sp_insert_booking_delhivery('"+bookingJSON+"')}")
@@ -58,29 +60,23 @@ class BookingViewSet(BaseViewSet):
         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
 
     def update(self, request, *args, **kwargs):
-        #print(json.dumps(request.data))
+        # test();
+        # print(json.dumps(request.data))
         with connection.cursor() as cursor:
-            cursor.execute("{call sp_Inscan_booking('"+json.dumps(request.data)+"')}")
-            print(request.data['awbNo']);
+            cursor.execute("{call sp_Inscan_booking('"+json.dumps(request.data)+"')}");
+            request.data['awbNo']=cursor.fetchone()[0];
+            print(cursor.fetchone());
         cursor.close();
         
         if request.data['awbNo'] is None or request.data['awbNo'] == '':
             return self.onError([request.data],"Something went wrong",status.HTTP_400_BAD_REQUEST);
-        
+
         booking =BookingWeb.objects.get(awbNo=request.data['awbNo']);
         apiResponse = self.api.create_booking(booking);
-
+        
         if apiResponse is not None and apiResponse != '':
             return self.onError([request.data],apiResponse,status.HTTP_400_BAD_REQUEST);
-        
 
-        # serializer = self.get_serializer(data=request.data)
-        #print(serializer.is_valid(raise_exception=True))
-            # if serializer.is_valid():
-        # cursor.close();
-        
-        # self.api.test();
-        # createDocket(booking);
         return  self.onSuccess([request.data],"Record updated successfully",status.HTTP_201_CREATED);
 
     def list(self, request, *args, **kwargs):

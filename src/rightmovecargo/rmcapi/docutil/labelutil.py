@@ -26,6 +26,10 @@ label_path=rmc_path+"/documents/labels/";
 
 pdfmetrics.registerFont(TTFont('code128', font_path+"code128.TTF"))
 
+def test():
+    booking = BookingWeb.objects.get(awbNo='5727310067200');
+    createLabel(booking);
+
 def createLabel(booking):
     print(booking)
     printop = 'N'
@@ -34,7 +38,7 @@ def createLabel(booking):
     lblpath = label_path+booking.awbNo+'.pdf'
     
     if os.path.isfile(lblpath):
-        # os.remove(lblpath)
+        os.remove(lblpath)
         return 'Y', lblpath
 
     doc = SimpleDocTemplate(lblpath, pagesize=(4 * inch, 6 * inch),
@@ -55,8 +59,19 @@ def createLabel(booking):
 
     print(lblpath)
     if booking.courier == constant.DELHIVERY:
-        printop, story = delhiverylabel(booking,courierlogo)
+        # printop, story = delhiverylabel(booking,courierlogo)
+        # pages.extend(story)
+        box_no = 1;
+        child_queryset = ChildBooking.objects.filter(masterawbno=booking.awbNo);
+        total_box = len(child_queryset);
+        total_box = total_box + box_no;
+        print(str(total_box)+"  "+str(box_no));
+        printop, story = delhiverylabel(booking,"",box_no,total_box)
         pages.extend(story)
+        for childBooking in child_queryset:
+            box_no = box_no+1
+            printop, story = delhiverylabel(booking,childBooking,box_no,total_box)
+            pages.extend(story)
     else:
         box_no = 1;
         child_queryset = ChildBooking.objects.filter(masterawbno=booking.awbNo);
@@ -73,14 +88,18 @@ def createLabel(booking):
     return printop, lblpath
 
 
-def delhiverylabel(booking,log):
+def delhiverylabel(booking,childBooking,box_no,total_box):
+    print(box_no)
+    print(total_box)
     # consignee = booking['consignee']
+    is_parent =True;
+    if box_no > 1:
+        is_parent = False;
     client = Client.objects.get(userid=booking.client)
     styles = getSampleStyleSheet()
     styleN = styles['Normal']
     story = []
 
-    # Test Push
     ri = Image(image_path+'logo.jpg')
     ri.drawHeight = 1.7*inch * ri.drawHeight / ri.drawWidth
     ri.drawWidth = 1.7*inch
@@ -110,6 +129,9 @@ def delhiverylabel(booking,log):
     ps5c = ParagraphStyle('normal', alignment=TA_CENTER, fontName='Helvetica', fontSize=8)
     psb = ParagraphStyle('barcode', alignment=TA_CENTER, fontName='code128', fontSize=42)
     psbo = ParagraphStyle('barcode', alignment=TA_CENTER, fontName='code128', fontSize=28)
+
+    
+
     p2 = Paragraph(str(booking.recpin), style=ps1)
     p3 = Paragraph('<b>'+sortcode+'</b>', style=ps2)
     
@@ -123,16 +145,30 @@ def delhiverylabel(booking,log):
     p17 = Paragraph('\n'+booking.invoiceNumber, style=styleN)
     p18 = Paragraph('Return Address:'+client.username+'-'+client.address1+'-'+str(client.pin), style=ps4)
     p19 = Paragraph(ptstr, style=ps3)
+    totalPieces = Paragraph('<b>MULTI-PIECE<br/>count' + str(total_box) + '</b>', style=ps3)
     p21 = Paragraph('Dt:'+str(createDate), style=ps4)
     p22 = Paragraph(code128encoded(str(booking.awbNo)), style=psb)
     p23 = Paragraph('<br/><br/><br/>'+str(booking.awbNo), style=ps5c)
     p24 = Paragraph(code128encoded(str(booking.invoiceNumber)), style=psbo)
     p25 = Paragraph('<br/><br/>'+str(booking.invoiceNumber), style=ps5c)
 
-    data = [[ri, rd]]
-    t = Table(data, style=[('GRID', (0, 0), (1, 0), 0.5, colors.black),
+
+    packageType = Paragraph("Master Package", style=ps3);
+    awbNo = Paragraph("Master AwbNo: "+booking.awbNo, style=ps3);
+    
+    if is_parent == False:
+        packageType = Paragraph("Child Package", style=ps3);
+        p22 = Paragraph(code128encoded(str(childBooking.subAwbNo)), style=psb)
+        p23 = Paragraph('<br/><br/><br/>'+str(childBooking.subAwbNo), style=ps5c)
+    
+       
+    headerLogo = Table([[ri,rd]], style=[('GRID', (0, 0), (1, 0), 0.5, colors.black),
                            ('VALIGN', (0, 0), (1, 0), 'MIDDLE')])
-    t._argH[0] = 0.6*inch
+    headerLogo._argH[0] = 0.6*inch
+
+    mspHeader = Table([[packageType,awbNo]], style=[('GRID', (0, 0), (1, 0), 0.5, colors.black),
+                           ('VALIGN', (0, 0), (1, 0), 'MIDDLE')])
+    mspHeader._argH[0] = 0.2*inch
 
     t1 = Table([[[p22, p23], ''], [p2, p3]], style=[('BOX', (0, 0), (1, 1), 0.5, colors.black),
                                                     ('SPAN', (0, 0), (1, 0)),
@@ -142,29 +178,21 @@ def delhiverylabel(booking,log):
     t1._argH[1] = 0.2*inch
     t1._argW[0] = 1.735*inch
     t1._argW[1] = 2*inch
-
-    t2 = Table([[p4, p19]], style=[('GRID', (0, 0), (1, 0), 0.5, colors.black),
-                                   ('VALIGN', (1, 0), (1, -1), 'MIDDLE')])
-
-    t2._argW[0] = 3*inch
+    t2 = Table([[p4,[p19,totalPieces]]], style=[('GRID', (0, 0), (1, 1), 0.5, colors.black),
+                                                        #  ('ALIGN', (0, -1), (0, 0), 'CENTER')
+                                                      ])
+    t2._argW[0] = 3*inch    
 
     t3 = Table([[p9, p21]], style=[('GRID', (0, 0), (1, 0), 0.5, colors.black)])
-
     t3._argW[0] = 2.485*inch
 
-    data1 = [[p11, p12, p13],
+    t4 = Table([[p11, p12, p13],
              [p14, p15, p15],
-             [p13, p15, p15]]
-
-    t4 = Table(data1, style=[('GRID', (0, 0), (2, 2), 0.5, colors.black),
+             [p13, p15, p15]], style=[('GRID', (0, 0), (2, 2), 0.5, colors.black),
                              ('VALIGN', (0, 1), (2, 1), 'MIDDLE')])
 
     t4._argH[1] = 0.35*inch
     t4._argW[0] = 2*inch
-
-    #if rob.drawHeight > 0.75*inch:
-    #    rob.drawHeight = 0.65*inch
-
     t5 = Table([[[p24, p25]]], style=[('GRID', (0, 0), (0, 0), 0.5, colors.black),
                                       ('ALIGN', (0, 0), (0, 0), 'CENTER'),
                                       ('VALIGN', (0, 0), (0, 0), 'TOP')])
@@ -174,7 +202,10 @@ def delhiverylabel(booking,log):
 
     t6 = Table([[p18]], style=[('GRID', (0, 0), (0, 0), 0.5, colors.black)])
 
-    story = [t, t1, t2, t3, t4, t5, t6, PageBreak()]
+    if total_box > 1:
+        story = [headerLogo,mspHeader, t1, t2, t3, t4, t5, t6, PageBreak()]
+    else:
+        story = [headerLogo, t1, t2, t3, t4, t5, t6, PageBreak()]
 
     return 'Y', story
 
@@ -192,8 +223,6 @@ def otherLabel(booking, imagename, childBooking, boxno,total_box):
     lg.drawWidth = 1.4 * inch
     
     iamt = booking.codAmt
-
-    
 
     ps1 = ParagraphStyle('left', alignment=TA_LEFT, fontName='Helvetica', fontSize=10)
     ps1c = ParagraphStyle('center', alignment=TA_LEFT, fontName='Helvetica', fontSize=10)

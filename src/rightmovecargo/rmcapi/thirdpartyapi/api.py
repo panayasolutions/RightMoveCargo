@@ -245,7 +245,7 @@ class API:
 
 
     def test(self):
-        booking = BookingWeb.objects.get(awbNo='5727310066172');
+        booking = BookingWeb.objects.get(awbNo='5727310067200');
         self.create_booking(booking);
     def create_booking(self,booking):
         
@@ -262,20 +262,20 @@ class API:
             url = self.get_url(courier,courier_client[2],'order',[]);
             data = self.create_delivery_payload(booking,url[1]['Pickup']);
             data = json.dumps(data);
-            
-            # url = self.get_url(courier,courier_client[2],'order',['json',data]);
             headers = {'Authorization': "Token "+url[1]['token']}
             payload = {'data':data,'format':'json'}
             session = requests.Session()
             response = session.post(url[0],headers=headers,data=payload)
-            # my_json = response.content.decode('utf8').replace("'", '"')
+            my_json = response.content.decode('utf8').replace("'", '"')
             my_json = json.loads(response.content)
-            print(my_json);
             return self.genrateError(my_json)
+            # print(data);
+            # url = self.get_url(courier,courier_client[2],'order',['json',data]);
+            
             # print(self.genrateError(my_json));
             # print(data);
             # print(courier_client);
-            
+            # print(my_json);
             # print(courier_client[2])
             # print(url[1]['Pickup'])
             #response = requests.get(url)
@@ -287,13 +287,14 @@ class API:
         pickup_location = {};
         pickup_location["name"] =  wearhouse#
         shipments = [];
+        
         child_queryset = ChildBooking.objects.filter(masterawbno=booking.awbNo);
         client = Client.objects.get(userid=booking.client);
         shipments.append(self.create_payload_v1(booking,"",client,True)); 
+        print(child_queryset)
         for childBooking in child_queryset:
-            shipment = self.create_payload_v1(booking,childBooking,client,False);
-            shipments.append(shipment); 
-
+            shipments.append(self.create_payload_v1(booking,childBooking,client,False)); 
+        
         data["pickup_location"] = pickup_location;
         data["shipments"] = shipments;
         return data;
@@ -434,7 +435,7 @@ class API:
         shipment["payment_mode"]=payment_mode; #"Prepaid/COD/Pickup/REPL", 
         shipment["shipment_type"] = shipment_type; #//Mandatory for b2c mps or blank// 
         shipment["mps_amount"] = cod_amount;
-        shipment["mps_children"] = booking.prodPiece;
+        
 
         shipment["category_of_goods"]=""; # if prod desc have medicine then pass essential 
         shipment["commodity_value"]=commodity_value; #invoice value in case  topay and cod then topay+cod in MSP not single package invoice value
@@ -444,7 +445,7 @@ class API:
         shipment["shipment_height"]=str(booking.height); # if there in booking then use other wise no need
         shipment["shipment_width"]=str(booking.width); # if there in booking then use other wise no need
         shipment["shipment_length"]=str(booking.length); # if there in booking then use other wise no need
-        
+        shipment["mps_children"] = booking.prodPiece;
         if isMaster == False:
             shipment["weight"] = 0; #only for master max 20,000g rest 0
             shipment["waybill"] = childBooking.subAwbNo; #// first package will always be master package//
