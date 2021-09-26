@@ -68,7 +68,7 @@ def create(booking,log):
     styleN = styles['Normal']
     story = []
 
-    ri = Image(image_path+log)
+    ri = Image(image_path+'logo.jpg')
     ri.drawHeight = 1.7*inch * ri.drawHeight / ri.drawWidth
     ri.drawWidth = 1.7*inch
 

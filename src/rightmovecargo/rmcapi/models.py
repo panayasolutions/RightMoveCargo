@@ -1160,7 +1160,6 @@ class Tbofd(models.Model):
 
 
 # ======================= Custome Table =================================
-
 class UserType(models.Model):
     # user_type_code = models.CharField(max_length=50,primary_key=True,db_column='user_type_code')
     type_name = models.CharField(unique=True,max_length=100)
@@ -1286,4 +1285,3 @@ class Attachment(models.Model):
     class Meta:
         managed = False
         db_table = 'tbAttachments'
-        

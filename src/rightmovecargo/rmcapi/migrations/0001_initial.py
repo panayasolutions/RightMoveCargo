@@ -449,7 +449,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='CityMapping',
+            name='Mtcitymapping',
             fields=[
                 ('company', models.CharField(db_column='Company', max_length=10)),
                 ('destination', models.CharField(db_column='Destination', max_length=10, primary_key=True, serialize=False)),
@@ -461,7 +461,6 @@ class Migration(migrations.Migration):
                 'managed': True,
             },
         ),
-        
         migrations.CreateModel(
             name='Client',
             fields=[
@@ -632,7 +631,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PinCode',
             fields=[
-                ('pincode', models.CharField(db_column='PinCode',default=None, max_length=6)),
+                ('pincode', models.CharField(db_column='PinCode', max_length=6,primary_key=True, serialize=False)),
                 ('branchcode', models.CharField(db_column='BranchCode', max_length=10,null=True)),
                 ('destinationcode', models.CharField(db_column='DestinationCode', max_length=10, null=True)),
                 # ('destinationcode', models.ForeignKey(db_column='destinationcode', default=None, null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='rmcapi.Destination')),
@@ -967,7 +966,6 @@ class Migration(migrations.Migration):
                 ('awbno', models.CharField(db_column='AwbNo', max_length=50)),
                 ('refno', models.CharField(db_column='RefNo', max_length=50)),
                 ('companycode', models.CharField(db_column='CompanyCode', max_length=10)),
-                ('shipment',models.CharField(db_column='ShipmentMode', default=None, max_length=10)),
                 ('clientcode', models.CharField(db_column='ClientCode', max_length=10)),
                 ('couriercode', models.CharField(db_column='CourierCode', max_length=10)),
                 ('clientname', models.CharField(db_column='ClientName', max_length=100)),
@@ -1039,31 +1037,6 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'tbDelivery',
                 'managed': True,
-            },
-        ),
-         migrations.CreateModel(
-            name='Attachment',
-            fields=[
-                ('awbno', models.CharField(max_length=50, primary_key=True, serialize=False)),
-                ('declarationdata', models.BinaryField(blank=True, null=True)),
-                ('dfilename', models.CharField(blank=True, max_length=80, null=True)),
-                ('deextn', models.CharField(blank=True, max_length=10, null=True)),
-                ('docketdata', models.BinaryField(blank=True, null=True)),
-                ('docketfilename', models.CharField(blank=True, max_length=80, null=True)),
-                ('dextn', models.CharField(blank=True, max_length=10, null=True)),
-                ('file3data', models.BinaryField(blank=True, null=True)),
-                ('file3filename', models.CharField(blank=True, max_length=80, null=True)),
-                ('f3extn', models.CharField(blank=True, max_length=10, null=True)),
-                ('file4data', models.BinaryField(blank=True, null=True)),
-                ('file4filename', models.CharField(blank=True, max_length=80, null=True)),
-                ('f4extn', models.CharField(blank=True, max_length=10, null=True)),
-                ('file5data', models.BinaryField(blank=True, null=True)),
-                ('file5filename', models.CharField(blank=True, max_length=80, null=True)),
-                ('f5extn', models.CharField(blank=True, max_length=10, null=True)),
-            ],
-            options={
-                'db_table': 'tbAttachments',
-                'managed': False,
             },
         ),
         migrations.CreateModel(
@@ -1223,7 +1196,7 @@ class Migration(migrations.Migration):
             unique_together={('remarks', 'status')},
         ),
         migrations.AlterUniqueTogether(
-            name='CityMapping',
+            name='mtcitymapping',
             unique_together={('destination', 'company')},
         ),
         migrations.AlterUniqueTogether(

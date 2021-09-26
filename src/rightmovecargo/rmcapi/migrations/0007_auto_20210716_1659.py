@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PinCode',
             fields=[
-                ('pincode', models.CharField(db_column='PinCode', max_length=6, default=None)),
+                ('pincode', models.CharField(db_column='PinCode', max_length=6, primary_key=True, serialize=False)),
                 ('courier', models.CharField(db_column='CourierCode', max_length=10, null=True)),
                 ('branchcode', models.CharField(db_column='BranchCode', max_length=10, null=True)),
                 ('oda', models.CharField(db_column='ODA', max_length=10, null=True)),

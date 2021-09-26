@@ -46,6 +46,7 @@ class PinCodeViewSet(BaseViewSet):
         params = [active];
         result = any;
         pincodes = self.api.get_pin_code(courier,[pincode]);
+        print(pincodes);
         pincodeser = self.get_serializer(pincodes,many=True);
 
         queryset = self.get_queryset();
@@ -65,7 +66,7 @@ class PinCodeViewSet(BaseViewSet):
         else:
            serializer = self.get_serializer(queryset, many=True) 
 
-        pincodes = serializer.data+pincodeser.data        
+        pincodes = serializer.data +pincodeser.data        
         return self.onSuccess(pincodes," ",status.HTTP_200_OK)
 
     def dictfetchall(self, cursor):
