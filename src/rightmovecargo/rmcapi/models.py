@@ -21,7 +21,7 @@ class Awbseries(models.Model):
     lastupdatedtimestamp = models.DateTimeField(db_column='LastUpdatedTimeStamp')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'AWBSeries'
         unique_together = (('couriercode', 'weight'),)
 
@@ -87,7 +87,7 @@ class Awbseries(models.Model):
     # datasource = models.CharField(db_column='DataSource', max_length=10)  # Field name made lowercase.
 
     # class Meta:
-    #     managed = True
+    #     managed = False
     #     db_table = 'TBBILLING181220'
 
 
@@ -98,7 +98,7 @@ class DCode(models.Model):
     oda = models.CharField(db_column='ODA', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'd_code'
 
 
@@ -115,7 +115,7 @@ class Datapostalpin(models.Model):
     entryid = models.AutoField(db_column='EntryId',primary_key=True)  # Field name made lowercase. changed by amit
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'dataPostalPin'
 
 
@@ -126,7 +126,7 @@ class Dc(models.Model):
     oda = models.CharField(db_column='ODA', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'dc'
 
 
@@ -176,7 +176,7 @@ class Hisbilling(models.Model):
     gramount = models.DecimalField(db_column='GRAmount', max_digits=19, decimal_places=4)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'hisBilling'
 
 
@@ -224,7 +224,7 @@ class Hisbooking(models.Model):
     clipin = models.CharField(db_column='CliPin', max_length=6)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'hisBooking'
 
 
@@ -246,7 +246,7 @@ class Hisdelivery(models.Model):
     entrysource = models.CharField(db_column='EntrySource', max_length=50)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'hisDelivery'
 
 
@@ -268,7 +268,7 @@ class Hisinscan(models.Model):
     remarks = models.CharField(db_column='Remarks', max_length=50)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'hisInscan'
 
 
@@ -292,7 +292,7 @@ class Hismanifest(models.Model):
     entrysource = models.CharField(db_column='EntrySource', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'hisManifest'
 
 
@@ -319,7 +319,7 @@ class Hisofd(models.Model):
     entrysource = models.CharField(db_column='EntrySource', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'hisOFD'
 
 class CityMapping(models.Model):
@@ -329,7 +329,7 @@ class CityMapping(models.Model):
     zonenondox = models.CharField(db_column='ZoneNonDox', max_length=5)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtCityMapping'
         unique_together = (('destination', 'company'),)
 
@@ -371,7 +371,7 @@ class Company(models.Model):
     through='CompanyCourierMode',related_name='companies')
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtCompany'
 
 
@@ -410,11 +410,11 @@ class Consignee(models.Model):
 
 #     class Meta:
 #         unique_together = [['user','company','consignee']]
-#         managed = True
+#         managed = False
 #         db_table = 'mpUserConsignee'
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtConsignee'
 
 
@@ -461,7 +461,7 @@ class Courier(models.Model):
     
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtCourier'
 
 
@@ -496,7 +496,7 @@ class Client(models.Model):
     othertext = models.CharField(db_column='OtherText', max_length=50)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtCustomer'
 
 class Destination(models.Model):
@@ -509,7 +509,7 @@ class Destination(models.Model):
     oda = models.CharField(db_column='ODA', max_length=5)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtDestination'
 
 
@@ -530,7 +530,7 @@ class PinCode(models.Model):
     
     class Meta:
         unique_together = (('pincode','courier'))
-        managed = True
+        managed = False
         db_table = 'mtPin'
 
         
@@ -548,7 +548,7 @@ class Mtfuelchg(models.Model):
     courier = models.CharField(db_column='Courier', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtFuelChg'
 
 
@@ -559,7 +559,7 @@ class Mtglobalchg(models.Model):
     gsttype = models.CharField(db_column='GSTType', max_length=10, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtGlobalChg'
 
 
@@ -575,7 +575,7 @@ class Mtissue(models.Model):
     entrydatetime = models.DateTimeField(db_column='EntryDateTime')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtIssue'
 
 
@@ -592,7 +592,7 @@ class Mtitem(models.Model):
     company = models.CharField(db_column='Company', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtItem'
 
 
@@ -617,7 +617,7 @@ class Mtncrrate(models.Model):
     courier = models.CharField(db_column='Courier', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtNCRRate'
 
 
@@ -628,7 +628,7 @@ class Mtoriginzone(models.Model):
     entrydatetime = models.DateTimeField(db_column='EntryDatetime')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtOriginZone'
 
 
@@ -641,7 +641,7 @@ class Mtratezone(models.Model):
     entrydatetime = models.DateTimeField(db_column='EntryDateTime')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtRateZone'
 
 
@@ -653,7 +653,7 @@ class Mtstate(models.Model):
     entrydatetime = models.DateTimeField(db_column='EntryDatetime')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtState'
 
 
@@ -667,7 +667,7 @@ class Mtstatus(models.Model):
     active = models.CharField(db_column='Active', max_length=5)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtStatus'
         unique_together = (('remarks', 'status'),)
 
@@ -682,7 +682,7 @@ class Mttopayrate(models.Model):
     entrydatetime = models.DateTimeField(db_column='EntryDatetime')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtTopayRate'
 
 
@@ -714,7 +714,7 @@ class User(models.Model):
     is_authenticated = False
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtUserRevenue'
 
 
@@ -730,7 +730,7 @@ class Mtvalue(models.Model):
     client = models.CharField(db_column='Client', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtValue'
 
 
@@ -741,7 +741,7 @@ class Mtzone(models.Model):
     entrydatetime = models.DateTimeField(db_column='EntryDateTime')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtZone'
 
 
@@ -753,7 +753,7 @@ class Nd(models.Model):
     f5 = models.DateTimeField(db_column='F5')  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'nd'
 
 
@@ -765,7 +765,7 @@ class Nd1(models.Model):
     f5 = models.DateTimeField(db_column='F5', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'nd1'
 
 
@@ -802,7 +802,7 @@ class Tbbillreg(models.Model):
     discounttype = models.CharField(db_column='DiscountType', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbBillReg'
 
 
@@ -839,7 +839,7 @@ class Tbbillreg(models.Model):
     # discounttype = models.CharField(db_column='DiscountType', max_length=10)  # Field name made lowercase.
 
     # class Meta:
-    #     managed = True
+    #     managed = False
     #     db_table = 'tbBillReg_copy610'
 
 
@@ -904,7 +904,7 @@ class Tbbilling(models.Model):
     datasource = models.CharField(db_column='DataSource', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbBilling'
 
 
@@ -941,7 +941,7 @@ class Tbbilling(models.Model):
 #     discounttype = models.CharField(db_column='DiscountType', max_length=10)  # Field name made lowercase.
 
 #     class Meta:
-#         managed = True
+#         managed = False
 #         db_table = 'tbBilling_copy610'
 
 
@@ -988,7 +988,7 @@ class Tbbooking(models.Model):
     clipin = models.CharField(db_column='CliPin', max_length=6)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbBooking'
 
 
@@ -1004,7 +1004,7 @@ class ChildBooking(models.Model):
     entrydate = models.DateTimeField(db_column='EntryDate')  # Field name made lowercase.
     # masterawbno   = models.ForeignKey('BookingWeb', on_delete=models.CASCADE)
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbBookingChild'
         unique_together = (('masterawbno', 'subAwbNo'),)
 
@@ -1059,11 +1059,13 @@ class BookingWeb(models.Model):
     climail = models.CharField(db_column='CliMail', max_length=100)  # Field name made lowercase.
     cliadd = models.CharField(db_column='CliAdd', max_length=100)  # Field name made lowercase.
     clipin = models.CharField(db_column='CliPin', max_length=6)  # Field name made lowercase.
+    zstatus= models.CharField(db_column='AWBStatus', max_length=30) 
 
     dim = ''
+    shipment_progress = ''
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbBookingWeb'
 
 
@@ -1084,7 +1086,7 @@ class Tbdelivery(models.Model):
     entrysource = models.CharField(db_column='EntrySource', max_length=50)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbDelivery'
 
 
@@ -1105,7 +1107,7 @@ class Tbinscan(models.Model):
     remarks = models.CharField(db_column='Remarks', max_length=50)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbInscan'
 
 
@@ -1128,7 +1130,7 @@ class Tbmanifest(models.Model):
     entrysource = models.CharField(db_column='EntrySource', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbManifest'
 
 
@@ -1154,7 +1156,7 @@ class Tbofd(models.Model):
     entrysource = models.CharField(db_column='EntrySource', max_length=10)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tbOFD'
 
 
@@ -1166,7 +1168,7 @@ class UserType(models.Model):
     type_code= models.CharField(unique=True,primary_key=True,max_length=10)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtUserType'
         
 class AppMenu(models.Model):
@@ -1176,7 +1178,7 @@ class AppMenu(models.Model):
     parent_menu = models.CharField(max_length=50,null=False,default=None)
     
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtAppMenu'
 
 class ShipmentMode(models.Model):
@@ -1187,7 +1189,7 @@ class ShipmentMode(models.Model):
     shipment_courier = any
     
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mtShipmentMode'   
 
 class UserCompany(models.Model):
@@ -1197,7 +1199,7 @@ class UserCompany(models.Model):
     company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code',related_name='company')
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mpUserCompany'
         unique_together = [['user', 'user_type','company']]
 
@@ -1209,7 +1211,7 @@ class CompanyCourierMode(models.Model):
     # shipment = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=True,default=None, db_column='shipment_code')
     
     class Meta:
-        managed = True
+        managed = False
         unique_together = [['company','user_type','courier']]
         db_table = 'mpCompanyCourierMode'
 
@@ -1224,7 +1226,7 @@ class CourierShipmentMode(models.Model):
         company_courier__company=self)
 
     class Meta:
-        managed = True
+        managed = False
         # unique_together = [['company_courier', 'shipment_mode']]
         db_table = 'mpCourierShipmentMode'
 
@@ -1236,7 +1238,7 @@ class UserConsignee(models.Model):
 
     class Meta:
         unique_together = [['user','company','consignee']]
-        managed = True
+        managed = False
         db_table = 'mpUserConsignee'
         
 class CompanyUserMenu(models.Model):
@@ -1247,7 +1249,7 @@ class CompanyUserMenu(models.Model):
     user_type = models.CharField(max_length=50,null=False,default=None, db_column='user_type')
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'mpCompanyUserMenu'
 
 
@@ -1260,7 +1262,7 @@ class LocalSession(models.Model):
     user_company = models.ForeignKey(UserCompany,models.DO_NOTHING,null=True,db_column='company')
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'local_session'
 
 

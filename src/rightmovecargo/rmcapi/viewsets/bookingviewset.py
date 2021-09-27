@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from rest_framework import status
 from rightmovecargo.rmcapi.models import BookingWeb, Client, Company, Consignee, Courier, CourierShipmentMode, ShipmentMode, ChildBooking, User, UserCompany, UserType
 from rightmovecargo.rmcapi.thirdpartyapi.api import API
+from rightmovecargo.rmcapi.constants import constant
 from rightmovecargo.rmcapi.viewsets.baseviewset import BaseViewSet
 from rightmovecargo.rmcapi.serializers import BookingSerializer, UserSerializer
 from django.db import connection
@@ -81,14 +82,35 @@ class BookingViewSet(BaseViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = None
+        zstatus = request.GET.get('status', None);
+        start_date = request.GET.get('sd', None);
+        end_date = request.GET.get('ed', None);
         user = self.get_user(request);
         user_type = self.get_user_type(request).type_code;
         company_code = self.get_company(request).company_code;
-        if user_type !='ZEMP':
-            queryset = self.filter_queryset(self.get_queryset()).filter(user=user.userid).order_by('awbNo')
-        else:
-            queryset = self.filter_queryset(self.get_queryset()).filter(companyCode=company_code).order_by('awbNo')
-       # page = self.paginate_queryset(queryset)
+        if zstatus == 'MD':
+            zstatus = constant.MANIFESTED;
+        elif zstatus == 'IT': 
+            zstatus = constant.INTRANSIT;
+        elif zstatus == 'DL': 
+            zstatus = constant.DELIVERED;
+        elif zstatus == 'RT': 
+            zstatus = constant.RETURNED;
+        else :
+            zstatus = None
+
+        if zstatus == None:
+            if user_type !='ZEMP':
+                queryset = self.filter_queryset(self.get_queryset()).filter(user=user.userid,entrydate__gte= start_date,entrydate__lte= end_date).order_by('awbNo')
+            else:
+                queryset = self.filter_queryset(self.get_queryset()).filter(companyCode=company_code,entrydate__gte= start_date,entrydate__lte= end_date).order_by('awbNo')
+        else :
+            if user_type !='ZEMP':
+                queryset = self.filter_queryset(self.get_queryset()).filter(user=user.userid,zstatus=zstatus,entrydate__gte= start_date,entrydate__lte= end_date).order_by('awbNo')
+            else:
+                queryset = self.filter_queryset(self.get_queryset()).filter(companyCode=company_code,zstatus=zstatus,entrydate__gte= start_date,entrydate__lte= end_date).order_by('awbNo')
+       
+        # page = self.paginate_queryset(queryset)
         for booking in queryset:
             booking.client = Client.objects.get(userid=booking.user)
             try:
@@ -130,6 +152,7 @@ class BookingViewSet(BaseViewSet):
         user = self.get_user(request);
         user_type = self.get_user_type(request).type_code;
         company_code = self.get_company(request).company_code;
+       
         if user_type !='ZEMP':
             queryset = self.get_queryset().filter(user=user.userid,awbNo=awbNo)
         else:
