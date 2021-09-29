@@ -1,110 +1,186 @@
 {
     "DELC": {
-           "auth":{
-            "RIGHTMOVEFRANCHISE":
-            {
-                "authtype":"TOKEN",
+        "auth": {
+            "RIGHTMOVEFRANCHISE": {
+                "authtype": "TOKEN",
                 "cl": "RIGHTMOVEFRANCHISE",
                 "user": "RIGHTMOVEFRANCHISE",
                 "token": "246cddab4de2381e75b38c4bcc694ab06f428ffd",
-                "format":"json",
+                "format": "json",
                 "baseurl": "https://track.delhivery.com",
                 "Pickup": "RIGHTMOVE FRANCHISE"
             },
-            "DOCRIGHTMOVEFRANCHISE":{
-                "authtype":"TOKEN",
+            "DOCRIGHTMOVEFRANCHISE": {
+                "authtype": "TOKEN",
                 "cl": "DOCRIGHTMOVE FRANCHISE",
                 "user": "DOCRIGHTMOVEFRANCHISE",
                 "token": "cbb3099f80dd98db77c7bafbc4b1b7487a51b78b",
-                "format":"json",
+                "format": "json",
                 "baseurl": "https://track.delhivery.com",
                 "Pickup": "DOCRIGHTMOVE FRANCHISE"
             },
-            "RIGHTMOVELOGISTICSLW":{
-                "authtype":"TOKEN",
+            "RIGHTMOVELOGISTICSLW": {
+                "authtype": "TOKEN",
                 "cl": "RIGHTMOVE LOGISTICSLW",
                 "user": "RIGHTMOVELOGISTICSLW",
                 "token": "426008e0ee82d28dc4728eb849f8896a150aa2a3",
-                "format":"json",
+                "format": "json",
                 "baseurl": "https://track.delhivery.com",
                 "Pickup": "RIGHTMOVE LOGISTICSLW"
             }
-           },
-            "uris":{
-                "pin":{
-                    "uri":"/c/api/pin-codes/json/",
-                    "authindex":0,
-                    "params":["token", "filter_codes", "st", "dt", "covid_zone"],
-                    "response":["pin","pre_paid","pickup","district","cod","is_oda","state_code","covid_zone"]
-                },
-                "track":{
-                    "uri":"/api/v1/packages/json/",
-                    "authindex":0,
-                    "params":["token","waybill"]
-                },
-                "order":{
-                    "uri":"/api/cmu/create.json",
-                    "authindex":0,
-                    "params":["token", "format","data"]
-                },
-                "label":{
-                    "uri":"/api/p/packing_slip",
-                    "authindex":-1,
-                    "params":["wbns"]
-                },
-                "eway_no":{
-                    "uri":"/waybill/api/fetch/json",
-                    "authindex":2,
-                    "params":["token","cl","format"]
-                },
-                "eway_nos":{
-                    "uri":"/waybill/api/bulk/json",
-                    "authindex":2,
-                    "params":["token","cl","format","count"]
-                }
+        },
+        "uris": {
+            "pin": {
+                "uri": "/c/api/pin-codes/json/",
+                "authindex": 0,
+                "params": [
+                    "token",
+                    "filter_codes",
+                    "st",
+                    "dt",
+                    "covid_zone"
+                ],
+                "response": [
+                    "pin",
+                    "pre_paid",
+                    "pickup",
+                    "district",
+                    "cod",
+                    "is_oda",
+                    "state_code",
+                    "covid_zone"
+                ]
+            },
+            "track": {
+                "uri": "/api/v1/packages/json/",
+                "authindex": 0,
+                "params": [
+                    "token",
+                    "waybill"
+                ]
+            },
+            "order": {
+                "uri": "/api/cmu/create.json",
+                "authindex": 0,
+                "params": [
+                    "token",
+                    "format",
+                    "data"
+                ]
+            },
+            "label": {
+                "uri": "/api/p/packing_slip",
+                "authindex": -1,
+                "params": [
+                    "wbns"
+                ]
+            },
+            "eway_no": {
+                "uri": "/waybill/api/fetch/json",
+                "authindex": 2,
+                "params": [
+                    "token",
+                    "cl",
+                    "format"
+                ]
+            },
+            "eway_nos": {
+                "uri": "/waybill/api/bulk/json",
+                "authindex": 2,
+                "params": [
+                    "token",
+                    "cl",
+                    "format",
+                    "count"
+                ]
             }
+        }
     },
     "TCPL": {
-        "auth":{
-            "TCPL":{
-                "authtype":"USERNAMEPASSWORD",
-                "userID": "D20833",
-                "Password": "dMST1hzre4433cz",
-                "AppKey": "3wdpo90mjrttdMST1hzcz",
+        "auth": {
+            "TCPL": {
+                "authtype": "USERNAMEPASSWORD",
+                "userID": "MMJH",
+                "Password": "10emix8b5Ro08",
+                "AppKey": "04FF9911C1ZZ74MMKA5699113MAD65DB",
                 "baseurl": "http://trackoncourier.com:5455"
             }
         },
-        "uris":{
-            "track":{
+        "uris": {
+            "track": {
                 "uri": "/CrmApi/t1/AWBTracking",
-                "authindex":2,
-                "params": ["userID", "Password", "AppKey","AWBNo"]
+                "authindex": 2,
+                "params": [
+                    "userID",
+                    "Password",
+                    "AppKey",
+                    "AWBNo"
+                ]
             }
         }
+    },
+    "DTDC": {
+        "auth": {
+            "DTDC": {
+                "authtype": "USERNAMEPASSWORD",
+                "username": "JF1768_JF1768015_trk",
+                "password": "stmUP75bpjelG1S",
+                "TrkType": "cnno",
+                "addtnlDtl": "Y",
+                "token": "JF1768_JF1768015_trk:90c811e0f34a3a84f6a7f45ac9425a04",
+                "baseurl": "https://blktracksvc.dtdc.com"
+            }
         },
-        "DTDC": {
-            "auth":{
-                "DTDC":{
-                    "authtype":"USERNAMEPASSWORD",
-                    "username": "JF1768_JF1768015_trk",
-                    "password": "stmUP75bpjelG1S",
-                    "TrkType": "cnno",
-                    "addtnlDtl": "Y",
-                    "token":"JF1768_JF1768015_trk:90c811e0f34a3a84f6a7f45ac9425a04",
-                    "baseurl": "https://blktracksvc.dtdc.com"
-                }
+        "uris": {
+            "auth": {
+                "uri": "/dtdc-api/api/dtdc/authenticate",
+                "authindex": 2,
+                "params": [
+                    "username",
+                    "password"
+                ]
             },
-            "uris":{
-                "auth":{
-                    "uri": "/dtdc-api/api/dtdc/authenticate",
-                    "authindex":2,
-                    "params": ["username", "password"]
-                },
-                "track":{
-                    "uri": "/dtdc-api/rest/JSONCnTrk/getTrackDetails",
-                    "authindex":1,
-                    "params": [ "TrkType", "addtnlDtl","strcnno"]
-                }
-            } 
+            "track": {
+                "uri": "/dtdc-api/rest/JSONCnTrk/getTrackDetails",
+                "authindex": 1,
+                "params": [
+                    "TrkType",
+                    "addtnlDtl",
+                    "strcnno"
+                ]
+            }
         }
+    },
+    "PRO": {
+        "auth": {
+            "PRO": {
+                "authtype": "USERNAMEPASSWORD",
+                "username": "JF1768_JF1768015_trk",
+                "password": "stmUP75bpjelG1S",
+                "TrkType": "cnno",
+                "addtnlDtl": "Y",
+                "token": "JF1768_JF1768015_trk:90c811e0f34a3a84f6a7f45ac9425a04",
+                "baseurl": "https://blktracksvc.dtdc.com"
+            }
+        },
+        "uris": {
+            "auth": {
+                "uri": "/dtdc-api/api/dtdc/authenticate",
+                "authindex": 2,
+                "params": [
+                    "username",
+                    "password"
+                ]
+            },
+            "track": {
+                "uri": "/dtdc-api/rest/JSONCnTrk/getTrackDetails",
+                "authindex": 1,
+                "params": [
+                    "TrkType",
+                    "addtnlDtl",
+                    "strcnno"
+                ]
+            }
+        }
+    }
 }

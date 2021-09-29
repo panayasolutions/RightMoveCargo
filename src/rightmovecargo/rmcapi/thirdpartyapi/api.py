@@ -121,8 +121,9 @@ class API:
     def get_track(self,awbNo,courier):
         # url_a =self.get_url(courier,courier,'track',[awbNo])[0];
         # print(url_a);
-        url = self.get_url(courier,courier,'track',[awbNo]);
+        
         if courier == constant.DTDC:
+            url = self.get_url(courier,courier,'track',[awbNo]);
             data = {"strcnno":awbNo,"TrkType":url[1]["TrkType"],"addtnlDtl":url[1]["addtnlDtl"]}
             payload = json.dumps(data);
             headers = {'X-Access-Token': url[1]['token'],"content-type": "application/json"}
@@ -132,11 +133,26 @@ class API:
             my_json = json.loads(my_json)
             # my_json = json.loads(my_json)
             return self.create_track_list(courier,my_json);
+        elif courier == constant.DELHIVERY:
+            url = self.get_url(courier,"RIGHTMOVEFRANCHISE",'track',[awbNo]);
+            response = requests.get(url[0]);
+            my_json = response.content.decode('utf8').replace("'", '"');
+            my_json = json.loads(my_json)
+            return self.create_track_list(courier,my_json);
+        elif courier == constant.TRACKON:
+            url = self.get_url(courier,courier,'track',[awbNo]);
+            response = requests.get(url[0]);
+            my_json = response.content.decode('utf8').replace("'", '"');
+            my_json = json.loads(my_json)
+            return self.create_track_list(courier,my_json);
         else:
-            print("ad");
-        return 
+            # url = self.get_url(courier,courier,'track',[awbNo]);
+            # response = requests.get(url[0]);
+            # my_json = response.content.decode('utf8').replace("'", '"');
+            # my_json = json.loads(my_json)
+            return self.create_track_list(courier,None);
 
-
+# http://trackoncourier.com:5455/CrmApi/t1/AWBTracking?AWBNo=500189234930&userID=MMJH&Password=10emix8b5Ro08&AppKey=04FF9911C1ZZ74MMKA5699113MAD65DB
     def get_client_by_booking(self,pincode,doctype,weight,mode):
         returnValue = list();
         weight = float(weight)*1000 # weight in grams
@@ -490,17 +506,53 @@ class API:
 
     def create_track_list(self,courier,response):
         shipment_proccess = [];
-        
-        for ashipment in response["trackDetails"]:
-            shipment = {};
-            shipment["origin"] = ashipment["strOrigin"]
-            shipment["destination"] = ashipment["strDestination"]
-            shipment["datetime"] = datetime.strptime(ashipment["strActionDate"]+" "+ashipment["strActionTime"], '%d%m%Y %H%M')
-            shipment["remarks"] = ashipment["sTrRemarks"]
-            shipment["action"] = ashipment["strAction"]
-            shipment_proccess.append(shipment); 
-        
-        return shipment_proccess;
+        try:
+            if courier == constant.DTDC:
+                
+                for ashipment in response["trackDetails"]:
+                    shipment = {};
+                    shipment["origin"] = ashipment["strOrigin"]
+                    shipment["destination"] = ashipment["strDestination"]
+                    shipment["datetime"] = datetime.strptime(ashipment["strActionDate"]+" "+ashipment["strActionTime"], '%d%m%Y %H%M')
+                    shipment["remarks"] = ashipment["sTrRemarks"]
+                    shipment["action"] = ashipment["strAction"]
+                    shipment_proccess.append(shipment);
+                return shipment_proccess; 
+            elif courier == constant.TRACKON:
+                
+                for ashipment in response["lstDetails"]:
+                    shipment = {};
+                    shipment["origin"] = ""
+                    shipment["destination"] = ashipment["CURRENT_CITY"]
+                    shipment["datetime"] = datetime.strptime(ashipment["EVENTDATE"]+" "+ashipment["EVENTTIME"], '%d/%m/%Y %H:%M:%S')
+                    shipment["remarks"] = ""
+                    shipment["action"] = ashipment["CURRENT_STATUS"]
+                    shipment_proccess.append(shipment); 
+                return shipment_proccess;
+            elif courier == constant.DELHIVERY:
+            
+                for ashipment in response["ShipmentData"][0]["Shipment"]["Scans"]:
+                    # print(ashipment);
+                    shipment = {};
+                    shipment["origin"] = ""
+                    shipment["destination"] = ashipment["ScanDetail"]["ScannedLocation"]
+                    shipment["datetime"] = ashipment["ScanDetail"]["StatusDateTime"] #datetime.strptime(ashipment["EVENTDATE"]+" "+ashipment["EVENTTIME"], '%d/%m/%Y %H:%M:%S')
+                    shipment["remarks"] = ""
+                    shipment["action"] = ashipment["ScanDetail"]["Instructions"]
+                    shipment_proccess.append(shipment); 
+                return shipment_proccess;
+            elif courier == constant.PROFESSIONAL:
+                # for ashipment in response["lstDetails"]:
+                #     shipment = {};
+                #     shipment["origin"] = ""
+                #     shipment["destination"] = ashipment["CURRENT_CITY"]
+                #     shipment["datetime"] = datetime.strptime(ashipment["EVENTDATE"]+" "+ashipment["EVENTTIME"], '%d/%m/%Y %H:%M:%S')
+                #     shipment["remarks"] = ""
+                #     shipment["action"] = ashipment["CURRENT_STATUS"]
+                #     shipment_proccess.append(shipment); 
+                return shipment_proccess;
+        except KeyError:
+            return shipment_proccess;
 
     def genrateError(self,jsonResponse):
         stringError = "";

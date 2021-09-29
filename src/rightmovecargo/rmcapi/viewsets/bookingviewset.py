@@ -120,7 +120,8 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment.shipment_courier = None #Courier.objects.get(branchcode=booking.courier.branchcode);
                 # booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 # booking.shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
-                booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo)
+                booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo);
+                booking.shipment_progress = self.api.get_track(booking.awbNo,booking.courier.branchcode);
             except Consignee.DoesNotExist :
                 booking.consignee = None
             except ShipmentMode.DoesNotExist :
