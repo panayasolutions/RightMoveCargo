@@ -64,7 +64,6 @@
                 }
             }
     },
-
     "TCPL": {
         "auth":{
             "TCPL":{
@@ -82,5 +81,30 @@
                 "params": ["userID", "Password", "AppKey","AWBNo"]
             }
         }
+        },
+        "DTDC": {
+            "auth":{
+                "DTDC":{
+                    "authtype":"USERNAMEPASSWORD",
+                    "username": "JF1768_JF1768015_trk",
+                    "password": "stmUP75bpjelG1S",
+                    "TrkType": "cnno",
+                    "addtnlDtl": "Y",
+                    "token":"JF1768_JF1768015_trk:90c811e0f34a3a84f6a7f45ac9425a04",
+                    "baseurl": "https://blktracksvc.dtdc.com"
+                }
+            },
+            "uris":{
+                "auth":{
+                    "uri": "/dtdc-api/api/dtdc/authenticate",
+                    "authindex":2,
+                    "params": ["username", "password"]
+                },
+                "track":{
+                    "uri": "/dtdc-api/rest/JSONCnTrk/getTrackDetails",
+                    "authindex":1,
+                    "params": [ "TrkType", "addtnlDtl","strcnno"]
+                }
+            } 
         }
 }

@@ -148,6 +148,7 @@ class BookingViewSet(BaseViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         awbNo = kwargs.get('pk');
+        
         queryset = None
         user = self.get_user(request);
         user_type = self.get_user_type(request).type_code;
@@ -177,6 +178,6 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
                 booking.dim = None
-
+        booking.shipment_progress = self.api.get_track(awbNo,booking.courier.branchcode);
         serializer = self.get_serializer(queryset , many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);

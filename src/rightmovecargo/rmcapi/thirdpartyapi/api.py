@@ -3,6 +3,7 @@ from pathlib import Path
 import requests
 
 from django.http import request
+from datetime import datetime
 
 from rightmovecargo.rmcapi.models import BookingWeb, ChildBooking, CityMapping, Client, Courier, Destination, PinCode, Tbbilling
 from rightmovecargo.rmcapi.constants import constant
@@ -29,6 +30,7 @@ class API:
         uri = data[courier]['uris'][urltype]
         url = auth['baseurl']+uri['uri'];
         authindex = uri['authindex'];
+        
         
         params = "";
         seprator = "?";
@@ -112,8 +114,27 @@ class API:
             eway_codes = response.json()
         return eway_codes;
 
-    def get_track(self,courier,authfor,oparams):
-        return self.get_url(self,courier,authfor,'track',oparams)[0]
+    def test_tracking(self,awbNo,courier):
+        # booking = BookingWeb.objects.get(awbNo=awbNo);
+        return self.get_track(awbNo,courier);
+
+    def get_track(self,awbNo,courier):
+        # url_a =self.get_url(courier,courier,'track',[awbNo])[0];
+        # print(url_a);
+        url = self.get_url(courier,courier,'track',[awbNo]);
+        if courier == constant.DTDC:
+            data = {"strcnno":awbNo,"TrkType":url[1]["TrkType"],"addtnlDtl":url[1]["addtnlDtl"]}
+            payload = json.dumps(data);
+            headers = {'X-Access-Token': url[1]['token'],"content-type": "application/json"}
+            session = requests.Session()
+            my_json = session.post(url[0],headers=headers,data=payload)
+            my_json = my_json.content.decode('utf8').replace("'", '"')
+            my_json = json.loads(my_json)
+            # my_json = json.loads(my_json)
+            return self.create_track_list(courier,my_json);
+        else:
+            print("ad");
+        return 
 
 
     def get_client_by_booking(self,pincode,doctype,weight,mode):
@@ -244,7 +265,7 @@ class API:
         return pinCodes;
 
 
-    def test(self):
+    def test_booking(self):
         booking = BookingWeb.objects.get(awbNo='5727310067200');
         self.create_booking(booking);
     def create_booking(self,booking):
@@ -464,7 +485,22 @@ class API:
         return shipment;
 
 
-        # disbale ewabill if invocie value < 50000
+    # disbale ewabill if invocie value < 50000
+
+
+    def create_track_list(self,courier,response):
+        shipment_proccess = [];
+        
+        for ashipment in response["trackDetails"]:
+            shipment = {};
+            shipment["origin"] = ashipment["strOrigin"]
+            shipment["destination"] = ashipment["strDestination"]
+            shipment["datetime"] = datetime.strptime(ashipment["strActionDate"]+" "+ashipment["strActionTime"], '%d%m%Y %H%M')
+            shipment["remarks"] = ashipment["sTrRemarks"]
+            shipment["action"] = ashipment["strAction"]
+            shipment_proccess.append(shipment); 
+        
+        return shipment_proccess;
 
     def genrateError(self,jsonResponse):
         stringError = "";
