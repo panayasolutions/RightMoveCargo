@@ -5,7 +5,7 @@ import requests
 from django.http import request
 from datetime import datetime
 
-from rightmovecargo.rmcapi.models import BookingWeb, ChildBooking, CityMapping, Client, Courier, Destination, PinCode, Tbbilling
+from rightmovecargo.rmcapi.models import BookingWeb, ChildBooking, CityMapping, Client, Courier, Destination, PinCode, Tbbilling,Trackingstatus
 from rightmovecargo.rmcapi.constants import constant
 
 # from rightmovecargo.rmcapi.thirdpartyapi import api;
@@ -145,6 +145,9 @@ class API:
             my_json = response.content.decode('utf8').replace("'", '"');
             my_json = json.loads(my_json)
             return self.create_track_list(courier,my_json);
+        elif courier == constant.PROFESSIONAL:
+            my_response = Trackingstatus.objects.all().filter(awbnumber=awbNo,couriercode=courier);
+            return self.create_track_list(courier,my_response);
         else:
             # url = self.get_url(courier,courier,'track',[awbNo]);
             # response = requests.get(url[0]);
@@ -542,14 +545,16 @@ class API:
                     shipment_proccess.append(shipment); 
                 return shipment_proccess;
             elif courier == constant.PROFESSIONAL:
-                # for ashipment in response["lstDetails"]:
-                #     shipment = {};
-                #     shipment["origin"] = ""
-                #     shipment["destination"] = ashipment["CURRENT_CITY"]
-                #     shipment["datetime"] = datetime.strptime(ashipment["EVENTDATE"]+" "+ashipment["EVENTTIME"], '%d/%m/%Y %H:%M:%S')
-                #     shipment["remarks"] = ""
-                #     shipment["action"] = ashipment["CURRENT_STATUS"]
-                #     shipment_proccess.append(shipment); 
+                
+                for ashipment in response:
+                    print(ashipment)
+                    shipment = {};
+                    shipment["origin"] = ""
+                    shipment["destination"] = ashipment.city
+                    shipment["datetime"] = ashipment.st_datetime
+                    shipment["remarks"] = ""
+                    shipment["action"] = ashipment.status_text
+                    shipment_proccess.append(shipment); 
                 return shipment_proccess;
         except KeyError:
             return shipment_proccess;

@@ -1287,3 +1287,16 @@ class Attachment(models.Model):
     class Meta:
         managed = False
         db_table = 'tbAttachments'
+
+
+class Trackingstatus(models.Model):
+    couriercode = models.CharField(db_column='CourierCode', max_length=10)  # Field name made lowercase.
+    awbnumber = models.CharField(db_column='AWBNumber',primary_key=True, max_length=50)  # Field name made lowercase.
+    city = models.CharField(db_column='City', max_length=50)  # Field name made lowercase.
+    st_datetime = models.DateTimeField(db_column='St_DateTime')  # Field name made lowercase.
+    status_text = models.CharField(db_column='Status_Text', max_length=150)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        unique_together = [['couriercode','awbnumber']]
+        db_table = 'TrackingStatus'
