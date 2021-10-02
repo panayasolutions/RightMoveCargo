@@ -121,7 +121,7 @@ class BookingViewSet(BaseViewSet):
                 # booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 # booking.shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
                 booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo);
-                booking.shipment_progress = self.api.get_track(booking.awbNo,booking.courier.branchcode);
+                booking.shipment_progress = [] #self.api.get_track(booking.awbNo,booking.courier.branchcode);
             except Consignee.DoesNotExist :
                 booking.consignee = None
             except ShipmentMode.DoesNotExist :
@@ -149,12 +149,10 @@ class BookingViewSet(BaseViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         awbNo = kwargs.get('pk');
-        
         queryset = None
         user = self.get_user(request);
         user_type = self.get_user_type(request).type_code;
         company_code = self.get_company(request).company_code;
-       
         if user_type !='ZEMP':
             queryset = self.get_queryset().filter(user=user.userid,awbNo=awbNo)
         else:

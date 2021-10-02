@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from rightmovecargo.rmcapi.models import Attachment, BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, Destination, LocalSession, PinCode, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
         pass
@@ -179,6 +179,25 @@ class BookingSerializer(BaseSerializer):
     # "dim":
     
 class AttachmentSerializer(BaseSerializer):
+    # def __init__(self, *args, **kwargs):
+    #     file_fields = kwargs.pop('file_fields', None)
+    #     super().__init__(*args, **kwargs)
+    #     if file_fields:
+    #         field_update_dict = {field: serializers.FileField(required=False, write_only=True) for field in file_fields}
+    #         self.fields.update(**field_update_dict)
+
+    # def create(self, validated_data):
+    #     validated_data_copy = validated_data.copy()
+    #     validated_files = []
+    #     for key, value in validated_data_copy.items():
+    #         if isinstance(value, InMemoryUploadedFile):
+    #             validated_files.append(value)
+    #             validated_data.pop(key)
+    #     submission_instance = super().create(validated_data)
+    #     for file in validated_files:
+    #         BinaryFile.objects.create(submission=submission_instance, file=file)
+    #     return submission_instance
+
     class Meta:
         model = Attachment
         fields = ['awbno','declarationdata','dfilename','deextn','docketdata','docketfilename','dextn']

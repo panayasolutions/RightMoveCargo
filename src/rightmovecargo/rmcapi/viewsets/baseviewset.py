@@ -4,6 +4,10 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.response import Response
 from django.utils import timezone
+import secrets
+from Crypto.Cipher import AES
+from Crypto.Util import pad, unpad
+from rightmovecargo.rmcapi.constants import constant
 
 from rightmovecargo.rmcapi.models import User
 
@@ -70,8 +74,16 @@ class BaseViewSet(viewsets.ModelViewSet):
         return self.user;
 
     def user_credentials_validation(self,username,password):
-        sysuser = User.objects.get(userid=username,password=password);
-        return sysuser;
+        sysuser = User.objects.get(userid=username);
+        keyval = constant.KEYVAL
+        aes2 = AES.new(keyval, AES.MODE_CBC, sysuser.iv)
+        dwpwd = unpad(aes2.decrypt(sysuser.password), constant.BLOCKSIZE)
+        decryptpwd = dwpwd.decode()
+        print(decryptpwd);
+        print(password);
+        if decryptpwd == password:
+            return sysuser;
+        return None
 
     def create_id(self,prefix,suffix=None):
         record_id = prefix

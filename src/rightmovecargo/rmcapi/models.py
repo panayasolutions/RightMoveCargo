@@ -1283,7 +1283,7 @@ class Attachment(models.Model):
     file5data = models.BinaryField(blank=True, null=True)
     file5filename = models.CharField(max_length=80, blank=True, null=True)
     f5extn = models.CharField(max_length=10, blank=True, null=True)
-
+    
     class Meta:
         managed = False
         db_table = 'tbAttachments'
