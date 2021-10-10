@@ -36,16 +36,11 @@ class AttachmentViewSet(BaseViewSet):
             return  self.onSuccess("",up_file.name+" File with "+request.data["awbno"]+" uploaded successfully",status.HTTP_201_CREATED);
         return  self.onError([""],serializer._errors,status.HTTP_400_BAD_REQUEST)
 
-    # def list(self, request, *args, **kwargs):
-
-    #     # qCompnay = self.filter_queryset(self.get_queryset().filter(
-    #     #     company_courier__user_type= self.get_user_type(request)
-            
-    #     # ));
-    #     # print(que ryset.query)
-    #     # print(qCompnay.query);
-    #     serializer = self.get_serializer(self.get_queryset(), many=True)
-    #     return self.onSuccess(serializer.data," ",status.HTTP_200_OK);
+    def destroy(self, request, *args, **kwargs):
+        awbNo = kwargs.get('pk');
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return self.onSuccess([],"Awb number "+awbNo+" deleted ",status.HTTP_200_OK);
 
     def retrieve(self, request, *args, **kwargs):
         awbNo = kwargs.get('pk');

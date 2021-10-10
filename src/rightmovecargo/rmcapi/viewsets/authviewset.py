@@ -103,6 +103,7 @@ class AuthViewSet(BaseViewSet):
         Authenticate the userid and password against username and password
         with optional request for context.
         """
+        
         msg = None
         sysuser = User.objects.get(userid=username);
         if sysuser is None:
@@ -124,6 +125,7 @@ class AuthViewSet(BaseViewSet):
         return (user, None,msg)
 
     def basic_authentication(self,authtoken,request):
+        
         try:
             try:
                 auth_decoded = base64.b64decode(authtoken).decode('utf-8');
@@ -152,7 +154,7 @@ class AuthViewSet(BaseViewSet):
             localAuth.token = user.userid+""+user.password #default_token_generator.make_token(user);
             
             localAuth.userid = user.userid
-            localAuth.connid = self.create_id('CONN')
+            # localAuth.connid = self.create_id('CONN')
             localAuth.created = current_dt;
             localAuth.expirey = current_dt #+ datetime.timedelta(minutes=15) ;
             localAuth.save()
