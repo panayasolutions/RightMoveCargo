@@ -112,18 +112,18 @@ class BookingViewSet(BaseViewSet):
        
         # page = self.paginate_queryset(queryset)
         for booking in queryset:
-            booking.client = Client.objects.get(userid=booking.user)
             try:
-                booking.consignee = Consignee.objects.get(conscode=booking.consignee)
                 booking.courier = Courier.objects.get(branchcode=booking.courier)
                 booking.shipment = ShipmentMode.objects.get(shipment_mode_code=booking.shipment);
-                booking.shipment.shipment_courier = None #Courier.objects.get(branchcode=booking.courier.branchcode);
-                # booking.courier.courier_shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
-                # booking.shipment = ShipmentMode.objects.filter(shipment_mode_code='CA')
-                booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo);
+                booking.shipment.shipment_courier = None 
+                booking.consignee = Consignee.objects.get(conscode=booking.consignee)
+                booking.dim = ChildBooking.objects.filter(masterawbno=booking.awbNo)
                 booking.shipment_progress = [] #self.api.get_track(booking.awbNo,booking.courier.branchcode);
+                booking.client = Client.objects.get(userid=booking.user)
             except Consignee.DoesNotExist :
                 booking.consignee = None
+            except Client.DoesNotExist :
+                booking.client = None
             except ShipmentMode.DoesNotExist :
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
@@ -146,6 +146,15 @@ class BookingViewSet(BaseViewSet):
         #     serializer = self.get_serializer(page, many=True)
         #     return self.get_paginated_response(serializer.data)
         # serializer = self.get_serializer(queryset, many=True)
+    def destroy(self, request, *args, **kwargs):
+        awbNo = kwargs.get('pk');
+        # instance = self.get_object();
+        with connection.cursor() as cursor:
+            cursor.execute("{call sp_inscan_delete('"+awbNo+"')}");
+            request.data['awbNo']=cursor.fetchone()[0];
+            print(cursor.fetchone());
+        cursor.close();
+        return self.onSuccess([],awbNo+" Deleted successfully ",status.HTTP_200_OK);
 
     def retrieve(self, request, *args, **kwargs):
         awbNo = kwargs.get('pk');
@@ -177,6 +186,6 @@ class BookingViewSet(BaseViewSet):
                 booking.shipment = None
             except ChildBooking.DoesNotExist :
                 booking.dim = None
-        booking.shipment_progress = self.api.get_track(awbNo,booking.courier.branchcode);
+            booking.shipment_progress = self.api.get_track(awbNo,booking.courier.branchcode);
         serializer = self.get_serializer(queryset , many=True)
         return self.onSuccess(serializer.data," ",status.HTTP_200_OK);

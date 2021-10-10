@@ -154,7 +154,7 @@ class BookingSerializer(BaseSerializer):
     shipment = ShipmentModeSerializer(many=False, read_only=True)
     consignee = ConsigneeSerializer(many=False, read_only=True)
     client = ClientSerializer(many=False, read_only=True)
-    dim = ChildSerializer(many=True, read_only=True)
+    # dim = ChildSerializer(many=True, read_only=True)
     
     class Meta:
         model = BookingWeb
@@ -179,25 +179,6 @@ class BookingSerializer(BaseSerializer):
     # "dim":
     
 class AttachmentSerializer(BaseSerializer):
-    # def __init__(self, *args, **kwargs):
-    #     file_fields = kwargs.pop('file_fields', None)
-    #     super().__init__(*args, **kwargs)
-    #     if file_fields:
-    #         field_update_dict = {field: serializers.FileField(required=False, write_only=True) for field in file_fields}
-    #         self.fields.update(**field_update_dict)
-
-    # def create(self, validated_data):
-    #     validated_data_copy = validated_data.copy()
-    #     validated_files = []
-    #     for key, value in validated_data_copy.items():
-    #         if isinstance(value, InMemoryUploadedFile):
-    #             validated_files.append(value)
-    #             validated_data.pop(key)
-    #     submission_instance = super().create(validated_data)
-    #     for file in validated_files:
-    #         BinaryFile.objects.create(submission=submission_instance, file=file)
-    #     return submission_instance
-
     class Meta:
         model = Attachment
         fields = ['awbno','declarationdata','dfilename','deextn','docketdata','docketfilename','dextn']
