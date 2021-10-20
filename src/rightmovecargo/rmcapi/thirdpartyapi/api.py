@@ -79,6 +79,7 @@ class API:
         elif courier == constant.DELHIVERY:
             authfor = "RIGHTMOVEFRANCHISE";
             url = self.get_url(courier,authfor,'pin',oparams)[0];
+            # print(url);
             response = requests.get(url)
             geodata = response.json()
             pinCodes = self.get_delivery_pincode(courier,authfor,geodata);
@@ -280,6 +281,8 @@ class API:
             pinObj.pickup = pincode["pickup"];
             dest.statecode = pincode["state_code"]
             pinObj.destinationcode = dest  
+            # pinObj.service = 'YES'  
+            pinObj.active = 'YES'  
             pinCodes.append(pinObj)
         return pinCodes;
 

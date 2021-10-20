@@ -42,7 +42,7 @@ class PinCodeSerializer(BaseSerializer):
     class Meta:
         model = PinCode
         # fields = '__all__'
-        fields = ['pincode','branchcode','oda','topay','courier','pickup','destinationcode','destinationname','statecode']
+        fields = ['pincode','branchcode','oda','topay','courier','pickup','destinationcode','destinationname','statecode','active']
        
 
 class CompanyCourierSerializer(BaseSerializer):
