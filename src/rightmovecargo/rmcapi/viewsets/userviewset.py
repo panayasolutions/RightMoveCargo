@@ -45,7 +45,7 @@ class UserViewSet(BaseViewSet):
         branchs = serializer.initial_data.get('branchs')
         try:
             for branch in branchs:
-                user_type = UserType.objects.get(pk=branch.get("user_type"))
+                user_type = UserType.objects.all().filter(pk=branch.get("user_type"))
                 branch = Company.objects.get(pk=branch.get("company_code"))
                 userBranch = UserCompany(user=instance, branch=branch,user_type=user_type)
                 # userBranch.modified_by = request.user;
@@ -61,6 +61,7 @@ class UserViewSet(BaseViewSet):
         return super(viewsets.ModelViewSet,self).partial_update(request, *args, **kwargs);
 
     def list(self, request, *args, **kwargs):
+        
         queryset = None
         utype = request.GET.get('utype', None);
         if utype != None:

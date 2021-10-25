@@ -526,6 +526,8 @@ class PinCode(models.Model):
     active = models.CharField(db_column='Active', max_length=5,null=True)  # Field name made lowercase.
     destinationcode = models.ForeignKey(Destination,on_delete=CASCADE,db_column='DestinationCode',max_length=10 ,null=True)  # Field name made lowercase.
     # ODA/TOPAYCODE/COMPNAY/PICKUP
+   
+    
     
     class Meta:
         unique_together = (('pincode','courier'))
@@ -1254,7 +1256,7 @@ class CompanyUserMenu(models.Model):
 
 
 class LocalSession(models.Model):
-    connid = models.BigAutoField(primary_key=True,db_column='connid')
+    connid = models.BigAutoField(max_length=50,primary_key=True,db_column='connid')
     token = models.CharField(max_length=150,db_column='authtoken')
     expirey = models.DateTimeField(blank=True, null=True,db_column='authexp')
     created = models.DateTimeField(blank=True, null=True,db_column='authcreated')
@@ -1300,3 +1302,23 @@ class Trackingstatus(models.Model):
         managed = False
         unique_together = [['couriercode','awbnumber']]
         db_table = 'TrackingStatus'
+
+
+class RateCalculator(models.Model):
+    awb = models.CharField(db_column='awb',primary_key=True, max_length=150)  # Field name made lowercase.
+    freight = models.CharField(db_column='freight', max_length=10)  # Field name made lowercase.
+    oda = models.CharField(db_column='oda', max_length=50)  # Field name made lowercase.
+    risk = models.CharField(db_column='risk', max_length=50)  # Field name made lowercase.
+    adjustment = models.CharField(db_column='adjustment',max_length=100)  # Field name made lowercase.
+    couriername = models.CharField(db_column='couriername', max_length=150)  # Field name made lowercase.
+    fuel = models.CharField(db_column='fuel', max_length=150)  # Field name made lowercase.
+    gst = models.CharField(db_column='gst', max_length=150)  # Field name made lowercase.
+    other = models.CharField(db_column='other', max_length=150)  # Field name made lowercase.
+    pinservice = models.CharField(db_column='pinservice', max_length=150)  # Field name made lowercase.
+    topaycod = models.CharField(db_column='topaycod', max_length=150)  # Field name made lowercase.
+    total = models.DecimalField(db_column='total', max_digits=5,decimal_places=2)  # Field name made lowercase.
+   
+
+    class Meta:
+        managed = False
+        db_table = 'RateCalculator'
