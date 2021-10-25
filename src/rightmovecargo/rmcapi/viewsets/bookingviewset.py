@@ -61,12 +61,17 @@ class BookingViewSet(BaseViewSet):
         return  self.onSuccess([request.data],"Record created successfully",status.HTTP_201_CREATED);
 
     def update(self, request, *args, **kwargs):
-        # test();
-        # print(json.dumps(request.data))
-        with connection.cursor() as cursor:
-            cursor.execute("{call sp_Inscan_booking('"+json.dumps(request.data)+"')}");
-            request.data['awbNo']=cursor.fetchone()[0];
-            print(cursor.fetchone());
+        optype = request.GET.get('optype', None);
+        if optype != 'edit':
+            with connection.cursor() as cursor:
+                cursor.execute("{call sp_Inscan_booking('"+json.dumps(request.data)+"')}");
+                request.data['awbNo']=cursor.fetchone()[0];
+                print(cursor.fetchone());
+        else:
+            with connection.cursor() as cursor:
+                cursor.execute("{call sp_edit_booking('"+json.dumps(request.data)+"')}");
+                request.data['awbNo']=cursor.fetchone()[0];
+                print(cursor.fetchone());
         cursor.close();
         
         if request.data['awbNo'] is None or request.data['awbNo'] == '':
