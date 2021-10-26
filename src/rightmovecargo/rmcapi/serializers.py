@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from rightmovecargo.rmcapi.models import Attachment, BookingWeb, Client, Company, CompanyCourierMode,  Consignee, Courier, CourierShipmentMode, Destination, LocalSession, PinCode, RateCalculator, ShipmentMode, ChildBooking, User, UserCompany, UserConsignee, UserType
-from django.core.files.uploadedfile import InMemoryUploadedFile
+
 class BaseSerializer(serializers.HyperlinkedModelSerializer):
     def test():
         pass
@@ -154,7 +154,7 @@ class BookingSerializer(BaseSerializer):
     shipment = ShipmentModeSerializer(many=False, read_only=True)
     consignee = ConsigneeSerializer(many=False, read_only=True)
     client = ClientSerializer(many=False, read_only=True)
-    # dim = ChildSerializer(many=True, read_only=True)
+    dim = ChildSerializer(many=True, read_only=True)
     
     class Meta:
         model = BookingWeb
@@ -182,7 +182,6 @@ class AttachmentSerializer(BaseSerializer):
     class Meta:
         model = Attachment
         fields = ['awbno','declarationdata','dfilename','deextn','docketdata','docketfilename','dextn']
-
 
 
 class RateCalculatorSerializer(BaseSerializer):

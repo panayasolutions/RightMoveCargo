@@ -1185,8 +1185,8 @@ class AppMenu(models.Model):
         db_table = 'mtAppMenu'
 
 class ShipmentMode(models.Model):
-    # shipment_mode_code = models.CharField(max_length=50,primary_key=True)
-    shipment_mode_code = models.BigAutoField(primary_key=True)
+    shipment_mode_code = models.CharField(max_length=50,primary_key=True)
+    # shipment_mode_code = models.BigAutoField(primary_key=True)
     shipment_mode_name = models.CharField(max_length=100, blank=True, null=True)
     shipment_seq = models.IntegerField( db_column='shipment_seq',blank=True, null=True)
     # amit kumar 
