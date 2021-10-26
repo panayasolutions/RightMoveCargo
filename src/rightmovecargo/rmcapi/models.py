@@ -271,6 +271,7 @@ class Hisinscan(models.Model):
         managed = False
         db_table = 'hisInscan'
 
+
 class Hismanifest(models.Model):
     history = models.CharField(db_column='History', max_length=50)  # Field name made lowercase.
     entryid = models.BigIntegerField(db_column='EntryId', blank=True, null=True)  # Field name made lowercase.
@@ -526,8 +527,6 @@ class PinCode(models.Model):
     active = models.CharField(db_column='Active', max_length=5,null=True)  # Field name made lowercase.
     destinationcode = models.ForeignKey(Destination,on_delete=CASCADE,db_column='DestinationCode',max_length=10 ,null=True)  # Field name made lowercase.
     # ODA/TOPAYCODE/COMPNAY/PICKUP
-   
-    
     
     class Meta:
         unique_together = (('pincode','courier'))
@@ -1163,17 +1162,19 @@ class Tbofd(models.Model):
 
 
 # ======================= Custome Table =================================
+
 class UserType(models.Model):
     # user_type_code = models.CharField(max_length=50,primary_key=True,db_column='user_type_code')
-    type_code= models.BigAutoField(primary_key=True)
+    # type_code= models.BigAutoField(primary_key=True)
     type_name = models.CharField(unique=True,max_length=100)
- 
+    type_code= models.CharField(unique=True,primary_key=True,max_length=10)
 
     class Meta:
         managed = False
         db_table = 'mtUserType'
         
 class AppMenu(models.Model):
+    # app_menu_code = models.CharField(max_length=50,primary_key=True)
     app_menu_code = models.BigAutoField(primary_key=True)
     menu_name = models.CharField(max_length=150)
     menu_type = models.CharField(max_length=150)
@@ -1184,6 +1185,7 @@ class AppMenu(models.Model):
         db_table = 'mtAppMenu'
 
 class ShipmentMode(models.Model):
+    # shipment_mode_code = models.CharField(max_length=50,primary_key=True)
     shipment_mode_code = models.BigAutoField(primary_key=True)
     shipment_mode_name = models.CharField(max_length=100, blank=True, null=True)
     shipment_seq = models.IntegerField( db_column='shipment_seq',blank=True, null=True)
@@ -1195,6 +1197,7 @@ class ShipmentMode(models.Model):
         db_table = 'mtShipmentMode'   
 
 class UserCompany(models.Model):
+    # user_company_code = models.CharField(max_length=50,primary_key=True)
     user_company_code = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid',related_name='user')
     user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None,db_column='type_code',related_name='user_type')
@@ -1206,6 +1209,7 @@ class UserCompany(models.Model):
         unique_together = [['user', 'user_type','company']]
 
 class CompanyCourierMode(models.Model):
+    # company_courier_mode_code = models.CharField(max_length =50,primary_key=True)
     company_courier_mode_code = models.BigAutoField(primary_key=True)
     company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None, db_column='company_code')
     user_type = models.ForeignKey(UserType,models.DO_NOTHING,null=False,default=None, db_column='type_code')
@@ -1219,6 +1223,7 @@ class CompanyCourierMode(models.Model):
 
 
 class CourierShipmentMode(models.Model):
+    # courier_shipment_code = models.CharField(max_length=50,primary_key=True)
     courier_shipment_code = models.BigAutoField(primary_key=True)
     company_courier = models.ForeignKey(CompanyCourierMode,models.DO_NOTHING,null=True,default=None, db_column='company_courier')
     shipment_mode = models.ForeignKey(ShipmentMode,models.DO_NOTHING,null=False,default=None, db_column='shipment_mode')
@@ -1233,6 +1238,7 @@ class CourierShipmentMode(models.Model):
         db_table = 'mpCourierShipmentMode'
 
 class UserConsignee(models.Model):
+    # user_consignee_code = models.CharField(max_length=50,primary_key=True)
     user_consignee_code = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User,models.DO_NOTHING,null=False,default=None, db_column='userid')
     company = models.ForeignKey(Company,models.DO_NOTHING,null=True,default=None,db_column='company_code')
@@ -1244,6 +1250,7 @@ class UserConsignee(models.Model):
         db_table = 'mpUserConsignee'
         
 class CompanyUserMenu(models.Model):
+    # company_user_menu_code = models.CharField(max_length=50,primary_key=True)
     company_user_menu_code = models.BigAutoField(primary_key=True)
     company_code = models.CharField(max_length=50,default=None,db_column='company')
     userId = models.CharField(max_length=50,null=False,default=None, db_column='userid')
@@ -1256,6 +1263,7 @@ class CompanyUserMenu(models.Model):
 
 
 class LocalSession(models.Model):
+    # connid = models.CharField(max_length=50,primary_key=True,db_column='connid')
     connid = models.BigAutoField(max_length=50,primary_key=True,db_column='connid')
     token = models.CharField(max_length=150,db_column='authtoken')
     expirey = models.DateTimeField(blank=True, null=True,db_column='authexp')
@@ -1285,23 +1293,10 @@ class Attachment(models.Model):
     file5data = models.BinaryField(blank=True, null=True)
     file5filename = models.CharField(max_length=80, blank=True, null=True)
     f5extn = models.CharField(max_length=10, blank=True, null=True)
-    
+
     class Meta:
         managed = False
         db_table = 'tbAttachments'
-
-
-class Trackingstatus(models.Model):
-    couriercode = models.CharField(db_column='CourierCode', max_length=10)  # Field name made lowercase.
-    awbnumber = models.CharField(db_column='AWBNumber',primary_key=True, max_length=50)  # Field name made lowercase.
-    city = models.CharField(db_column='City', max_length=50)  # Field name made lowercase.
-    st_datetime = models.DateTimeField(db_column='St_DateTime')  # Field name made lowercase.
-    status_text = models.CharField(db_column='Status_Text', max_length=150)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        unique_together = [['couriercode','awbnumber']]
-        db_table = 'TrackingStatus'
 
 
 class RateCalculator(models.Model):
@@ -1318,7 +1313,6 @@ class RateCalculator(models.Model):
     topaycod = models.CharField(db_column='topaycod', max_length=150)  # Field name made lowercase.
     total = models.DecimalField(db_column='total', max_digits=5,decimal_places=2)  # Field name made lowercase.
    
-
     class Meta:
         managed = False
         db_table = 'RateCalculator'

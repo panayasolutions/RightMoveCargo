@@ -5,7 +5,7 @@ import requests
 from django.http import request
 from datetime import datetime
 
-from rightmovecargo.rmcapi.models import BookingWeb, ChildBooking, CityMapping, Client, Courier, Destination, PinCode, Tbbilling,Trackingstatus
+from rightmovecargo.rmcapi.models import BookingWeb, ChildBooking, CityMapping, Client, Courier, Destination, PinCode, Tbbilling
 from rightmovecargo.rmcapi.constants import constant
 
 # from rightmovecargo.rmcapi.thirdpartyapi import api;
