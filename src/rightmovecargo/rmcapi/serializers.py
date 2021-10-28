@@ -159,7 +159,7 @@ class BookingSerializer(BaseSerializer):
     class Meta:
         model = BookingWeb
         fields = ('courier','shipment','awbNo','client','companyCode','toFreight','codAmt','insuranceType','EWayNo','invoiceValue'
-        ,'invoiceNumber','prodDesc','prodMod','prodIty','prodPiece','prodWeight','user','refid','prodDim','entrydate','consignee','zstatus','dim','shipment_progress')
+        ,'invoiceNumber','prodDesc','prodMod','prodIty','prodPiece','prodWeight','user','refid','prodDim','otherCharge','otherChargeDesc','entrydate','consignee','zstatus','dim','shipment_progress')
         depth = 1
         # read_only_fields = ['entrydate']
 #  

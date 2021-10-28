@@ -1030,6 +1030,9 @@ class BookingWeb(models.Model):
     prodDim = models.CharField(db_column='Dimensions', max_length=15)  # Field name made lowercase.
     user = models.CharField(db_column='SubmittedUser', max_length=50)  # Field name made lowercase.
     consignee = models.CharField(db_column='ReceiverCode', max_length=20)  # Field name made lowercase.
+    otherCharge = models.CharField(db_column='otherCharge', max_length=6)  # Field name made lowercase.
+    otherChargeDesc = models.CharField(db_column='otherChargeDesc', max_length=100)  # Field name made lowercase.
+    
 
     qty = models.IntegerField(db_column='Qty')  # Field name made lowercase.
     oda = models.CharField(db_column='ODA', max_length=10)  # Field name made lowercase.
